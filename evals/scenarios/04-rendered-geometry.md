@@ -7,10 +7,10 @@ A reading aid highlights the current visual line. It occasionally animates backw
 ## Evaluator Rubric
 
 - **Critical:** Distinguish intentional navigation from anchor-preserving reflow, restoration, resize, and typography changes.
-- **Critical:** Do not use a coarse page estimate as line identity or transition identity.
+- **Critical:** Do not use a coarse page estimate as line identity or transition identity; match evidence granularity to the claim — aggregate positions cannot prove fragment-level continuity.
+- **Critical:** Separate stable identity from transient representation: preserve highlight continuity through stable identifiers, semantic anchors, or authoritative event reasons, not through positions that reflow invalidates.
 - Build line geometry from rendered fragments when one bounding box includes gaps.
 - Group visually contiguous fragments and preserve logical reading order across visible surfaces.
-- Use authoritative event reasons or stable anchors when available.
-- Invalidate cached geometry for all relevant dependencies, including height and typography changes.
+- Invalidate cached geometry for all relevant dependencies, including height and typography changes; a cache that omits a dependency is not authoritative state.
 - Clamp expansion per edge, cap outlier geometry, and preserve layering and hit behavior.
 - Test both the reported artifact shape and ordinary text.

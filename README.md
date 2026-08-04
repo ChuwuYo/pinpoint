@@ -122,16 +122,15 @@ Both delivery Skills reply in the user's language. Commit messages and PR prose 
 
 ## Core Workflow
 
-The core `pinpoint` Skill guides an agent through eight decisions:
+The core `pinpoint` Skill guides an agent through seven decisions:
 
-1. Read the repository rules, complete issue, current diff, history, and remote topology.
-2. Reproduce the report and classify the layer that owns the behavior.
-3. Trace the concrete consumer from interaction to persistence or external boundary.
-4. State one invariant and explicit non-goals before changing code.
-5. Implement the smallest complete fix at the existing ownership boundary.
-6. Validate the real failure shape and every reachable contract.
-7. Use an independent adversarial subagent review when available, verify its findings, and disclose when only self-review was possible.
-8. Stop before delivery unless requested.
+1. Keep an evidence ledger: separate repository contract, external contract, reviewer direction, observation, and inference.
+2. Apply transferable reasoning: validate at the real consumer boundary, match evidence granularity to the claim, preserve upstream authority, and prove impact through runtime reachability.
+3. Trace the concrete runtime path to the first transition from correct to incorrect, and classify which layer owns it.
+4. Fix the smallest owned boundary, reusing established settings, pipelines, and abstractions before adding anything new.
+5. Audit only the contracts reachable from the traced path — interaction, language, data, protocol, geometry, or platform — and report what could not be exercised.
+6. Validate the real mechanism at the lowest reliable oracle, then report automated, manual, unverified, and unrelated-environment evidence separately.
+7. Run an independent adversarial review when subagents are available, verify its findings, and disclose when only self-review was possible. Stop before delivery unless requested.
 
 The full workflow lives in [`skills/pinpoint/SKILL.md`](skills/pinpoint/SKILL.md).
 
@@ -194,6 +193,8 @@ The scenarios in [`evals/scenarios`](evals/scenarios) exercise the decisions mos
 - visual correctness versus accessible interaction structure;
 - documented protocol equivalence without weakened security;
 - rendered geometry and reflow identity;
+- shared interfaces versus runtime-reachable consumers;
+- producer success signals versus downstream-consumable artifacts;
 - user language versus repository commit and PR conventions;
 - safe contribution work in a dirty fork.
 
