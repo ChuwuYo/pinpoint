@@ -99,7 +99,7 @@ function validatePackage() {
 
     const source = commandSource(name);
     if (!existsSync(source)) throw new Error(`Missing command: commands/${name}.md`);
-    const content = readFileSync(source, 'utf8');
+    const content = readFileSync(source, 'utf8').replace(/\r\n?/g, '\n');
     if (!content.startsWith('---\n') || !content.includes('\ndescription: ')) {
       throw new Error(`Invalid command frontmatter: commands/${name}.md`);
     }
