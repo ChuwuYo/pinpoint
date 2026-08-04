@@ -59,7 +59,9 @@ picker and `$` mentions rather than third-party bare slash commands.
 
 Start a new session after installation. Harnesses discover Skills and command
 menus at session startup; installing into an already-running session does not
-guarantee that its cached capability list will refresh.
+guarantee that its cached capability list will refresh. For desktop or
+long-running harnesses, quit and relaunch the application entirely — starting
+a new conversation inside a running app may not rescan the command menu.
 
 ## Standard Skills-only installation
 

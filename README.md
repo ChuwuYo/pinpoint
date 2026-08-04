@@ -1,5 +1,7 @@
 # Pinpoint
 
+English | [简体中文](README.zh-CN.md)
+
 **Find the owner. Fix the boundary. Prove the claim.**
 
 [![Validate Pinpoint](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml/badge.svg)](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml)
@@ -116,7 +118,7 @@ Both delivery Skills reply in the user's language. Commit messages and PR prose 
 | Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |
 
 > [!NOTE]
-> Agent Skills are portable; command registration is harness-owned. Skills and commands are discovered when a harness starts a session, so open a new session after installation. Codex exposes third-party Skills through `$` mentions and `/skills`; it does not register third-party bare `/pinpoint` commands.
+> Agent Skills are portable; command registration is harness-owned. Skills and commands are discovered when a harness starts a session, so open a new session after installation — for desktop or long-running harnesses, quit and relaunch the application entirely, since a new conversation may not rescan the command menu. Codex exposes third-party Skills through `$` mentions and `/skills`; it does not register third-party bare `/pinpoint` commands.
 
 ## Core Workflow
 
