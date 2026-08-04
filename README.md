@@ -174,13 +174,16 @@ Use Pinpoint PR to prepare the English PR title and body, but do not push.
 
 ## What Pinpoint Protects
 
-- Native browser and operating-system behavior
-- DOM order, focus, keyboard use, selection, and screen-reader traversal
-- Unicode, RTL, CJK, vertical text, and long translations
-- Platform-specific workarounds and native toolchains
-- Authentication callbacks, redirects, state, PKCE, signatures, and protocol validation
-- Stable identity, hashes, ordering, sync clocks, persistence, and fallbacks
-- Rendered geometry, reflow, viewport changes, caching, clipping, and hit targets
+Every contract reachable from the traced runtime path — whatever the domain. Common examples:
+
+- Upstream authority: intentional browser, OS, protocol, or provider behavior
+- Interaction structure: DOM order, focus, keyboard, selection, screen-reader traversal
+- Language and content: Unicode, RTL, CJK, vertical text, long translations
+- Identity and persistence: stable identifiers, hashes, ordering, sync, fallbacks
+- Protocol validity: callbacks, redirects, state, PKCE, signatures, replay checks
+- Rendered behavior: geometry, reflow, viewport, caching, clipping, hit targets
+- Platform reality: specific workarounds, native toolchains, actual mechanisms
+- Producer-consumer contracts: exit codes, artifact completeness, downstream readability
 - Existing user work, branch history, fork topology, and deployment boundaries
 
 Pinpoint does not promise zero impact. It requires the agent to demonstrate the reachable impact and state any remaining verification gaps.
