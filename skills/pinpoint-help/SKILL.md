@@ -34,43 +34,32 @@ Completion of one phase does not authorize the next.
 
 ## Explain Invocation
 
-Recommend explicit requests when automatic activation is uncertain:
+Use the current harness's native explicit form:
 
-```text
-Use Pinpoint to investigate and fix this issue with the smallest proven impact.
-```
+| Workflow | Claude Code, Cursor, OpenCode | Codex |
+| --- | --- | --- |
+| Complete fix workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
+| Commit workflow | `/pinpoint-commit <request>` | `$pinpoint-commit` or `/skills` |
+| PR workflow | `/pinpoint-pr <request>` | `$pinpoint-pr` or `/skills` |
+| Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |
 
-```text
-Use Pinpoint Commit to prepare the commit message, but do not commit.
-```
-
-```text
-Use Pinpoint PR to write the PR title and body, but do not push.
-```
+For another harness, use its native Skill picker, mention syntax, or a natural-language request that names the Skill. Do not claim a slash command exists when the harness does not provide one.
 
 ## Explain Installation
 
-Install the complete suite:
+Install the complete suite and supported command entries for a primary harness:
+
+```bash
+npx -y github:ChuwuYo/pinpoint --agent opencode
+```
+
+Replace `opencode` with `codex`, `claude-code`, or `cursor`. Add `--project` for project scope.
+
+For another Agent Skills-compatible harness, or for Skills without separate command integration:
 
 ```bash
 npx skills add ChuwuYo/pinpoint --skill '*' -g
 ```
-
-Install the suite only for the current project by omitting `-g`. Install one workflow by replacing `'*'` with its exact Skill name.
-
-For unattended Codex installation:
-
-```bash
-npx skills add ChuwuYo/pinpoint --skill '*' -g -a codex -y
-```
-
-For unattended OpenCode installation:
-
-```bash
-npx skills add ChuwuYo/pinpoint --skill '*' -g -a opencode -y
-```
-
-Codex, Claude Code, Cursor, OpenCode, and other supported harnesses use the same command shape with their installer-documented agent identifier.
 
 After installation, verify discovery:
 
@@ -78,7 +67,7 @@ After installation, verify discovery:
 npx skills list -g -a codex
 ```
 
-Replace `codex` with `opencode` when verifying an OpenCode installation.
+Replace `codex` with the installer-documented target identifier. Confirm all four Skill names, then start a new session and test the native explicit invocation. OpenCode should also list all four Pinpoint commands in its `/` menu.
 
 If an installed Skill does not appear, restart the current agent or start a new task. Do not add hooks, edit `AGENTS.md`, or change project configuration merely to make Pinpoint available.
 

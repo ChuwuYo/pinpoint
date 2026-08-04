@@ -1,13 +1,25 @@
-name: Validate Skill
+name: Validate Pinpoint
 
 on:
   push:
     paths:
       - "skills/**"
+      - "commands/**"
+      - "bin/**"
+      - "package.json"
+      - "README.md"
+      - "INSTALL.md"
+      - "tests/**"
       - ".github/workflows/validate.yml"
   pull_request:
     paths:
       - "skills/**"
+      - "commands/**"
+      - "bin/**"
+      - "package.json"
+      - "README.md"
+      - "INSTALL.md"
+      - "tests/**"
       - ".github/workflows/validate.yml"
 
 permissions:
@@ -19,6 +31,11 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22.20.0
 
       - name: Install uv
         uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
@@ -32,3 +49,27 @@ jobs:
               --from "git+https://github.com/agentskills/agentskills.git@27a9f0c075e876ad632fc2e88b8866c5dc8ca15c#subdirectory=skills-ref" \
               skills-ref validate "$skill"
           done
+
+      - name: Validate packaged commands and installer metadata
+        run: node bin/pinpoint-install.mjs --check
+
+      - name: Validate the packaged entrypoint
+        run: npm exec --yes --package=. -- pinpoint-install --version
+
+  installer-smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22.20.0
+
+      - name: Smoke-test project install, update, conflict handling, and uninstall
+        run: node tests/installer-smoke.mjs

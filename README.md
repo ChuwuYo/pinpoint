@@ -2,10 +2,10 @@
 
 **Find the owner. Fix the boundary. Prove the claim.**
 
-[![Validate Skill](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml/badge.svg)](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml)
+[![Validate Pinpoint](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml/badge.svg)](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[Install](#quick-install) · [Why Pinpoint](#why-pinpoint) · [Skills](#skills) · [Workflow](#core-workflow) · [Evaluation](#evaluation)
+[Install](#quick-install) · [Why Pinpoint](#why-pinpoint) · [Skills](#skills) · [Commands](#commands) · [Workflow](#core-workflow) · [Evaluation](#evaluation)
 
 ---
 
@@ -15,19 +15,50 @@ It does not prescribe a framework or replace a repository's own rules. It provid
 
 ## Quick Install
 
-Give your coding agent this repository URL and say:
+### Install with your agent
+
+Give this prompt to your coding agent:
 
 ```text
-Install the complete Pinpoint Skill suite globally for the current agent from
-https://github.com/ChuwuYo/pinpoint. Follow INSTALL.md, verify that all four
-Skills are discoverable, and do not add hooks or modify project files.
+Install Pinpoint globally for the current coding harness from
+https://github.com/ChuwuYo/pinpoint. Read and follow INSTALL.md. Install all four
+Skills and any matching user commands supported by this harness, then verify
+explicit invocation in a new session. Do not install hooks or modify project
+files.
 ```
 
-Or run the cross-agent installer directly:
+### Install from terminal
+
+Run the suite installer with the harness you use:
 
 ```bash
-npx skills add ChuwuYo/pinpoint --skill '*' -g
+npx -y github:ChuwuYo/pinpoint --agent opencode
 ```
+
+`npx -y github:ChuwuYo/pinpoint` fetches this repository and runs the Pinpoint
+suite installer. `--agent opencode` selects the target harness's Skill
+directory and any required command integration.
+
+The suite installer supports these explicitly verified values:
+
+```text
+codex
+claude-code
+cursor
+opencode
+```
+
+The `--agent` value is not an arbitrary harness identifier. For another
+Agent Skills-compatible harness, use its identifier with the standard
+installer instead:
+
+```bash
+npx skills add ChuwuYo/pinpoint --skill '*' -g -a <harness-id>
+```
+
+The suite installer adds all four Skills globally and installs separate
+command files only when the selected harness requires them. Use `--project`
+for project-only scope.
 
 > [!TIP]
 > Give the repository URL to your coding agent with the prompt above and it can install and verify the suite itself. No manual download or file copying is required.
@@ -75,6 +106,18 @@ Pinpoint focuses the agent on questions that determine whether a fix is actually
 
 Both delivery Skills reply in the user's language. Commit messages and PR prose follow an explicitly requested language first; otherwise they follow repository rules and established history before falling back to the user's language.
 
+## Commands
+
+| Workflow | Claude Code, Cursor, OpenCode | Codex |
+| --- | --- | --- |
+| Complete fix workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
+| Commit workflow | `/pinpoint-commit <request>` | `$pinpoint-commit` or `/skills` |
+| PR workflow | `/pinpoint-pr <request>` | `$pinpoint-pr` or `/skills` |
+| Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |
+
+> [!NOTE]
+> Agent Skills are portable; command registration is harness-owned. Skills and commands are discovered when a harness starts a session, so open a new session after installation. Codex exposes third-party Skills through `$` mentions and `/skills`; it does not register third-party bare `/pinpoint` commands.
+
 ## Core Workflow
 
 The core `pinpoint` Skill guides an agent through eight decisions:
@@ -90,9 +133,9 @@ The core `pinpoint` Skill guides an agent through eight decisions:
 
 The full workflow lives in [`skills/pinpoint/SKILL.md`](skills/pinpoint/SKILL.md).
 
-## Install Options
+## Scope and Invocation
 
-Install the complete suite globally for the detected agent:
+Install only the standard Skills when command integration is not needed or the harness is not listed above:
 
 ```bash
 npx skills add ChuwuYo/pinpoint --skill '*' -g
@@ -104,7 +147,7 @@ Install only the core workflow globally when commit and PR helpers are not neede
 npx skills add ChuwuYo/pinpoint --skill pinpoint -g
 ```
 
-Omit `-g` for a project-scoped installation. Use an explicit `-a` target for unattended installation; [`INSTALL.md`](INSTALL.md) contains ready-to-run examples.
+Omit `-g` for a project-scoped installation. Use an explicit `-a` target for unattended installation; [`INSTALL.md`](INSTALL.md) contains ready-to-run examples and command behavior for each primary harness.
 
 > [!IMPORTANT]
 > Installing or invoking Pinpoint does not authorize commits, pushes, pull requests, merges, deployments, or destructive cleanup. Each delivery action still requires explicit user authorization.
@@ -153,27 +196,6 @@ The scenarios in [`evals/scenarios`](evals/scenarios) exercise the decisions mos
 - safe contribution work in a dirty fork.
 
 Each scenario keeps the user prompt separate from the evaluator rubric. Give only the prompt to the agent under evaluation; use the rubric afterward. The scenarios are harness-neutral so they can be used with different agents and models.
-
-## Repository Layout
-
-```text
-pinpoint/
-├── README.md
-├── INSTALL.md
-├── LICENSE
-├── skills/
-│   ├── pinpoint/SKILL.md
-│   ├── pinpoint-commit/SKILL.md
-│   ├── pinpoint-pr/SKILL.md
-│   └── pinpoint-help/SKILL.md
-├── evals/
-│   └── scenarios/
-└── .github/
-    └── workflows/
-        └── validate.yml
-```
-
-Only the selected folders under `skills/` are installed. The remaining files support people evaluating, maintaining, and publishing the project.
 
 ## Contributing
 
