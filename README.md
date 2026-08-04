@@ -2,6 +2,13 @@
 
 **Find the owner. Fix the boundary. Prove the claim.**
 
+[![Validate Skill](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml/badge.svg)](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+[Install](#quick-install) · [Why Pinpoint](#why-pinpoint) · [Skills](#skills) · [Workflow](#core-workflow) · [Evaluation](#evaluation)
+
+---
+
 Pinpoint is a portable Agent Skill suite for fixing software issues with evidence and a deliberately small blast radius. Its core Skill traces the real runtime path, identifies which layer owns the failure, preserves adjacent contracts, and reports only what the available evidence proves. Focused companion Skills handle commits and pull requests without loading delivery rules into every investigation.
 
 It does not prescribe a framework or replace a repository's own rules. It provides a disciplined way to investigate and deliver changes inside them.
@@ -22,7 +29,10 @@ Or run the cross-agent installer directly:
 npx skills add ChuwuYo/pinpoint --skill '*' -g
 ```
 
-No manual download or file copying is required. See [`INSTALL.md`](INSTALL.md) for Codex, Claude Code, Cursor, OpenCode, other supported harnesses, project-scoped installation, verification, updates, and removal.
+> [!TIP]
+> Give the repository URL to your coding agent with the prompt above and it can install and verify the suite itself. No manual download or file copying is required.
+
+See [`INSTALL.md`](INSTALL.md) for Codex, Claude Code, Cursor, OpenCode, other supported harnesses, project-scoped installation, verification, updates, and removal.
 
 ## Why Pinpoint
 
@@ -36,6 +46,9 @@ Pinpoint focuses the agent on questions that determine whether a fix is actually
 - Which accessibility, language, platform, data, security, and persistence contracts can the change reach?
 - Does the test reproduce the real mechanism, or only a convenient imitation?
 - Which claims are verified, and which still require a device, provider, artifact, or human check?
+
+> [!NOTE]
+> Pinpoint audits only contracts reachable from the traced runtime path. A single-platform project stays single-platform; unrelated platforms, formats, and toolchains do not become artificial requirements.
 
 ## What Changes
 
@@ -92,6 +105,9 @@ npx skills add ChuwuYo/pinpoint --skill pinpoint -g
 ```
 
 Omit `-g` for a project-scoped installation. Use an explicit `-a` target for unattended installation; [`INSTALL.md`](INSTALL.md) contains ready-to-run examples.
+
+> [!IMPORTANT]
+> Installing or invoking Pinpoint does not authorize commits, pushes, pull requests, merges, deployments, or destructive cleanup. Each delivery action still requires explicit user authorization.
 
 The suite activates from each Skill's description. `pinpoint` handles bug fixing and complete review; `pinpoint-commit` handles staging and commits; `pinpoint-pr` handles PR preparation and publication; `pinpoint-help` explains which one to use. You can also request one explicitly:
 
