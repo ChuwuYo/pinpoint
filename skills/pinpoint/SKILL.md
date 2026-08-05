@@ -111,7 +111,7 @@ Report evidence separately:
 
 ## Run an Adversarial Review
 
-After the cohesive change is ready, hand it to an independent, read-only reviewer. Assemble the review packet: the raw issue, repository rules, the authoritative-base diff, reproduction and validation evidence, and the intended-behavior claims — never the intended verdict or a defense of the change.
+After the cohesive change is ready, hand it to an independent, read-only reviewer. Assemble the review packet: the stated intent (issue, request, or change description), repository rules, the authoritative-base diff, reproduction and validation evidence, and the intended-behavior claims — never the intended verdict or a defense of the change.
 
 When the `pinpoint-review` Skill is available, load and follow it with the review packet. Otherwise run the same challenge inline: prefer one independent, read-only reviewer when the harness provides subagents; prohibit edits explicitly and compare repository state before and after the review if read-only cannot be guaranteed.
 

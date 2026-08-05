@@ -11,7 +11,7 @@ Challenge a completed change the way a hostile reviewer would, then prove or dis
 
 Every reviewer works from the same packet:
 
-- the raw issue or requested change, unedited;
+- the stated intent, unedited — whatever form it takes: an issue, a user request, a spec excerpt, or the change's own description;
 - repository rules that constrain the change;
 - the diff against the authoritative base, with its scope stated exactly;
 - reproduction and validation evidence for the claimed behavior;
@@ -19,7 +19,7 @@ Every reviewer works from the same packet:
 
 Never include the intended verdict, a defense of the change, or hints about what to find. A reviewer primed with the author's conclusion confirms it.
 
-When invoked standalone, derive the packet: diff from the actual merge-base or requested range, the issue or request text from the user, and claims from the branch's commits and description. State any packet element you could not obtain.
+When invoked standalone, derive the packet: diff from the actual merge-base or requested range, the intent as stated by the user, and claims from the branch's commits and description. When no external statement of intent exists, reconstruct it from the change itself and say so. State any packet element you could not obtain.
 
 ## Run Static Checks First
 
@@ -29,7 +29,7 @@ Run the repository's configured formatter check, linter, type checker, and build
 
 Challenge the change along each axis that the diff can reach; exclude an axis rather than inventing hypothetical relevance:
 
-1. **Intent and scope.** Does the diff actually address the reported issue? Quote the issue or spec line behind each gap. Flag behavior the request never asked for as scope creep.
+1. **Intent and scope.** Does the diff actually address the stated intent? Quote the intent source — issue, request, spec, or change description — behind each gap. Flag behavior the intent never asked for as scope creep.
 2. **Ownership and root cause.** A wrong ownership or root-cause assumption; a fix at a boundary that does not own the transition.
 3. **Blast radius.** A wider runtime blast radius than claimed — callers, dispatch, configuration gates, event buses, and concrete consumers not accounted for.
 4. **Architecture and platform.** Divergence from established architecture or platform handling without justification.
