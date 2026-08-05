@@ -28,7 +28,7 @@ Prefer evidence in this order: real reproduction, traced mechanism, representati
 Preserve lessons from specific bugs by translating them into cross-domain rules:
 
 - **Validate at the real consumer boundary.** Intermediate state and static checks are proxies, not final behavior. An accessibility tree may not prove screen-reader navigation, and a successful API response may not prove persistence. When only a proxy is available, state what it cannot prove.
-- **Match evidence granularity to the claim.** Aggregate evidence cannot prove local continuity, order, or identity. An average cannot establish tail behavior, and one bounding region cannot establish every rendered fragment.
+- **Match evidence granularity to the claim.** Aggregate evidence cannot prove local continuity, order, or identity. An average cannot establish tail behavior, and one bounding region cannot establish every rendered fragment. An unchanged result on an input that cannot exhibit the behavior proves nothing about preservation.
 - **Distinguish visible equivalence from semantic equivalence.** Compare identity, order, lifecycle, side effects, and security as well as output. A retried request may duplicate work, while a visually identical UI may change focus or interaction order.
 - **Preserve upstream authority.** If a protocol returns a documented valid form or an operating system provides intentional native behavior, normalize only what crosses into application ownership rather than rewriting the authority itself.
 - **Prove impact through runtime reachability.** A shared type or common helper shows possible reuse, not actual execution. Establish affected formats, platforms, providers, and modes through callers, dispatch, configuration gates, and concrete consumers.
@@ -136,7 +136,7 @@ A completion claim made without evidence in this session's ledger is a misreport
 | --- | --- | --- |
 | Root cause found | Traced first incorrect transition at an owned boundary | A plausible explanation that matches the symptom |
 | Fixed | The original failure now passes at the lowest reliable oracle | The code changed; a proxy or simplified fixture passes |
-| Adjacent behavior preserved | Each invariant-named behavior exercised | A broader suite passed against the suite's own model, not the product |
+| Adjacent behavior preserved | Each invariant-named behavior exercised with inputs capable of showing the change | An unchanged result on inputs that cannot exhibit the behavior |
 | Works on a platform, format, or language | Evidence from that target | Evidence from another target |
 | Accessible | Real assistive-technology traversal — otherwise report the gap as unverified | Static ARIA or accessibility-tree checks |
 | No wider impact | Reachability traced through callers, dispatch, configuration gates, and concrete consumers | A shared type or common helper without a traced consumer |
