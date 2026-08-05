@@ -13,3 +13,13 @@ A CLI tool exports project archives. Intermittently, the command exits 0 and pri
 - Check for partial-file residue and re-entry behavior after interruption.
 - Preserve exit-code contract, output format, and CLI flags unless the issue explicitly changes them.
 - Report which failure modes were actually reproduced (slow disk, interruption, full disk) and which remain unverified.
+
+## Fixture Requirements (evaluator only — never shown to the agent)
+
+The run fixture must contain:
+
+- A CLI with `export` and `import` commands for project archives.
+- An exporter that writes directly to the destination path through buffered stream writes and reports success synchronously after the final `write()` returns — no `end`/`finish` await, no fsync, no temporary file, no rename, and no error handling.
+- An importer that validates a complete archive (end marker, manifest, per-file sizes) and rejects truncated archives.
+- A sample project small enough that the happy path passes by luck, so the run must construct a larger payload or an early-exit condition to observe the failure.
+- No test suite, linter, or CI configuration.

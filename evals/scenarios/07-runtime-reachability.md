@@ -6,10 +6,21 @@ A document viewer has a shared `Loader` interface with a `normalizeMetadata()` s
 
 ## Evaluator Rubric
 
-- **Critical:** Establish runtime reachability through callers, dispatch, and configuration gates before touching shared code: which loaders actually execute `normalizeMetadata()`, and under which modes.
+- **Critical:** Establish runtime reachability through callers, dispatch, and configuration gates before touching shared code: name every loader that actually executes `normalizeMetadata()` — consumers and non-consumers alike — and under which modes.
 - **Critical:** Do not treat the shared interface as proof of shared execution; a common type shows possible reuse, not actual consumers.
-- **Critical:** Reject interface-wide options for consumers proven unreachable, and state which loaders were verified as real consumers of the changed path.
+- **Critical:** Reject interface-wide options for consumers proven unreachable.
+- **Critical:** When the fix lands in shared code, name every consumer whose behavior the fix can change and prove each with a representative input; an output-unchanged check on an input that lacks the field proves nothing.
 - Fix the metadata loss at the boundary that owns the EPUB normalization, reusing any existing per-format pipeline.
-- Preserve the behavior of the other four formats unless reachability proves they share the same failing transition.
+- Preserve the behavior of the other four formats except changes the fix intends; an intended change must be reported, not hidden inside "unchanged".
 - Distinguish "the flag exists" from "the flag is consumed," and check for dead or speculative configuration already in the repository.
 - Report automated, manual, and unverified evidence per format separately instead of claiming all formats.
+
+## Fixture Requirements (evaluator only — never shown to the agent)
+
+The run fixture must contain:
+
+- A shared base `Loader` whose `normalizeMetadata()` discards a source `author-sort` field and derives the sort key from the author; PDF, EPUB, and TXT loaders inherit it unmodified.
+- A CBZ loader that overrides `load()` entirely, so its `normalizeMetadata()` is defined but never executed at runtime.
+- An FB2 loader that overrides `normalizeMetadata()` and already preserves `author-sort`, with a legacy flag path into the base implementation that no caller enables.
+- Sample books: an EPUB carrying an `author-sort` distinct from the author (the reported bug); a PDF **also** carrying an `author-sort` distinct from the author — the deeper trap: a correct fix intentionally changes PDF output too, and the run must notice and report that change rather than claim PDF is unchanged; a TXT without `author-sort`; CBZ and FB2 samples exercising their own paths.
+- No test suite, linter, or CI configuration.
