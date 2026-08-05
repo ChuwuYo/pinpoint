@@ -23,6 +23,7 @@ Prepare a pull request whose scope, history, target, and claims match the final 
 4. Fetch current refs before comparing the branch with its intended base.
 5. Review every commit and the complete diff that the PR will contain.
 6. Confirm that one coherent change is represented and unrelated work is absent.
+7. If the authoritative base has moved since the branch diverged, report the drift; rebase or merge to integrate only with explicit authorization.
 
 If a reviewer, automation, rebase, or force-push updated the remote branch, fetch and compare before continuing. Preserve the newer history and never overwrite it from a stale local branch.
 
@@ -35,11 +36,9 @@ If a reviewer, automation, rebase, or force-push updated the remote branch, fetc
 
 ## Write Claims the Evidence Supports
 
-Adapt the body to the repository template and size of the change. Include only useful sections:
+Adapt the body to the repository template and size of the change. Link the originating issue with closing syntax when one exists and repository convention expects it. Include only useful sections:
 
 ```md
-Closes #<issue>
-
 ## Summary
 
 - State the user-visible problem and corrected behavior.
@@ -84,7 +83,7 @@ When the user explicitly requests publication:
 4. Verify the PR URL, title, body, issue linkage, source branch, target branch, and draft state.
 5. Do not merge, deploy, tag, delete branches, or modify unrelated PRs unless separately authorized.
 
-After merge, synchronize the authoritative base before starting another issue. Do not infer that synchronization is requested merely because the PR merged.
+After merge, synchronize the authoritative base before starting another task. Do not infer that synchronization is requested merely because the PR merged.
 
 ## Respond to Review
 

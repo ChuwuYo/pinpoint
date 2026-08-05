@@ -62,9 +62,11 @@ Only create a commit after the user authorizes committing.
 2. Re-read the complete staged diff and staged file list.
 3. Confirm that no unrelated, secret, generated, or missing required files are present.
 4. Run any repository-required pre-commit validation not already completed.
-5. Create the commit without bypassing hooks.
+5. Create the commit without bypassing hooks. If a hook fails, report the failure and stop; never retry with a bypass.
 6. Verify the resulting commit subject, body, file list, diff summary, and repository status.
 7. Report any remaining staged, unstaged, or untracked work separately.
+
+If the authorized selection yields no diff, stop and say so — never create an empty commit.
 
 Do not push, create a PR, deploy, tag, or amend as an implied follow-up.
 
