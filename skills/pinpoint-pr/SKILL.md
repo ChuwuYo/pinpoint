@@ -66,7 +66,7 @@ Explain the concrete runtime mechanism only when it is not obvious.
 ```
 
 - Omit empty or ceremonial sections.
-- Follow the repository's preferred placement for validation evidence; do not force a `Testing` heading.
+- Follow the repository's preferred placement for validation evidence. When the change includes test files or the work included verification runs, include a `Testing` section by default, reporting the evidence categories: automated, artifact or manual, and unverified. Omit it only when the change has no testing-related content, such as documentation-only edits.
 - Add a compact before/after table only for visual changes that benefit from comparison.
 - Separate automated evidence, manual or artifact evidence, unverified boundaries, and unrelated environment failures.
 - Never claim all platforms, all formats, full accessibility, zero impact, or device verification without evidence.

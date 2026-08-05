@@ -215,6 +215,8 @@ The scenarios in [`evals/scenarios`](evals/scenarios) exercise the decisions mos
 - rendered geometry and reflow identity;
 - shared interfaces versus runtime-reachable consumers;
 - producer success signals versus downstream-consumable artifacts;
+- baseline measurement versus intuitive optimization;
+- persisted-value provenance versus same-named decoys;
 - user language versus repository commit and PR conventions;
 - safe contribution work in a dirty fork.
 

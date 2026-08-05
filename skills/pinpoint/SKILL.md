@@ -21,7 +21,7 @@ Classify important conclusions internally:
 
 Do not present inference as observation. Resolve conflicts by identifying which authority owns the behavior; generic best practice does not override a deliberate repository contract, and repository convention does not override a mandatory external protocol.
 
-Prefer evidence in this order: real reproduction, traced mechanism, representative oracle, repository contract, official external contract, then generic guidance.
+Prefer evidence in this order: real reproduction, traced mechanism, representative oracle, repository contract, official external contract, then generic guidance. External convention and prior art are generic guidance: they may justify the minimal internal answer, but they never substitute for tracing the project's own mechanism, and they must not expand the option surface.
 
 ## Apply Transferable Reasoning
 
@@ -31,10 +31,11 @@ Preserve lessons from specific bugs by translating them into cross-domain rules:
 - **Match evidence granularity to the claim.** Aggregate evidence cannot prove local continuity, order, or identity. An average cannot establish tail behavior, and one bounding region cannot establish every rendered fragment. An unchanged result on an input that cannot exhibit the behavior proves nothing about preservation.
 - **Distinguish visible equivalence from semantic equivalence.** Compare identity, order, lifecycle, side effects, and security as well as output. A retried request may duplicate work, while a visually identical UI may change focus or interaction order.
 - **Preserve upstream authority.** If a protocol returns a documented valid form or an operating system provides intentional native behavior, normalize only what crosses into application ownership rather than rewriting the authority itself.
-- **Prove impact through runtime reachability.** A shared type or common helper shows possible reuse, not actual execution. Establish affected formats, platforms, providers, and modes through callers, dispatch, configuration gates, and concrete consumers.
+- **Prove impact through runtime reachability.** A shared type or common helper shows possible reuse, not actual execution. Establish affected formats, platforms, providers, and modes through callers, dispatch, configuration gates, and concrete consumers. Enumerate channels that bypass the call graph — event buses, dispatchers, registries — by event or channel name, and check each dispatch site's data provenance: live value or stale snapshot.
 - **Separate stable identity from transient representation.** A reordered list may change indexes without changing records, and a reconnect may replace a connection without replacing the business session. Preserve continuity with stable identifiers, semantic anchors, or authoritative event reasons.
 - **Make cached results express all dependencies.** An API cache may depend on permissions and locale; a geometry cache may depend on dimensions and fonts. A cache with incomplete dependencies is not authoritative state.
 - **Relax only the smallest necessary condition.** Accepting another documented OAuth callback form must preserve state validation; accepting another file extension must preserve content and size checks. Define the new equivalence precisely and keep unrelated invariants unchanged.
+- **Keep one user-facing field on one producer with one semantics.** Prefer honest absence (an explicit unknown state) over a second producer with different semantics. A fallback chain that leaves a "which value do we show?" fork is a stop signal: re-verify the primary source's properties before adding producers, not a question to delegate to the user.
 
 ## Trace Ownership Before Designing
 
@@ -43,9 +44,10 @@ Protect the working state first: preserve unrelated user changes, staged work, w
 1. Capture the exact environment, input, settings, expected behavior, and observed behavior relevant to the report.
 2. Follow the concrete runtime path from trigger through local state, shared transformations, external or native boundaries, and persistence or re-entry.
 3. Identify the concrete consumer of every value under consideration. Do not infer reachability from a shared type, optional method, or broad interface.
-4. Inspect the real failing artifact or mechanism: DOM, computed style, event sequence, payload, persisted record, generated file, native log, geometry, or equivalent evidence.
-5. Classify ownership: application, framework, browser, operating system, toolkit, source data, provider, network, or environment.
-6. Locate the first transition from correct to incorrect, or from acceptable cost to unjustified cost. Distinguish an external layer behaving intentionally from the application consuming that behavior incorrectly.
+4. Before reusing, substituting, or extending an existing value, trace it to its producer and read the producing computation. Never infer a value's properties from a same-named nearby computation or from domain convention. Name the producer (file:line) before proposing alternatives.
+5. Inspect the real failing artifact or mechanism: DOM, computed style, event sequence, payload, persisted record, generated file, native log, geometry, or equivalent evidence.
+6. Classify ownership: application, framework, browser, operating system, toolkit, source data, provider, network, or environment.
+7. Locate the first transition from correct to incorrect, or from acceptable cost to unjustified cost. Distinguish an external layer behaving intentionally from the application consuming that behavior incorrectly.
 
 A simplified fixture is useful only if it preserves the property that causes the failure.
 

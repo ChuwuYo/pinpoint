@@ -24,5 +24,5 @@ gracefully or fabricate a root cause is untested.
 metadata-handling layer with planted behavioral hazards such as ordering,
 error-message text, or identifier stability). Use the observed failure modes
 to design the Skill's sections and Final Gate rows, then add the scenario as
-`evals/scenarios/10-refactoring-preservation.md`. Do not write the Skill
+`evals/scenarios/11-refactoring-preservation.md`. Do not write the Skill
 before the baseline exists.
