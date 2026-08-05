@@ -1,6 +1,6 @@
 # Install Pinpoint
 
-Pinpoint uses the open Agent Skills format. The suite installer adds all four
+Pinpoint uses the open Agent Skills format. The suite installer adds all five
 Skills through the cross-agent `skills` CLI and installs separate user commands
 only for harnesses that do not expose installed Skills directly in their
 command menu. It does not install hooks or edit project instructions.
@@ -11,7 +11,7 @@ Give this prompt to your coding agent:
 
 ```text
 Install Pinpoint globally for the current coding harness from
-https://github.com/ChuwuYo/pinpoint. Read and follow INSTALL.md. Install all four
+https://github.com/ChuwuYo/pinpoint. Read and follow INSTALL.md. Install all five
 Skills and any matching user commands supported by this harness, then verify
 explicit invocation in a new session. Do not install hooks or modify project
 files.
@@ -44,7 +44,7 @@ current project.
 The installer gives its exact packaged Skill source to the pinned `skills` CLI,
 which writes to the selected harness's documented Skill directory. Claude Code
 and Cursor can surface user-invocable Skills directly. OpenCode keeps Skills
-and custom commands separate, so the installer also writes four managed
+and custom commands separate, so the installer also writes five managed
 command files to its documented command directory. Codex uses its native Skill
 picker and `$` mentions rather than third-party bare slash commands.
 
@@ -97,7 +97,7 @@ When Codex has `$skill-installer`, ask it directly:
 
 ```text
 Use $skill-installer to install all Skills from
-https://github.com/ChuwuYo/pinpoint globally. Verify all four names afterward.
+https://github.com/ChuwuYo/pinpoint globally. Verify all five names afterward.
 ```
 
 Codex discovers newly installed Skills automatically. In a new task, invoke one
@@ -123,7 +123,7 @@ pinpoint-help
 ```
 
 Then start a new session and invoke `pinpoint-help` using the syntax in the
-table above. On OpenCode, all four command names should also appear in the `/`
+table above. On OpenCode, all five command names should also appear in the `/`
 menu.
 
 ## Versioning
@@ -138,7 +138,7 @@ npx -y github:ChuwuYo/pinpoint --version
 For reproducible installation after a release tag exists, pin the tag:
 
 ```bash
-npx -y github:ChuwuYo/pinpoint#v0.3.1 --agent opencode
+npx -y github:ChuwuYo/pinpoint#v0.4.0 --agent opencode
 ```
 
 The package version, Git tag, Skills, commands, and installer belong to the

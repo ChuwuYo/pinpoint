@@ -111,16 +111,19 @@ Report evidence separately:
 
 ## Run an Adversarial Review
 
-After the cohesive change is ready, prefer one independent, read-only reviewer when the harness provides subagents. If the reviewer is not read-only, explicitly prohibit edits and compare repository state before and after the review. Give it the raw issue, repository rules, authoritative-base diff, and reproduction evidence without the intended verdict or defense.
+After the cohesive change is ready, hand it to an independent, read-only reviewer. Assemble the review packet: the raw issue, repository rules, the authoritative-base diff, reproduction and validation evidence, and the intended-behavior claims — never the intended verdict or a defense of the change.
 
-Ask it to find:
+When the `pinpoint-review` Skill is available, load and follow it with the review packet. Otherwise run the same challenge inline: prefer one independent, read-only reviewer when the harness provides subagents; prohibit edits explicitly and compare repository state before and after the review if read-only cannot be guaranteed.
+
+Ask the reviewer to find:
 
 - a wrong ownership or root-cause assumption;
 - a wider runtime blast radius than claimed;
 - divergence from established architecture or platform handling;
 - reachable accessibility, language, platform, data, security, or persistence regressions;
 - tests that imitate the implementation instead of the reported mechanism;
-- unrelated changes or unsupported claims.
+- unrelated changes or unsupported claims;
+- scope creep: behavior the request never asked for.
 
 Require the review to close with severity counts (blocker, should-fix, nit) and a verdict: BLOCK, FIX-THEN-COMMIT, or CLEAR.
 

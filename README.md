@@ -40,7 +40,7 @@ Give this prompt to your coding agent:
 
 ```text
 Install Pinpoint globally for the current coding harness from
-https://github.com/ChuwuYo/pinpoint. Read and follow INSTALL.md. Install all four
+https://github.com/ChuwuYo/pinpoint. Read and follow INSTALL.md. Install all five
 Skills and any matching user commands supported by this harness, then verify
 explicit invocation in a new session. Do not install hooks or modify project
 files.
@@ -75,7 +75,7 @@ installer instead:
 npx skills add ChuwuYo/pinpoint --skill '*' -g -a <harness-id>
 ```
 
-The suite installer adds all four Skills globally and installs separate
+The suite installer adds all five Skills globally and installs separate
 command files only when the selected harness requires them. Use `--project`
 for project-only scope.
 
@@ -117,11 +117,12 @@ Pinpoint focuses the agent on questions that determine whether a fix is actually
 | Skill | Purpose |
 | --- | --- |
 | `pinpoint` | Complete investigation, implementation, validation, and review workflow for fixes and optimizations |
+| `pinpoint-review` | Read-only adversarial review of a diff, branch, or PR: parallel concern axes, scored re-rank gate, strict noise budget |
 | `pinpoint-commit` | Exact staging, repository-aligned commit messages, and authorized commits |
 | `pinpoint-pr` | Branch and remote checks, evidence-backed PR prose, and authorized publication |
 | `pinpoint-help` | Explain the suite and route a request without changing repository state |
 
-`pinpoint` remains one complete root-cause-to-review workflow. Commit and PR delivery are separate because they are optional actions with distinct authorization and language rules. Help remains a lightweight router rather than another workflow.
+`pinpoint` remains one complete root-cause-to-review workflow, and invokes `pinpoint-review` at its review stage. Review is a separate Skill because it is also useful standalone — auditing any diff or branch, not just Pinpoint output — and because keeping its adversarial methodology out of the investigation context keeps both sharper. Commit and PR delivery are separate because they are optional actions with distinct authorization and language rules. Help remains a lightweight router rather than another workflow.
 
 Both delivery Skills reply in the user's language. Commit messages and PR prose follow an explicitly requested language first; otherwise they follow repository rules and established history before falling back to the user's language.
 
@@ -130,6 +131,7 @@ Both delivery Skills reply in the user's language. Commit messages and PR prose 
 | Workflow | Claude Code, Cursor, OpenCode | Codex |
 | --- | --- | --- |
 | Fix and optimization workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
+| Review workflow | `/pinpoint-review <request>` | `$pinpoint-review` or `/skills` |
 | Commit workflow | `/pinpoint-commit <request>` | `$pinpoint-commit` or `/skills` |
 | PR workflow | `/pinpoint-pr <request>` | `$pinpoint-pr` or `/skills` |
 | Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |
@@ -147,7 +149,7 @@ The core `pinpoint` Skill guides an agent through seven decisions:
 4. Fix the smallest owned boundary, reusing established settings, pipelines, and abstractions before adding anything new.
 5. Audit only the contracts reachable from the traced path — interaction, language, data, protocol, geometry, or platform — and report what could not be exercised.
 6. Validate the real mechanism at the lowest reliable oracle, then report automated, manual, unverified, and unrelated-environment evidence separately.
-7. Run an independent adversarial review when subagents are available, verify its findings, and disclose when only self-review was possible. Stop before delivery unless requested.
+7. Run an independent adversarial review when subagents are available — delegated to the `pinpoint-review` Skill — verify its findings, and disclose when only self-review was possible. Stop before delivery unless requested.
 
 The full workflow lives in [`skills/pinpoint/SKILL.md`](skills/pinpoint/SKILL.md).
 
@@ -170,7 +172,7 @@ Omit `-g` for a project-scoped installation. Use an explicit `-a` target for una
 > [!IMPORTANT]
 > Installing or invoking Pinpoint does not authorize commits, pushes, pull requests, merges, deployments, or destructive cleanup. Each delivery action still requires explicit user authorization.
 
-The suite activates from each Skill's description. `pinpoint` handles bug fixing, optimization, and complete review; `pinpoint-commit` handles staging and commits; `pinpoint-pr` handles PR preparation and publication; `pinpoint-help` explains which one to use. You can also request one explicitly:
+The suite activates from each Skill's description. `pinpoint` handles bug fixing, optimization, and complete review; `pinpoint-review` audits any diff or branch read-only; `pinpoint-commit` handles staging and commits; `pinpoint-pr` handles PR preparation and publication; `pinpoint-help` explains which one to use. You can also request one explicitly:
 
 ```text
 Use Pinpoint to investigate and fix this issue with the smallest proven impact.
@@ -179,6 +181,11 @@ Use Pinpoint to investigate and fix this issue with the smallest proven impact.
 ```text
 Use Pinpoint to review this branch for incorrect ownership, hidden regressions,
 weak test models, and claims the evidence does not support.
+```
+
+```text
+Use Pinpoint Review to audit this branch before merge: challenge ownership,
+blast radius, test quality, and every claim the evidence does not support.
 ```
 
 ```text
@@ -217,6 +224,7 @@ The scenarios in [`evals/scenarios`](evals/scenarios) exercise the decisions mos
 - producer success signals versus downstream-consumable artifacts;
 - baseline measurement versus intuitive optimization;
 - persisted-value provenance versus same-named decoys;
+- planted blockers versus decoy findings and review noise;
 - user language versus repository commit and PR conventions;
 - safe contribution work in a dirty fork.
 

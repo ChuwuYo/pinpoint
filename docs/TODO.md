@@ -7,6 +7,21 @@ user-facing proposals belong in issues, not here.
 
 ## Under consideration
 
+### Scenario 12 baseline run
+
+**What:** Build the fixture for `evals/scenarios/12-review-noise-gate.md`
+(planted currency-path blocker, two documented decoys, linter-covered style
+issues) and run an A/B baseline with and without the `pinpoint-review` Skill.
+
+**Why:** The scenario is unproven until a no-Skill run shows the failure modes
+it was designed to catch (missed blocker, decoy findings, padded finding
+lists). A scenario the agent can pass without the Skill proves nothing.
+
+**Next step:** Build the fixture per the scenario's fixture requirements, run
+baseline on the current model, then run with `pinpoint-review` loaded and
+score both per `evals/SCORING.md`. Record results in the commit that adjusts
+the Skill from observed failure modes.
+
 ### `pinpoint-refactor` Skill
 
 **What:** A companion Skill applying the Pinpoint discipline to

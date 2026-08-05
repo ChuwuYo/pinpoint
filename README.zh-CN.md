@@ -40,7 +40,7 @@ Pinpoint 是一套可移植的 Agent Skill 套件，用于以证据为依据、�
 
 ```text
 Install Pinpoint globally for the current coding harness from
-https://github.com/ChuwuYo/pinpoint. Read and follow INSTALL.md. Install all four
+https://github.com/ChuwuYo/pinpoint. Read and follow INSTALL.md. Install all five
 Skills and any matching user commands supported by this harness, then verify
 explicit invocation in a new session. Do not install hooks or modify project
 files.
@@ -71,7 +71,7 @@ opencode
 npx skills add ChuwuYo/pinpoint --skill '*' -g -a <harness-id>
 ```
 
-套件安装器会全局安装全部四个 Skills，并且仅当所选 harness 需要时才额外安装独立的命令文件。使用 `--project` 可改为仅对当前项目生效。
+套件安装器会全局安装全部五个 Skills，并且仅当所选 harness 需要时才额外安装独立的命令文件。使用 `--project` 可改为仅对当前项目生效。
 
 > [!TIP]
 > 把仓库 URL 连同上面的提示词交给你的编码 Agent，它就能自己完成安装和验证，无需手动下载或复制文件。
@@ -111,11 +111,12 @@ Pinpoint 让 Agent 聚焦于决定修复是否真正成立的问题：
 | Skill | 用途 |
 | --- | --- |
 | `pinpoint` | 修复与优化的完整调查、实现、验证和审查工作流 |
+| `pinpoint-review` | 对 diff、分支或 PR 的只读对抗性审查：并行关注轴、评分重排门、严格噪音预算 |
 | `pinpoint-commit` | 精确的暂存、符合仓库习惯的提交信息，以及经授权的提交 |
 | `pinpoint-pr` | 分支与远端检查、有证据支撑的 PR 文案，以及经授权的发布 |
 | `pinpoint-help` | 解释这套套件并路由请求，不改变仓库状态 |
 
-`pinpoint` 保持为一个完整的"从根因到审查"工作流。提交和 PR 交付之所以独立，是因为它们是可选动作，各自有不同的授权和语言规则。Help 则保持为轻量路由器，而不是又一个工作流。
+`pinpoint` 保持为一个完整的"从根因到审查"工作流，并在其审查阶段调用 `pinpoint-review`。审查之所以是独立的 Skill，是因为它单独使用同样有价值——审计任意 diff 或分支，不限于 Pinpoint 的产出——而且把对抗性审查方法排除在调查上下文之外，能让两者都更锋利。提交和 PR 交付之所以独立，是因为它们是可选动作，各自有不同的授权和语言规则。Help 则保持为轻量路由器，而不是又一个工作流。
 
 两个交付 Skill 都用用户的语言回复。提交信息和 PR 文案优先遵循显式指定的语言；否则先遵循仓库规则和既有历史，最后才回退到用户的语言。
 
@@ -124,6 +125,7 @@ Pinpoint 让 Agent 聚焦于决定修复是否真正成立的问题：
 | 工作流 | Claude Code、Cursor、OpenCode | Codex |
 | --- | --- | --- |
 | 修复与优化工作流 | `/pinpoint <请求>` | `$pinpoint` 或 `/skills` |
+| 审查工作流 | `/pinpoint-review <请求>` | `$pinpoint-review` 或 `/skills` |
 | 提交工作流 | `/pinpoint-commit <请求>` | `$pinpoint-commit` 或 `/skills` |
 | PR 工作流 | `/pinpoint-pr <请求>` | `$pinpoint-pr` 或 `/skills` |
 | 帮助与路由 | `/pinpoint-help` | `$pinpoint-help` 或 `/skills` |
@@ -141,7 +143,7 @@ Pinpoint 让 Agent 聚焦于决定修复是否真正成立的问题：
 4. 修在最小的归属边界上，优先复用已有的设置、流水线和抽象，再考虑新增。
 5. 只审计从追踪路径可达的契约——交互、语言、数据、协议、几何或平台——并报告无法检验的部分。
 6. 在最低的可靠 oracle 上验证真实机制，然后分开报告自动化、人工、未验证和无关环境四类证据。
-7. 有条件时使用独立的对抗性子 Agent 审查并核实其发现；只能自审时如实披露。除非被要求，否则在交付前停下。
+7. 有条件时使用独立的对抗性审查——委托给 `pinpoint-review` Skill——并核实其发现；只能自审时如实披露。除非被要求，否则在交付前停下。
 
 完整工作流见 [`skills/pinpoint/SKILL.md`](skills/pinpoint/SKILL.md)。
 
@@ -164,7 +166,7 @@ npx skills add ChuwuYo/pinpoint --skill pinpoint -g
 > [!IMPORTANT]
 > 安装或调用 Pinpoint 并不授权提交、推送、创建 Pull Request、合并、部署或破坏性清理。每一个交付动作仍需用户显式授权。
 
-套件通过每个 Skill 的描述被激活。`pinpoint` 负责修 bug、优化和完整审查；`pinpoint-commit` 负责暂存和提交；`pinpoint-pr` 负责 PR 准备和发布；`pinpoint-help` 负责告诉你该用哪个。你也可以显式指定：
+套件通过每个 Skill 的描述被激活。`pinpoint` 负责修 bug、优化和完整审查；`pinpoint-review` 以只读方式审计任意 diff 或分支；`pinpoint-commit` 负责暂存和提交；`pinpoint-pr` 负责 PR 准备和发布；`pinpoint-help` 负责告诉你该用哪个。你也可以显式指定：
 
 ```text
 Use Pinpoint to investigate and fix this issue with the smallest proven impact.
@@ -173,6 +175,11 @@ Use Pinpoint to investigate and fix this issue with the smallest proven impact.
 ```text
 Use Pinpoint to review this branch for incorrect ownership, hidden regressions,
 weak test models, and claims the evidence does not support.
+```
+
+```text
+Use Pinpoint Review to audit this branch before merge: challenge ownership,
+blast radius, test quality, and every claim the evidence does not support.
 ```
 
 ```text
@@ -211,6 +218,7 @@ Pinpoint 不承诺零影响。它要求 Agent 论证清楚可达的影响范围�
 - 生产者的成功信号与下游可消费的产物；
 - 基线测量与直觉优化；
 - 持久化值的溯源与同名诱饵；
+- 预埋阻断项与诱饵发现、审查噪音；
 - 用户语言与仓库提交、PR 惯例；
 - 在脏 fork 中安全地贡献。
 

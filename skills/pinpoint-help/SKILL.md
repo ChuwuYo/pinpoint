@@ -1,6 +1,6 @@
 ---
 name: pinpoint-help
-description: Explain the Pinpoint Skill suite, choose the correct workflow, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use Pinpoint, Pinpoint help, available Pinpoint workflows, or the difference between pinpoint, pinpoint-commit, and pinpoint-pr.
+description: Explain the Pinpoint Skill suite, choose the correct workflow, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use Pinpoint, Pinpoint help, available Pinpoint workflows, or the difference between pinpoint, pinpoint-review, pinpoint-commit, and pinpoint-pr.
 ---
 
 # Pinpoint Help
@@ -18,6 +18,7 @@ Explain the suite and route the request. Do not inspect, edit, stage, commit, pu
 | Request | Skill |
 | --- | --- |
 | Investigate an issue or performance problem, find the owning layer, implement a narrow fix or optimization, validate it, or review the complete change | `pinpoint` |
+| Review a diff, branch, or PR read-only — challenge ownership, blast radius, test quality, and claims before delivery | `pinpoint-review` |
 | Generate a commit message, inspect staging, split commits, stage exact changes, or commit when authorized | `pinpoint-commit` |
 | Prepare a PR title or body, inspect fork and branch publication state, respond to review, push, or create a PR when authorized | `pinpoint-pr` |
 | Explain the suite, installation, invocation, or routing | `pinpoint-help` |
@@ -30,7 +31,7 @@ For an end-to-end contribution, use this sequence only as each phase becomes nec
 pinpoint -> pinpoint-commit -> pinpoint-pr
 ```
 
-Completion of one phase does not authorize the next.
+The `pinpoint` workflow invokes `pinpoint-review` at its review stage automatically; invoke `pinpoint-review` directly when reviewing work that did not come from a Pinpoint run. Completion of one phase does not authorize the next.
 
 ## Explain Invocation
 
@@ -39,6 +40,7 @@ Use the current harness's native explicit form:
 | Workflow | Claude Code, Cursor, OpenCode | Codex |
 | --- | --- | --- |
 | Fix and optimization workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
+| Review workflow | `/pinpoint-review <request>` | `$pinpoint-review` or `/skills` |
 | Commit workflow | `/pinpoint-commit <request>` | `$pinpoint-commit` or `/skills` |
 | PR workflow | `/pinpoint-pr <request>` | `$pinpoint-pr` or `/skills` |
 | Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |
@@ -67,7 +69,7 @@ After installation, verify discovery:
 npx skills list -g -a codex
 ```
 
-Replace `codex` with the installer-documented target identifier. Confirm all four Skill names, then start a new session and test the native explicit invocation. OpenCode should also list all four Pinpoint commands in its `/` menu.
+Replace `codex` with the installer-documented target identifier. Confirm all five Skill names, then start a new session and test the native explicit invocation. OpenCode should also list all five Pinpoint commands in its `/` menu.
 
 If an installed Skill does not appear, restart the current agent or start a new task. Do not add hooks, edit `AGENTS.md`, or change project configuration merely to make Pinpoint available.
 
