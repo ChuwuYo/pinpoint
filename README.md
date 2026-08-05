@@ -1,13 +1,30 @@
-# Pinpoint
+<p align="center">
+  <img src="docs/assets/logo.svg" alt="Pinpoint logo" width="180">
+</p>
 
-English | [简体中文](README.zh-CN.md)
+<h1 align="center">Pinpoint</h1>
 
-**Find the owner. Fix the boundary. Prove the claim.**
+<p align="center">
+  English | <a href="README.zh-CN.md">简体中文</a>
+</p>
 
-[![Validate Pinpoint](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml/badge.svg)](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<p align="center">
+  <strong>Find the owner. Fix the boundary. Prove the claim.</strong>
+</p>
 
-[Install](#quick-install) · [Why Pinpoint](#why-pinpoint) · [Skills](#skills) · [Commands](#commands) · [Workflow](#core-workflow) · [Evaluation](#evaluation)
+<p align="center">
+  <a href="https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml"><img src="https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml/badge.svg" alt="Validate Pinpoint"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+</p>
+
+<p align="center">
+  <a href="#quick-install">Install</a> ·
+  <a href="#why-pinpoint">Why Pinpoint</a> ·
+  <a href="#skills">Skills</a> ·
+  <a href="#commands">Commands</a> ·
+  <a href="#core-workflow">Workflow</a> ·
+  <a href="#evaluation">Evaluation</a>
+</p>
 
 ---
 

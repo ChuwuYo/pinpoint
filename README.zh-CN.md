@@ -1,13 +1,30 @@
-# Pinpoint
+<p align="center">
+  <img src="docs/assets/logo.svg" alt="Pinpoint logo" width="180">
+</p>
 
-[English](README.md) | 简体中文
+<h1 align="center">Pinpoint</h1>
 
-**找到归属层。修在边界上。用证据证明。**
+<p align="center">
+  <a href="README.md">English</a> | 简体中文
+</p>
 
-[![Validate Pinpoint](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml/badge.svg)](https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<p align="center">
+  <strong>找到归属层。修在边界上。用证据证明。</strong>
+</p>
 
-[安装](#快速安装) · [为什么是 Pinpoint](#为什么是-pinpoint) · [Skills](#skills) · [命令](#命令) · [工作流](#核心工作流) · [评估](#评估)
+<p align="center">
+  <a href="https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml"><img src="https://github.com/ChuwuYo/pinpoint/actions/workflows/validate.yml/badge.svg" alt="Validate Pinpoint"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+</p>
+
+<p align="center">
+  <a href="#快速安装">安装</a> ·
+  <a href="#为什么是-pinpoint">为什么是 Pinpoint</a> ·
+  <a href="#skills">Skills</a> ·
+  <a href="#命令">命令</a> ·
+  <a href="#核心工作流">工作流</a> ·
+  <a href="#评估">评估</a>
+</p>
 
 ---
 

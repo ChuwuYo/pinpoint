@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="t d">
+<title id="t">Folded Boundary</title>
+<desc id="d">Geometric logo concept for Pinpoint.</desc>
+<rect width="512" height="512" rx="96" fill="#F7F5F2"/>
+
+<path d="
+M134 171
+C134 145 155 124 181 124H330
+C356 124 378 145 378 171V219
+H312V190H200V322H312V293H378V341
+C378 367 356 388 330 388H181
+C155 388 134 367 134 341V171Z" fill="#111318"/>
+<path d="M312 219H404L356 256L404 293H312V219Z" fill="#5B5FEF"/>
+
+</svg>
