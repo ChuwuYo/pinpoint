@@ -201,7 +201,7 @@ The scenarios in [`evals/scenarios`](evals/scenarios) exercise the decisions mos
 - user language versus repository commit and PR conventions;
 - safe contribution work in a dirty fork.
 
-Each scenario keeps the user prompt separate from the evaluator rubric. Give only the prompt to the agent under evaluation; use the rubric afterward. The scenarios are harness-neutral so they can be used with different agents and models.
+Each scenario keeps the user prompt separate from the evaluator rubric. Give only the prompt to the agent under evaluation; use the rubric afterward. The scenarios are harness-neutral so they can be used with different agents and models. Score runs with [`evals/SCORING.md`](evals/SCORING.md) so results stay comparable across versions and models.
 
 ## Contributing
 
@@ -210,7 +210,7 @@ Keep changes evidence-driven and narrowly scoped. For a behavior change:
 1. Add or update a scenario that exposes the missing decision.
 2. Change the minimum necessary instruction in the responsible `SKILL.md`.
 3. Validate every Skill against the open specification.
-4. Run the affected scenarios without showing their rubrics to the agent.
+4. Run the affected scenarios without showing their rubrics to the agent, scoring runs per [`evals/SCORING.md`](evals/SCORING.md).
 5. Report both improvements and regressions.
 
 Avoid adding scripts, references, compatibility layers, or plugin packaging until they solve a demonstrated distribution or reliability need.

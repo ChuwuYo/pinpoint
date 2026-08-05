@@ -195,7 +195,7 @@ Pinpoint 不承诺零影响。它要求 Agent 论证清楚可达的影响范围�
 - 用户语言与仓库提交、PR 惯例；
 - 在脏 fork 中安全地贡献。
 
-每个场景都把用户提示词和评估 rubric 分开。只把提示词给被评估的 Agent，rubric 留到事后使用。这些场景与 harness 无关，可用于不同的 Agent 和模型。
+每个场景都把用户提示词和评估 rubric 分开。只把提示词给被评估的 Agent，rubric 留到事后使用。这些场景与 harness 无关，可用于不同的 Agent 和模型。按 [`evals/SCORING.md`](evals/SCORING.md) 给运行打分，让结果在不同版本和模型之间保持可比。
 
 ## 贡献
 
@@ -204,7 +204,7 @@ Pinpoint 不承诺零影响。它要求 Agent 论证清楚可达的影响范围�
 1. 新增或更新一个能暴露缺失决策的场景。
 2. 在负有责任的 `SKILL.md` 中改动最少必要的指令。
 3. 对照开放规范验证每个 Skill。
-4. 运行受影响的场景，且不把 rubric 展示给被评估的 Agent。
+4. 运行受影响的场景，且不把 rubric 展示给被评估的 Agent，按 [`evals/SCORING.md`](evals/SCORING.md) 打分。
 5. 同时报告改进和回退。
 
 在解决已被证明的分发或可靠性需求之前，避免添加脚本、参考资料、兼容层或插件打包。
