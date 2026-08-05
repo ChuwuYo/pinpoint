@@ -15,7 +15,7 @@ Classify important conclusions internally:
 
 - **Repository contract:** current code, tests, contribution rules, or architecture.
 - **External contract:** applicable official specification, platform, framework, browser, or provider documentation.
-- **Reviewer direction:** a requirement stated in the current issue or review.
+- **Requester direction:** a requirement stated in the current request, issue, or review.
 - **Observation:** reproduced behavior from the real environment, artifact, payload, trace, or device.
 - **Inference:** an explanation that still needs verification.
 
@@ -39,9 +39,9 @@ Preserve lessons from specific bugs by translating them into cross-domain rules:
 
 ## Trace Ownership Before Designing
 
-Protect the working state first: preserve unrelated user changes, staged work, worktrees, and branch history, and never clean, reset, or rewrite anything without explicit authorization. When the task needs a new branch, create one issue-focused branch from the authoritative base identified from actual configuration, following the repository's branch naming and worktree conventions, and keep one coherent issue on it.
+Protect the working state first: preserve unrelated user changes, staged work, worktrees, and branch history, and never clean, reset, or rewrite anything without explicit authorization. When the task needs a new branch, create one task-focused branch from the authoritative base identified from actual configuration, following the repository's branch naming and worktree conventions, and keep one coherent task on it.
 
-1. Capture the exact environment, input, settings, expected behavior, and observed behavior relevant to the report.
+1. Capture the exact environment, input, settings, expected behavior, and observed behavior relevant to the stated problem.
 2. Follow the concrete runtime path from trigger through local state, shared transformations, external or native boundaries, and persistence or re-entry.
 3. Identify the concrete consumer of every value under consideration. Do not infer reachability from a shared type, optional method, or broad interface.
 4. Before reusing, substituting, or extending an existing value, trace it to its producer and read the producing computation. Never infer a value's properties from a same-named nearby computation or from domain convention. Name the producer (file:line) before proposing alternatives.
@@ -111,7 +111,7 @@ Report evidence separately:
 
 ## Run an Adversarial Review
 
-After the cohesive change is ready, hand it to an independent, read-only reviewer. Assemble the review packet: the stated intent (issue, request, or change description), repository rules, the authoritative-base diff, reproduction and validation evidence, and the intended-behavior claims — never the intended verdict or a defense of the change.
+After the cohesive change is ready, hand it to an independent, read-only reviewer. Assemble the review packet: the stated intent (issue, request, or change description), repository rules, the authoritative-base diff, validation evidence — reproduction evidence when the change fixes a defect — and the intended-behavior claims — never the intended verdict or a defense of the change.
 
 When the `pinpoint-review` Skill is available, load and follow it with the review packet. Otherwise run the same challenge inline: prefer one independent, read-only reviewer when the harness provides subagents; prohibit edits explicitly and compare repository state before and after the review if read-only cannot be guaranteed.
 
@@ -121,7 +121,7 @@ Ask the reviewer to find:
 - a wider runtime blast radius than claimed;
 - divergence from established architecture or platform handling;
 - reachable accessibility, language, platform, data, security, or persistence regressions;
-- tests that imitate the implementation instead of the reported mechanism;
+- tests that imitate the implementation instead of the claimed mechanism;
 - unrelated changes or unsupported claims;
 - scope creep: behavior the request never asked for.
 
@@ -153,7 +153,7 @@ A completion claim made without evidence in this session's ledger is a misreport
 Before claiming completion, answer:
 
 1. Where does correct behavior first become incorrect — or acceptable cost first become unjustified — and who owns that boundary?
-2. Which repository contract, external contract, reviewer direction, and observation support the fix?
+2. Which repository contract, external contract, requester direction, and observation support the fix?
 3. Does the oracle preserve the real failure mechanism?
 4. Which adjacent contracts are actually reachable?
 5. What is the smallest invariant now proven?

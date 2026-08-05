@@ -17,12 +17,12 @@ Prepare a pull request whose scope, history, target, and claims match the final 
 
 ## Establish the Publication State
 
-1. Read the repository contribution guide, PR template, issue, linked discussion, and current reviewer feedback.
+1. Read the repository contribution guide, PR template, and current reviewer feedback, plus any linked issue or discussion.
 2. Inspect status, staged and unstaged changes, untracked files, current branch, upstream tracking, remotes, worktrees, submodules, and nested repositories.
 3. Identify the authoritative base and contributor remote from configuration rather than assumed names.
 4. Fetch current refs before comparing the branch with its intended base.
 5. Review every commit and the complete diff that the PR will contain.
-6. Confirm that one coherent issue is represented and unrelated work is absent.
+6. Confirm that one coherent change is represented and unrelated work is absent.
 
 If a reviewer, automation, rebase, or force-push updated the remote branch, fetch and compare before continuing. Preserve the newer history and never overwrite it from a stale local branch.
 
@@ -99,7 +99,7 @@ After merge, synchronize the authoritative base before starting another issue. D
 Before returning or publishing, answer:
 
 1. Is the source branch based on the intended authoritative base?
-2. Does the PR contain only the issue it claims to solve?
+2. Does the PR contain only the change it claims to make?
 3. Does every behavioral and platform claim have corresponding evidence?
 4. Are manual and unverified boundaries stated honestly?
 5. Did the operation stop exactly where the user authorized?

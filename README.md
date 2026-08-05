@@ -143,7 +143,7 @@ Both delivery Skills reply in the user's language. Commit messages and PR prose 
 
 The core `pinpoint` Skill guides an agent through seven decisions:
 
-1. Keep an evidence ledger: separate repository contract, external contract, reviewer direction, observation, and inference.
+1. Keep an evidence ledger: separate repository contract, external contract, requester direction, observation, and inference.
 2. Apply transferable reasoning: validate at the real consumer boundary, match evidence granularity to the claim, preserve upstream authority, and prove impact through runtime reachability.
 3. Trace the concrete runtime path to the first transition from correct to incorrect, and classify which layer owns it.
 4. Fix the smallest owned boundary, reusing established settings, pipelines, and abstractions before adding anything new.

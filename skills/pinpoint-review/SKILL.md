@@ -14,7 +14,7 @@ Every reviewer works from the same packet:
 - the stated intent, unedited — whatever form it takes: an issue, a user request, a spec excerpt, or the change's own description;
 - repository rules that constrain the change;
 - the diff against the authoritative base, with its scope stated exactly;
-- reproduction and validation evidence for the claimed behavior;
+- validation evidence for the claimed behavior — reproduction evidence when the change fixes a defect;
 - the intended-behavior claims: what the change asserts it does and preserves.
 
 Never include the intended verdict, a defense of the change, or hints about what to find. A reviewer primed with the author's conclusion confirms it.
@@ -34,7 +34,7 @@ Challenge the change along each axis that the diff can reach; exclude an axis ra
 3. **Blast radius.** A wider runtime blast radius than claimed — callers, dispatch, configuration gates, event buses, and concrete consumers not accounted for.
 4. **Architecture and platform.** Divergence from established architecture or platform handling without justification.
 5. **Reachable regressions.** Accessibility, language, platform, data, security, or persistence regressions the change can actually reach.
-6. **Test quality.** Tests that imitate the implementation instead of the reported mechanism. For each new or changed test ask: would it fail if the code were broken?
+6. **Test quality.** Tests that imitate the implementation instead of the claimed mechanism. For each new or changed test ask: would it fail if the code were broken?
 7. **Claims versus evidence.** Unsupported or overstated claims — completion, preservation, performance, or coverage the packet's evidence does not prove.
 
 When the harness provides subagents, spawn one independent read-only reviewer per reachable axis, each on a fresh context with the full packet. When subagents are unavailable, run the axes sequentially yourself and disclose that the review was single-reviewer.
