@@ -17,7 +17,7 @@ Explain the suite and route the request. Do not inspect, edit, stage, commit, pu
 
 | Request | Skill |
 | --- | --- |
-| Investigate an issue, find the owning layer, implement a narrow fix, validate it, or review the complete change | `pinpoint` |
+| Investigate an issue or performance problem, find the owning layer, implement a narrow fix or optimization, validate it, or review the complete change | `pinpoint` |
 | Generate a commit message, inspect staging, split commits, stage exact changes, or commit when authorized | `pinpoint-commit` |
 | Prepare a PR title or body, inspect fork and branch publication state, respond to review, push, or create a PR when authorized | `pinpoint-pr` |
 | Explain the suite, installation, invocation, or routing | `pinpoint-help` |
@@ -38,7 +38,7 @@ Use the current harness's native explicit form:
 
 | Workflow | Claude Code, Cursor, OpenCode | Codex |
 | --- | --- | --- |
-| Complete fix workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
+| Fix and optimization workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
 | Commit workflow | `/pinpoint-commit <request>` | `$pinpoint-commit` or `/skills` |
 | PR workflow | `/pinpoint-pr <request>` | `$pinpoint-pr` or `/skills` |
 | Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |

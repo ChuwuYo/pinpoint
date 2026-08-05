@@ -1,7 +1,7 @@
 {
   "name": "pinpoint-skill-suite",
-  "version": "0.2.0",
-  "description": "Evidence-driven Agent Skills for narrow software fixes and reviewable delivery",
+  "version": "0.3.0",
+  "description": "Evidence-driven Agent Skills for narrow software fixes, optimizations, and reviewable delivery",
   "license": "MIT",
   "type": "module",
   "bin": {

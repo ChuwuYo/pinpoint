@@ -1,5 +1,5 @@
 ---
-description: Investigate and fix an issue at the smallest proven boundary
+description: Investigate and fix an issue or performance problem at the smallest proven boundary
 ---
 <!-- Managed by ChuwuYo/pinpoint. -->
 

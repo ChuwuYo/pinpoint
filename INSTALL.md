@@ -52,7 +52,7 @@ picker and `$` mentions rather than third-party bare slash commands.
 
 | Workflow | Claude Code, Cursor, OpenCode | Codex |
 | --- | --- | --- |
-| Complete fix workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
+| Fix and optimization workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
 | Commit workflow | `/pinpoint-commit <request>` | `$pinpoint-commit` or `/skills` |
 | PR workflow | `/pinpoint-pr <request>` | `$pinpoint-pr` or `/skills` |
 | Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |
@@ -138,7 +138,7 @@ npx -y github:ChuwuYo/pinpoint --version
 For reproducible installation after a release tag exists, pin the tag:
 
 ```bash
-npx -y github:ChuwuYo/pinpoint#v0.2.0 --agent opencode
+npx -y github:ChuwuYo/pinpoint#v0.3.0 --agent opencode
 ```
 
 The package version, Git tag, Skills, commands, and installer belong to the

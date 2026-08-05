@@ -1,11 +1,11 @@
 ---
 name: pinpoint
-description: Trace ambiguous or high-risk software defects to the owning runtime boundary, implement the smallest complete fix, validate the real mechanism, and run evidence-based adversarial review. Use for bug fixes, issue triage, architecture or regression review, cross-platform behavior, browser or native integration, accessibility, internationalization, external protocols, sync, persistence, UI geometry, or any task where blast radius and proof matter.
+description: Trace ambiguous or high-risk software defects and performance problems to the owning runtime boundary, implement the smallest complete fix, validate the real mechanism, and run evidence-based adversarial review. Use for bug fixes, performance optimization, issue triage, architecture or regression review, cross-platform behavior, browser or native integration, accessibility, internationalization, external protocols, sync, persistence, UI geometry, or anything reported as broken or slow where blast radius and proof matter.
 ---
 
 # Pinpoint
 
-Find where correct behavior first becomes incorrect, fix the boundary that owns that transition, and claim only what the evidence proves.
+Find where correct behavior first becomes incorrect — or acceptable cost first becomes unjustified — fix the boundary that owns that transition, and claim only what the evidence proves.
 
 Repository rules and mandatory external contracts outrank this Skill. Prior fixes are leads, not permanent architecture.
 
@@ -45,7 +45,7 @@ Protect the working state first: preserve unrelated user changes, staged work, w
 3. Identify the concrete consumer of every value under consideration. Do not infer reachability from a shared type, optional method, or broad interface.
 4. Inspect the real failing artifact or mechanism: DOM, computed style, event sequence, payload, persisted record, generated file, native log, geometry, or equivalent evidence.
 5. Classify ownership: application, framework, browser, operating system, toolkit, source data, provider, network, or environment.
-6. Locate the first transition from correct to incorrect. Distinguish an external layer behaving intentionally from the application consuming that behavior incorrectly.
+6. Locate the first transition from correct to incorrect, or from acceptable cost to unjustified cost. Distinguish an external layer behaving intentionally from the application consuming that behavior incorrectly.
 
 A simplified fixture is useful only if it preserves the property that causes the failure.
 
@@ -86,9 +86,11 @@ Choose the lowest reliable oracle that observes the original failure. Preserve t
 
 When a stable, representative oracle exists, add a failing regression test before the fix. Do not force test-first when the real mechanism requires visual judgment, hardware, a native service, or another unstable oracle.
 
+For optimization work, capture a baseline measurement at the chosen oracle before changing code and compare against that baseline under the same conditions. A speedup claimed without a before/after measurement at the same oracle is an inference, not an observation; state what the measurement cannot prove, such as variance, a single input, or a single environment.
+
 Validate:
 
-- the corrected behavior;
+- the corrected behavior or measured improvement;
 - adjacent behavior named in the invariant;
 - meaningful boundaries and failure fallback;
 - persistence, reload, or re-entry when reachable;
@@ -136,6 +138,7 @@ A completion claim made without evidence in this session's ledger is a misreport
 | --- | --- | --- |
 | Root cause found | Traced first incorrect transition at an owned boundary | A plausible explanation that matches the symptom |
 | Fixed | The original failure now passes at the lowest reliable oracle | The code changed; a proxy or simplified fixture passes |
+| Optimized | Before/after measurement at the same oracle under the same conditions | A complexity argument, or measurements taken on different inputs or environments |
 | Adjacent behavior preserved | Each invariant-named behavior exercised with inputs capable of showing the change | An unchanged result on inputs that cannot exhibit the behavior |
 | Works on a platform, format, or language | Evidence from that target | Evidence from another target |
 | Accessible | Real assistive-technology traversal — otherwise report the gap as unverified | Static ARIA or accessibility-tree checks |
@@ -144,7 +147,7 @@ A completion claim made without evidence in this session's ledger is a misreport
 
 Before claiming completion, answer:
 
-1. Where does correct behavior first become incorrect, and who owns that boundary?
+1. Where does correct behavior first become incorrect — or acceptable cost first become unjustified — and who owns that boundary?
 2. Which repository contract, external contract, reviewer direction, and observation support the fix?
 3. Does the oracle preserve the real failure mechanism?
 4. Which adjacent contracts are actually reachable?

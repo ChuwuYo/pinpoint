@@ -11,7 +11,7 @@ English | [简体中文](README.zh-CN.md)
 
 ---
 
-Pinpoint is a portable Agent Skill suite for fixing software issues with evidence and a deliberately small blast radius. Its core Skill traces the real runtime path, identifies which layer owns the failure, preserves adjacent contracts, and reports only what the available evidence proves. Focused companion Skills handle commits and pull requests without loading delivery rules into every investigation.
+Pinpoint is a portable Agent Skill suite for fixing and optimizing software with evidence and a deliberately small blast radius. Its core Skill traces the real runtime path, identifies which layer owns the failure, preserves adjacent contracts, and reports only what the available evidence proves. Focused companion Skills handle commits and pull requests without loading delivery rules into every investigation.
 
 It does not prescribe a framework or replace a repository's own rules. It provides a disciplined way to investigate and deliver changes inside them.
 
@@ -99,7 +99,7 @@ Pinpoint focuses the agent on questions that determine whether a fix is actually
 
 | Skill | Purpose |
 | --- | --- |
-| `pinpoint` | Complete investigation, implementation, validation, and review workflow |
+| `pinpoint` | Complete investigation, implementation, validation, and review workflow for fixes and optimizations |
 | `pinpoint-commit` | Exact staging, repository-aligned commit messages, and authorized commits |
 | `pinpoint-pr` | Branch and remote checks, evidence-backed PR prose, and authorized publication |
 | `pinpoint-help` | Explain the suite and route a request without changing repository state |
@@ -112,7 +112,7 @@ Both delivery Skills reply in the user's language. Commit messages and PR prose 
 
 | Workflow | Claude Code, Cursor, OpenCode | Codex |
 | --- | --- | --- |
-| Complete fix workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
+| Fix and optimization workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
 | Commit workflow | `/pinpoint-commit <request>` | `$pinpoint-commit` or `/skills` |
 | PR workflow | `/pinpoint-pr <request>` | `$pinpoint-pr` or `/skills` |
 | Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |
@@ -153,7 +153,7 @@ Omit `-g` for a project-scoped installation. Use an explicit `-a` target for una
 > [!IMPORTANT]
 > Installing or invoking Pinpoint does not authorize commits, pushes, pull requests, merges, deployments, or destructive cleanup. Each delivery action still requires explicit user authorization.
 
-The suite activates from each Skill's description. `pinpoint` handles bug fixing and complete review; `pinpoint-commit` handles staging and commits; `pinpoint-pr` handles PR preparation and publication; `pinpoint-help` explains which one to use. You can also request one explicitly:
+The suite activates from each Skill's description. `pinpoint` handles bug fixing, optimization, and complete review; `pinpoint-commit` handles staging and commits; `pinpoint-pr` handles PR preparation and publication; `pinpoint-help` explains which one to use. You can also request one explicitly:
 
 ```text
 Use Pinpoint to investigate and fix this issue with the smallest proven impact.

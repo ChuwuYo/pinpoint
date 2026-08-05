@@ -11,7 +11,7 @@
 
 ---
 
-Pinpoint 是一套可移植的 Agent Skill 套件，用于以证据为依据、以刻意缩小的影响面来修复软件问题。它的核心 Skill 会追踪真实的运行时路径，定位是哪一层该为故障负责，保护相邻的契约，并且只报告现有证据能够证明的结论。配套的专用 Skills 分别处理提交和 Pull Request，避免把交付规则塞进每一次调查。
+Pinpoint 是一套可移植的 Agent Skill 套件，用于以证据为依据、以刻意缩小的影响面来修复和优化软件。它的核心 Skill 会追踪真实的运行时路径，定位是哪一层该为故障负责，保护相邻的契约，并且只报告现有证据能够证明的结论。配套的专用 Skills 分别处理提交和 Pull Request，避免把交付规则塞进每一次调查。
 
 它不强推任何框架，也不取代仓库自身的规则。它提供的是一种在这些规则之内进行调查和交付的严谨方法。
 
@@ -93,7 +93,7 @@ Pinpoint 让 Agent 聚焦于决定修复是否真正成立的问题：
 
 | Skill | 用途 |
 | --- | --- |
-| `pinpoint` | 完整的调查、实现、验证和审查工作流 |
+| `pinpoint` | 修复与优化的完整调查、实现、验证和审查工作流 |
 | `pinpoint-commit` | 精确的暂存、符合仓库习惯的提交信息，以及经授权的提交 |
 | `pinpoint-pr` | 分支与远端检查、有证据支撑的 PR 文案，以及经授权的发布 |
 | `pinpoint-help` | 解释这套套件并路由请求，不改变仓库状态 |
@@ -106,7 +106,7 @@ Pinpoint 让 Agent 聚焦于决定修复是否真正成立的问题：
 
 | 工作流 | Claude Code、Cursor、OpenCode | Codex |
 | --- | --- | --- |
-| 完整修复工作流 | `/pinpoint <请求>` | `$pinpoint` 或 `/skills` |
+| 修复与优化工作流 | `/pinpoint <请求>` | `$pinpoint` 或 `/skills` |
 | 提交工作流 | `/pinpoint-commit <请求>` | `$pinpoint-commit` 或 `/skills` |
 | PR 工作流 | `/pinpoint-pr <请求>` | `$pinpoint-pr` 或 `/skills` |
 | 帮助与路由 | `/pinpoint-help` | `$pinpoint-help` 或 `/skills` |
@@ -147,7 +147,7 @@ npx skills add ChuwuYo/pinpoint --skill pinpoint -g
 > [!IMPORTANT]
 > 安装或调用 Pinpoint 并不授权提交、推送、创建 Pull Request、合并、部署或破坏性清理。每一个交付动作仍需用户显式授权。
 
-套件通过每个 Skill 的描述被激活。`pinpoint` 负责修 bug 和完整审查；`pinpoint-commit` 负责暂存和提交；`pinpoint-pr` 负责 PR 准备和发布；`pinpoint-help` 负责告诉你该用哪个。你也可以显式指定：
+套件通过每个 Skill 的描述被激活。`pinpoint` 负责修 bug、优化和完整审查；`pinpoint-commit` 负责暂存和提交；`pinpoint-pr` 负责 PR 准备和发布；`pinpoint-help` 负责告诉你该用哪个。你也可以显式指定：
 
 ```text
 Use Pinpoint to investigate and fix this issue with the smallest proven impact.
