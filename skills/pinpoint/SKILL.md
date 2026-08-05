@@ -118,6 +118,8 @@ Ask it to find:
 - tests that imitate the implementation instead of the reported mechanism;
 - unrelated changes or unsupported claims.
 
+Require the review to close with severity counts (blocker, should-fix, nit) and a verdict: BLOCK, FIX-THEN-COMMIT, or CLEAR.
+
 Verify every finding independently. Fix confirmed issues and reject false positives with evidence. A reviewer is a source of hypotheses, not proof of correctness.
 
 If an independent review is unavailable, perform the same challenge yourself and disclose that it was self-review.
@@ -127,6 +129,18 @@ If an independent review is unavailable, perform the same challenge yourself and
 Stop after implementation, validation, and review unless delivery was requested. Use `pinpoint-commit` for staging or commits and `pinpoint-pr` for PR preparation or publication. Completion does not authorize commit, push, PR, merge, tag, deployment, or cleanup.
 
 ## Final Gate
+
+A completion claim made without evidence in this session's ledger is a misreport, whatever the intent. The table names the most-overstated claims; the questions below remain the operative gate.
+
+| Claim | Requires | Not sufficient |
+| --- | --- | --- |
+| Root cause found | Traced first incorrect transition at an owned boundary | A plausible explanation that matches the symptom |
+| Fixed | The original failure now passes at the lowest reliable oracle | The code changed; a proxy or simplified fixture passes |
+| Adjacent behavior preserved | Each invariant-named behavior exercised | A broader suite passed against the suite's own model, not the product |
+| Works on a platform, format, or language | Evidence from that target | Evidence from another target |
+| Accessible | Real assistive-technology traversal — otherwise report the gap as unverified | Static ARIA or accessibility-tree checks |
+| No wider impact | Reachability traced through callers, dispatch, configuration gates, and concrete consumers | A shared type or common helper without a traced consumer |
+| Complete | Reachable behavior exercised, or each gap reported as unverified | Silence about reachable behavior not exercised |
 
 Before claiming completion, answer:
 
