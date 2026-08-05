@@ -117,6 +117,7 @@ When the `pinpoint-review` Skill is available, load and follow it with the revie
 
 Ask the reviewer to find:
 
+- a mismatch between the diff and the stated intent — each gap quoted against the intent source, or an intent that itself looks wrong;
 - a wrong ownership or root-cause assumption;
 - a wider runtime blast radius than claimed;
 - divergence from established architecture or platform handling;
@@ -127,7 +128,7 @@ Ask the reviewer to find:
 
 Require the review to close with severity counts (blocker, should-fix, nit) and a verdict: BLOCK, FIX-THEN-COMMIT, or CLEAR.
 
-Verify every finding independently. Fix confirmed issues and reject false positives with evidence. A reviewer is a source of hypotheses, not proof of correctness.
+Verify every finding independently. Fix confirmed issues and reject false positives with evidence. A reviewer is a source of hypotheses, not proof of correctness. Resolve open questions against the stated intent — re-verify or ask the requester; never promote an open question to a finding without evidence.
 
 If an independent review is unavailable, perform the same challenge yourself and disclose that it was self-review.
 
