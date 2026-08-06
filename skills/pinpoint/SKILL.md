@@ -19,7 +19,7 @@ Classify important conclusions internally:
 - **Observation:** reproduced behavior from the real environment, artifact, payload, trace, or device.
 - **Inference:** an explanation that still needs verification.
 
-Do not present inference as observation. Resolve conflicts by identifying which authority owns the behavior; generic best practice does not override a deliberate repository contract, and repository convention does not override a mandatory external protocol.
+Do not present inference as observation. A veto is a claim too: "no reliable predicate exists" is an inference until its failure costs are bounded with evidence. Resolve conflicts by identifying which authority owns the behavior; generic best practice does not override a deliberate repository contract, and repository convention does not override a mandatory external protocol.
 
 Prefer evidence in this order: real reproduction, traced mechanism, representative oracle, repository contract, official external contract, then generic guidance. External convention and prior art are generic guidance: they may justify the minimal internal answer, but they never substitute for tracing the project's own mechanism, and they must not expand the option surface.
 
@@ -36,6 +36,7 @@ Preserve lessons from specific bugs by translating them into cross-domain rules:
 - **Make cached results express all dependencies.** An API cache may depend on permissions and locale; a geometry cache may depend on dimensions and fonts. A cache with incomplete dependencies is not authoritative state.
 - **Relax only the smallest necessary condition.** Accepting another documented OAuth callback form must preserve state validation; accepting another file extension must preserve content and size checks. Define the new equivalence precisely and keep unrelated invariants unchanged.
 - **Keep one user-facing field on one producer with one semantics.** Prefer honest absence (an explicit unknown state) over a second producer with different semantics. A fallback chain that leaves a "which value do we show?" fork is a stop signal: re-verify the primary source's properties before adding producers, not a question to delegate to the user.
+- **Bound approximations by their failure cost.** When a decision cannot be exact and refusal is not an option — a routing gate, a language guess — choose the cheaper failure direction: degrade to the general path rather than suppress the capability, and bound the heuristic explicitly: name what it stands in for, cap it, document it. When absence is an option, honest absence outranks approximation.
 
 ## Trace Ownership Before Designing
 
@@ -84,7 +85,7 @@ If a dimension is not reachable, exclude it rather than inventing hypothetical s
 
 ## Validate the Mechanism, Not the Patch Shape
 
-Choose the lowest reliable oracle that observes the original failure. Preserve the real input structure, event order, classes, values, viewport, persistence state, or platform behavior that made the issue possible.
+Choose the lowest reliable oracle that observes the original failure — for a pure decision function, that is a boundary-value unit test, not an end-to-end flow. Preserve the real input structure, event order, classes, values, viewport, persistence state, or platform behavior that made the issue possible.
 
 When a stable, representative oracle exists, add a failing regression test before the fix. Do not force test-first when the real mechanism requires visual judgment, hardware, a native service, or another unstable oracle.
 
@@ -124,7 +125,8 @@ Ask the reviewer to find:
 - reachable accessibility, language, platform, data, security, or persistence regressions;
 - tests that imitate the implementation instead of the claimed mechanism;
 - unrelated changes or unsupported claims;
-- scope creep: behavior the request never asked for.
+- scope creep: behavior the request never asked for;
+- a scoped-out requirement whose rejection rests on an unverified feasibility claim — vetoes carry the same evidence burden as claims.
 
 Require the review to close with severity counts (blocker, should-fix, nit) and a verdict: BLOCK, FIX-THEN-COMMIT, or CLEAR.
 

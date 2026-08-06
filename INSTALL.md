@@ -138,7 +138,7 @@ npx -y github:ChuwuYo/pinpoint --version
 For reproducible installation after a release tag exists, pin the tag:
 
 ```bash
-npx -y github:ChuwuYo/pinpoint#v0.4.0 --agent opencode
+npx -y github:ChuwuYo/pinpoint#v0.4.1 --agent opencode
 ```
 
 The package version, Git tag, Skills, commands, and installer belong to the

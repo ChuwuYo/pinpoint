@@ -225,6 +225,7 @@ The scenarios in [`evals/scenarios`](evals/scenarios) exercise the decisions mos
 - baseline measurement versus intuitive optimization;
 - persisted-value provenance versus same-named decoys;
 - planted blockers versus decoy findings and review noise;
+- vetoes held to the same evidence standard as claims;
 - user language versus repository commit and PR conventions;
 - safe contribution work in a dirty fork.
 

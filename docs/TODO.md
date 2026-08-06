@@ -7,6 +7,21 @@ user-facing proposals belong in issues, not here.
 
 ## Under consideration
 
+### Scenario 13 baseline run
+
+**What:** Build the fixture for `evals/scenarios/13-veto-evidence.md`
+(unbounded segmentation predicate, safe degradation target, asymmetric
+failure costs) and run an A/B baseline with and without the core Skill.
+
+**Why:** The veto-evidence and bounded-approximation rules were added from a
+postmortem without a proven scenario. A scenario the agent can pass without
+the Skill proves nothing; the baseline must show veto-on-plausibility or
+issue-left-open failure modes.
+
+**Next step:** Build the fixture per the scenario's requirements, run
+baseline, then run with `pinpoint` loaded, score both per
+`evals/SCORING.md`, and record results in the commit that follows.
+
 ### `pinpoint-refactor` Skill
 
 **What:** A companion Skill applying the Pinpoint discipline to

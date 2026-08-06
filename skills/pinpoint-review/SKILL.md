@@ -31,7 +31,7 @@ Run the repository's configured formatter check, linter, type checker, and build
 
 Challenge the change along each axis that the diff can reach; exclude an axis rather than inventing hypothetical relevance:
 
-1. **Intent and scope.** Does the diff actually address the stated intent? Quote the intent source — issue, request, spec, or change description — behind each gap. Flag behavior the intent never asked for as scope creep. If the stated intent itself looks wrong — not merely unmet — say so explicitly.
+1. **Intent and scope.** Does the diff actually address the stated intent? Quote the intent source — issue, request, spec, or change description — behind each gap. Flag behavior the intent never asked for as scope creep, and challenge scope-outs whose justification is an unverified feasibility claim. If the stated intent itself looks wrong — not merely unmet — say so explicitly.
 2. **Ownership and root cause.** A wrong ownership or root-cause assumption; a fix at a boundary that does not own the transition.
 3. **Blast radius.** A wider runtime blast radius than claimed — callers, dispatch, configuration gates, event buses, and concrete consumers not accounted for.
 4. **Architecture and platform.** Divergence from established architecture or platform handling without justification.
