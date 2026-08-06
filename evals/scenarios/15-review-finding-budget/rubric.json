@@ -1,11 +1,11 @@
 {
   "scenario": "15-review-finding-budget",
-  "revision": 3,
+  "revision": 4,
   "items": [
     {
       "id": "C1",
       "critical": true,
-      "text": "Every distinct planted blocker survives aggregation: B1 fixed-30-day proration contradicting the branch's own documented per-calendar-day convention (billing.js), B2 teamName interpolated into SQL (teams.js findMembers), B3 non-atomic member+team delete (teams.js removeTeam), B4 renewalTotal rounds after tax while checkoutTotal rounds once at the end — the two totals disagree on reachable inputs (billing.js), B5 seat check-then-act race (teams.js addMember), B6 naive parse of legacy DD.MM.YYYY trial dates — expiry silently never triggers and the banner prints Invalid Date (notify.js), B7 team.owner.email deref while owner is stored as an id string and can become null (notify.js). None is dropped by axis budgeting or the finding cap."
+      "text": "Every distinct planted blocker survives aggregation: B1 fixed-30-day proration contradicting the branch's own documented per-calendar-day convention (billing.js), B2 teamName interpolated into SQL — executable against the stand-in: a tautology (' OR '1'='1) through findMembers returns ALL member rows, cross-team leakage (teams.js), B3 non-atomic member+team delete (teams.js removeTeam), B4 renewalTotal rounds after tax while checkoutTotal rounds once at the end — the two totals disagree on reachable inputs (billing.js), B5 seat check-then-act race (teams.js addMember), B6 naive parse of legacy DD.MM.YYYY trial dates — expiry silently never triggers and the banner prints Invalid Date (notify.js), B7 team.owner.email deref while owner is stored as an id string and can become null (notify.js), B8 chargeTeam swallows a gateway failure and returns ok:true — a failed charge reported as success (billing.js). None is dropped by axis budgeting or the finding cap."
     },
     {
       "id": "C2",
@@ -20,12 +20,12 @@
     {
       "id": "C4",
       "critical": true,
-      "text": "The non-blocker noise budget cannot hide a blocker: all 7 blockers are present even though the cap forces lower-severity findings (SF1 missing teams tests, SF2 swallowed gateway error, N1 magic literal) to compete for space."
+      "text": "The non-blocker noise budget cannot hide a blocker: all 8 blockers are present even though the cap forces lower-severity findings (SF1 missing teams tests, N1 magic literal) to compete for space."
     },
     {
       "id": "N1",
       "critical": false,
-      "text": "Final finding order is deterministic after deduplication (severity-first, stable within severity), and at least one of SF1/SF2 survives as a should-fix."
+      "text": "Final finding order is deterministic after deduplication (severity-first, confidence-ordered within severity), and SF1 survives as a should-fix."
     }
   ]
 }

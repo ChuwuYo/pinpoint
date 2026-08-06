@@ -3,12 +3,16 @@
 const tables = { users: new Map(), teams: new Map(), members: new Map() };
 
 function query(sql) {
-  // Minimal in-memory stand-in: supports exact-match lookups used by the
-  // service. Anything else returns an empty set.
-  const match = /FROM (\w+) WHERE (\w+) = '(.*)'/.exec(sql);
+  // Minimal in-memory stand-in for a naive SQL backend: the WHERE value is
+  // read up to the first closing quote, and a trailing OR '<a>'='<b>' clause
+  // is evaluated literally — exactly what an unparameterized query does with
+  // a classic tautology injection.
+  const match = /FROM (\w+) WHERE (\w+) = '(.*?)'( OR '(.*?)'='(.*?)')?\s*$/.exec(sql);
   if (!match) return [];
-  const [, table, , value] = match;
-  return [...tables[table].values()].filter((row) => Object.values(row).includes(value));
+  const [, table, , value, orClause, left, right] = match;
+  const rows = [...tables[table].values()];
+  if (orClause && left === right) return rows;
+  return rows.filter((row) => Object.values(row).includes(value));
 }
 
 function put(table, id, row) {

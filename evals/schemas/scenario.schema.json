@@ -18,26 +18,87 @@
     "timeout_minutes"
   ],
   "properties": {
-    "id": { "type": "string", "pattern": "^[0-9]{2}-[a-z0-9-]+$" },
-    "revision": { "type": "number" },
-    "title": { "type": "string" },
-    "target_skill": {
-      "enum": ["pinpoint", "pinpoint-review", "pinpoint-commit", "pinpoint-pr", "pinpoint-help"]
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9]{2}-[a-z0-9-]+$"
     },
-    "prompt": { "type": "string" },
-    "rubric": { "type": "string" },
-    "fixture": { "type": "string" },
-    "fixture_generator": { "type": "string" },
-    "fixture_status": { "enum": ["planned", "ready", "frozen"] },
-    "fixture_requirements": { "type": "array", "items": { "type": "string" } },
-    "deterministic_checks": { "type": "array", "items": { "type": "string" } },
-    "required_capabilities": { "type": "array", "items": { "type": "string" } },
-    "allowed_mutations": { "type": "array", "items": { "type": "string" } },
-    "timeout_minutes": { "type": "number" },
+    "revision": {
+      "type": "number"
+    },
+    "title": {
+      "type": "string"
+    },
+    "target_skill": {
+      "enum": [
+        "pinpoint",
+        "pinpoint-review",
+        "pinpoint-commit",
+        "pinpoint-pr",
+        "pinpoint-help"
+      ]
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "rubric": {
+      "type": "string"
+    },
+    "fixture": {
+      "type": "string"
+    },
+    "fixture_generator": {
+      "type": "string"
+    },
+    "fixture_status": {
+      "enum": [
+        "planned",
+        "ready",
+        "frozen"
+      ]
+    },
+    "fixture_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "deterministic_checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "required_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_mutations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "timeout_minutes": {
+      "type": "number"
+    },
     "conditions": {
       "type": "array",
       "minItems": 1,
-      "items": { "enum": ["no-skill", "with-skill", "trigger"] }
+      "items": {
+        "enum": [
+          "no-skill",
+          "with-skill",
+          "trigger"
+        ]
+      }
+    },
+    "fixture_hash_method": {
+      "type": "string"
+    },
+    "fixture_hash": {
+      "type": "string"
     }
   }
 }
