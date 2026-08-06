@@ -1,0 +1,63 @@
+{
+  "scenario": "13-veto-evidence",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "both failure directions costed: \"keeps the paid popup bounded while the free toolbar stays reachable\""
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "over-cap/phrases/whitespace -> toolbar; capability stays reachable"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "MAX_CJK_WORD_CHARS=4 named, exported, header-documented; verifiable in patch"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "9 boundary cases incl. over-cap, whitespace, punctuation, mixed; oracle PASS 11/11"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "word.js only; router/ui untouched"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Korean handled by principled spacing rule; mixed scripts honestly refused"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (11 routing cases)",
+      "status": "pass",
+      "evidence": "oracle PASS"
+    },
+    {
+      "name": "repo tests (node --test)",
+      "status": "pass",
+      "evidence": "12/12 pass"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "rubric feedback: does not reward the per-script insight (Hangul has real word spacing)"
+  }
+}

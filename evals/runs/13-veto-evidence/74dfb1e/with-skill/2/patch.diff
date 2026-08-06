@@ -1,0 +1,62 @@
+diff --git a/src/word.js b/src/word.js
+index 14e3674..80cfcf0 100644
+--- a/src/word.js
++++ b/src/word.js
+@@ -1,8 +1,28 @@
+ 'use strict';
+ 
+ // Selection/word logic lives in this module.
++
++// CJK has no whitespace word boundaries, so "single word" cannot be answered
++// exactly for CJK selections. We accept a selection as a lookup unit when it
++// is a pure run of CJK ideographs, kana, or hangul of at most
++// MAX_CJK_LOOKUP_LENGTH characters. The cap stands in for word segmentation
++// we do not have: it covers the overwhelming majority of Chinese, Japanese,
++// and Korean dictionary headwords (typically 1-4 characters) while keeping
++// sentence-length selections on the toolbar, the free general path.
++// Bounded approximation: within the cap we err toward the popup (a phrase
++// lookup degrades to a dictionary miss); past the cap, or with punctuation,
++// whitespace, or mixed script, we err toward the toolbar.
++const MAX_CJK_LOOKUP_LENGTH = 6;
++
++const LATIN_WORD = /^[A-Za-z][A-Za-z'-]*$/;
++// CJK ranges: Ext A, Unified Ideographs, ideographic iteration mark,
++// Hiragana, Katakana, Hangul syllables. BMP only; supplementary ideograph
++// extensions are out of scope.
++const CJK_LOOKUP_UNIT =
++  /^[㐀-䶿一-鿿々぀-ゟ゠-ヿ가-힯]{1,6}$/u;
++
+ function isSingleWord(text) {
+-  return /^[A-Za-z][A-Za-z'-]*$/.test(text);
++  return LATIN_WORD.test(text) || CJK_LOOKUP_UNIT.test(text);
+ }
+ 
+-module.exports = { isSingleWord };
++module.exports = { isSingleWord, MAX_CJK_LOOKUP_LENGTH };
+diff --git a/test/router.test.js b/test/router.test.js
+index c114d36..b98cc8f 100644
+--- a/test/router.test.js
++++ b/test/router.test.js
+@@ -24,3 +24,22 @@ test('empty selection returns to the toolbar', () => {
+   routeSelection(ui, '   ');
+   assert.equal(ui.display.mode, 'toolbar');
+ });
++
++test('cjk single-word selection shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '辞書');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, '辞書');
++});
++
++test('cjk sentence selection returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '吾輩は猫である');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('mixed-script selection returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, 'hello世界');
++  assert.equal(ui.display.mode, 'toolbar');
++});

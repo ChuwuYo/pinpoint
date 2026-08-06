@@ -1,0 +1,95 @@
+diff --git a/src/word.js b/src/word.js
+index 14e3674..288a6d7 100644
+--- a/src/word.js
++++ b/src/word.js
+@@ -1,8 +1,26 @@
+ 'use strict';
+ 
+ // Selection/word logic lives in this module.
++
++// CJK text has no whitespace word boundaries, so "single word" cannot be
++// decided exactly. A selection is treated as a lookupable CJK word when it
++// is:
++//   - free of whitespace (whitespace marks a phrase or sentence),
++//   - entirely Han / Hiragana / Katakana / Hangul (mixed Latin falls
++//     through to the toolbar),
++//   - at most MAX_CJK_WORD_LENGTH code points. The cap stands in for the
++//     longest plausible dictionary headword: most CJK headwords are 1-2
++//     characters and 4 covers compounds and chengyu/yojijukugo. Longer
++//     genuine headwords (e.g. 5-mora kana words like ありがとう) degrade
++//     to the toolbar by design: a missed lookup on a rare long word is
++//     cheaper than firing metered popup lookups on phrases and sentences.
++const MAX_CJK_WORD_LENGTH = 4;
++const CJK_WORD_RE =
++  /^(?:\p{Script=Han}|\p{Script=Hiragana}|\p{Script=Katakana}|\p{Script=Hangul})+$/u;
++
+ function isSingleWord(text) {
+-  return /^[A-Za-z][A-Za-z'-]*$/.test(text);
++  if (/^[A-Za-z][A-Za-z'-]*$/.test(text)) return true;
++  return [...text].length <= MAX_CJK_WORD_LENGTH && CJK_WORD_RE.test(text);
+ }
+ 
+ module.exports = { isSingleWord };
+diff --git a/test/router.test.js b/test/router.test.js
+index c114d36..5bdb35b 100644
+--- a/test/router.test.js
++++ b/test/router.test.js
+@@ -24,3 +24,58 @@ test('empty selection returns to the toolbar', () => {
+   routeSelection(ui, '   ');
+   assert.equal(ui.display.mode, 'toolbar');
+ });
++
++test('single CJK word shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '世界');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, '世界');
++});
++
++test('single CJK character shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '中');
++  assert.equal(ui.display.mode, 'popup');
++});
++
++test('japanese kanji-kana word shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '食べる');
++  assert.equal(ui.display.mode, 'popup');
++});
++
++test('korean word shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '사과');
++  assert.equal(ui.display.mode, 'popup');
++});
++
++test('four-character idiom shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '画蛇添足');
++  assert.equal(ui.display.mode, 'popup');
++});
++
++test('CJK run longer than the headword cap returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, 'ありがとう');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('CJK sentence returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '今日はいい天気ですね');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('CJK selection containing whitespace returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '你好 世界');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('mixed latin-CJK selection returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, 'hello世界');
++  assert.equal(ui.display.mode, 'toolbar');
++});

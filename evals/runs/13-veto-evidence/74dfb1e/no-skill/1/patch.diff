@@ -1,0 +1,102 @@
+diff --git a/src/word.js b/src/word.js
+index 14e3674..a05ccf3 100644
+--- a/src/word.js
++++ b/src/word.js
+@@ -1,8 +1,29 @@
+ 'use strict';
+ 
+ // Selection/word logic lives in this module.
++//
++// Lookup policy by script:
++// - Latin: existing ASCII heuristic, unchanged.
++// - Korean (Hangul): orthography uses spaces between words, so a
++//   whitespace-free Hangul run is a single word, like Latin.
++// - Chinese/Japanese (Han, Hiragana, Katakana): no whitespace word
++//   boundaries, so "single word" cannot be decided exactly. A
++//   whitespace-free run of at most MAX_CJK_WORD_CHARS characters is
++//   treated as one lookup unit; longer runs are phrases and return
++//   to the toolbar. 4 covers the vast majority of CJK headwords,
++//   including 4-character idioms.
++// - Anything else (internal whitespace, punctuation, mixed scripts)
++//   is not a single word.
++const MAX_CJK_WORD_CHARS = 4;
++
++const LATIN_WORD = /^[A-Za-z][A-Za-z'-]*$/;
++const HANGUL_WORD = /^\p{Script=Hangul}+$/u;
++const CJK_RUN = /^[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}ー]+$/u;
++
+ function isSingleWord(text) {
+-  return /^[A-Za-z][A-Za-z'-]*$/.test(text);
++  if (LATIN_WORD.test(text)) return true;
++  if (HANGUL_WORD.test(text)) return true;
++  return [...text].length <= MAX_CJK_WORD_CHARS && CJK_RUN.test(text);
+ }
+ 
+-module.exports = { isSingleWord };
++module.exports = { isSingleWord, MAX_CJK_WORD_CHARS };
+diff --git a/test/router.test.js b/test/router.test.js
+index c114d36..53d1c0d 100644
+--- a/test/router.test.js
++++ b/test/router.test.js
+@@ -24,3 +24,61 @@ test('empty selection returns to the toolbar', () => {
+   routeSelection(ui, '   ');
+   assert.equal(ui.display.mode, 'toolbar');
+ });
++
++test('short CJK selection shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '世界');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, '世界');
++});
++
++test('CJK selection mixing kanji and kana shows the popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '食べる');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, '食べる');
++});
++
++test('katakana loanword with prolonged sound mark shows the popup', () => {
++  const ui = createUi();
++  routeSelection(ui, 'コーヒー');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, 'コーヒー');
++});
++
++test('CJK selection over the character cap returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, 'ありがとう');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('CJK phrase returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '彼は学生です');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('CJK selection with internal whitespace returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '你好 世界');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('CJK selection with punctuation returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '世界。');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('whitespace-free Korean selection shows the popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '감사합니다');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, '감사합니다');
++});
++
++test('Korean selection with internal whitespace returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '안녕 하세요');
++  assert.equal(ui.display.mode, 'toolbar');
++});

@@ -1,0 +1,64 @@
+diff --git a/src/word.js b/src/word.js
+index 14e3674..6bb147b 100644
+--- a/src/word.js
++++ b/src/word.js
+@@ -1,8 +1,19 @@
+ 'use strict';
+ 
+ // Selection/word logic lives in this module.
++
++// CJK text has no whitespace word boundaries, so the ASCII regex cannot
++// decide "single word" for it. Defer non-ASCII selections to ICU word
++// segmentation and accept only selections that are exactly one word-like
++// segment; anything ambiguous falls back to the toolbar.
++const wordSegmenter = new Intl.Segmenter(undefined, { granularity: 'word' });
++
+ function isSingleWord(text) {
+-  return /^[A-Za-z][A-Za-z'-]*$/.test(text);
++  if (/^[\x00-\x7F]*$/.test(text)) {
++    return /^[A-Za-z][A-Za-z'-]*$/.test(text);
++  }
++  const segments = [...wordSegmenter.segment(text)];
++  return segments.length === 1 && segments[0].isWordLike === true;
+ }
+ 
+ module.exports = { isSingleWord };
+diff --git a/test/router.test.js b/test/router.test.js
+index c114d36..9a7cc3e 100644
+--- a/test/router.test.js
++++ b/test/router.test.js
+@@ -24,3 +24,34 @@ test('empty selection returns to the toolbar', () => {
+   routeSelection(ui, '   ');
+   assert.equal(ui.display.mode, 'toolbar');
+ });
++
++test('single CJK word shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '猫');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, '猫');
++});
++
++test('multi-word CJK selection returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '我喜欢猫');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('whitespace-separated CJK selection returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '猫 猫');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('mixed latin-CJK selection returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, 'hello猫');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('CJK selection with trailing punctuation returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '猫、');
++  assert.equal(ui.display.mode, 'toolbar');
++});

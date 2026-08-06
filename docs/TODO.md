@@ -441,7 +441,7 @@ false-accept/false-reject costs are asymmetric.
 
 ### 2.1 Build and freeze the fixture
 
-- [ ] Implement the fixture described by
+- [x] Implement the fixture described by
   `13-veto-evidence`:
   - an input space without reliable word segmentation;
   - an existing general toolbar path that preserves capability reachability;
@@ -449,38 +449,38 @@ false-accept/false-reject costs are asymmetric.
   - cheaper false rejection that degrades to the toolbar;
   - an existing domain module that owns selection/word logic;
   - repository notes that do not answer the gating decision.
-- [ ] Make refusal or indefinite deferral based solely on predicate uncertainty
+- [x] Make refusal or indefinite deferral based solely on predicate uncertainty
   a plausible shortcut in the scenario, and score that shortcut as a failure;
   do not pre-seed a completed incorrect implementation.
-- [ ] Include a bounded heuristic oracle and boundary cases at cap minus one,
+- [x] Include a bounded heuristic oracle and boundary cases at cap minus one,
   cap, cap plus one, mixed scripts, and punctuation.
-- [ ] Add fixture self-checks proving:
+- [x] Add fixture self-checks proving:
   - exact segmentation is not supplied by the fixture;
   - both routing paths are reachable;
   - the unbounded or suppressive solution fails;
   - the bounded fallback solution is observable at the real UI decision
     boundary.
-- [ ] Freeze the prompt, rubric, fixture hash, and checks before seeing any
+- [x] Freeze the prompt, rubric, fixture hash, and checks before seeing any
   with-Skill output.
-- [ ] Do not tune the fixture merely to force a no-Skill failure. The failure mode
+- [x] Do not tune the fixture merely to force a no-Skill failure. The failure mode
   must be plausible and natural.
 
 ### 2.2 Run the baseline and treatment conditions
 
-- [ ] Run `no-skill` with an isolated catalog that cannot discover Pinpoint.
-- [ ] Run `with-skill` with the exact pinned `pinpoint` commit and explicit
+- [x] Run `no-skill` with an isolated catalog that cannot discover Pinpoint.
+- [x] Run `with-skill` with the exact pinned `pinpoint` commit and explicit
   invocation.
-- [ ] Use the same model, harness, settings, fixture revision, and tool access.
-- [ ] Collect at least two valid runs per condition.
-- [ ] Run a third repetition when critical items disagree.
-- [ ] Blind the evaluator to condition and previous results.
-- [ ] Score both conditions with the normalized protocol.
-- [ ] Retain the final patch, commands, tests, final response, grade, and
+- [x] Use the same model, harness, settings, fixture revision, and tool access.
+- [x] Collect at least two valid runs per condition.
+- [x] Run a third repetition when critical items disagree.
+- [x] Blind the evaluator to condition and previous results.
+- [x] Score both conditions with the normalized protocol.
+- [x] Retain the final patch, commands, tests, final response, grade, and
   condition metadata.
 
 ### 2.3 Apply an evidence-based decision gate
 
-- [ ] If `with-skill` improves the targeted critical behavior without a new
+- [x] If `with-skill` improves the targeted critical behavior without a new
   critical regression, retain the related core rules and record exactly what
   improved.
 - [ ] If both conditions pass equally, do not claim the Skill caused success.
@@ -491,16 +491,16 @@ false-accept/false-reject costs are asymmetric.
   rerun before merging.
 - [ ] If results remain unstable after the third repetition, report the
   instability and keep the rule's status as unproven.
-- [ ] Publish a compact baseline summary under
+- [x] Publish a compact baseline summary under
   `evals/baselines/<commit>/summary.md`.
 
 ### Exit criteria
 
-- [ ] Scenario 13 has a committed, resettable fixture and deterministic oracle.
-- [ ] At least two valid runs exist for each condition, with a third where
+- [x] Scenario 13 has a committed, resettable fixture and deterministic oracle.
+- [x] At least two valid runs exist for each condition, with a third where
   required.
-- [ ] The result report exposes every repetition and all critical-item outcomes.
-- [ ] The repository makes no stronger claim than the evidence supports.
+- [x] The result report exposes every repetition and all critical-item outcomes.
+- [x] The repository makes no stronger claim than the evidence supports.
 - [ ] Any resulting `pinpoint/SKILL.md` edit passes Scenario 13 and a relevant
   regression subset before merge.
 

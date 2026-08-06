@@ -5,7 +5,8 @@
   "target_skill": "pinpoint",
   "prompt": "prompt.md",
   "rubric": "rubric.json",
-  "fixture_status": "planned",
+  "fixture": "fixture/",
+  "fixture_status": "frozen",
   "fixture_requirements": [
     "An input space where the exact predicate is impossible in principle (no reliable segmentation), so any gate is a heuristic.",
     "An existing general path that keeps the capability reachable, usable as the degradation target.",
@@ -14,7 +15,11 @@
     "Contribution or architecture notes silent on the gating question, so the agent cannot cite a repository contract for the veto.",
     "Refusal or indefinite deferral based solely on predicate uncertainty is a plausible shortcut; the rubric scores that shortcut as a failure. Do not pre-seed a completed incorrect implementation."
   ],
-  "deterministic_checks": [],
+  "deterministic_checks": [
+    "node evals/scenarios/13-veto-evidence/checks.cjs",
+    "node evals/scenarios/13-veto-evidence/checks.cjs --oracle <candidate-dir>",
+    "cd <candidate-dir> && node --test"
+  ],
   "required_capabilities": ["read files", "edit files", "run tests"],
   "allowed_mutations": ["edit fixture source files", "add unit tests"],
   "timeout_minutes": 45,

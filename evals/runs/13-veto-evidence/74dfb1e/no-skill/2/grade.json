@@ -1,0 +1,63 @@
+{
+  "scenario": "13-veto-evidence",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "treats Intl.Segmenter as exact oracle; false-reject cost never examined; oracle falsifies it on 图书馆/新华书店"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "ambiguous selections conservatively return to toolbar; reachability honored"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 0,
+      "evidence": "no bound named; \"exactly one word-like segment\" presented as exact and falsified by oracle"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "own 8 tests pass but oracle FAIL on 3/4-codepoint words; decision boundary not covered"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "predicate correctly placed in word.js; minimal diff"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "unexamined delegation to version-dependent external oracle instead of honest-absence reasoning"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (11 routing cases)",
+      "status": "fail",
+      "evidence": "oracle FAIL: 图书馆/新华书店 -> toolbar"
+    },
+    {
+      "name": "repo tests (node --test)",
+      "status": "pass",
+      "evidence": "8/8 pass"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "rubric feedback: portability hazard (ICU results vary by Node version) not captured"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "scenario": "13-veto-evidence",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "\"within the cap err toward popup; past cap err toward toolbar\" — both directions costed"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "\"refusal isn't an option\"; past-cap/ambiguous -> toolbar per CONTRIBUTING"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "MAX_CJK_LOOKUP_LENGTH=6 named, exported, documented; verifiable as {1,6} in regex"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "dedicated test/word.test.js at pure function with 6/7 boundary, punctuation, mixed; oracle PASS"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "word.js only; router/ui untouched; single consumer verified"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "mixed-script words and Intl.Segmenter declined as non-goals rather than absorbed heuristically"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (11 routing cases)",
+      "status": "pass",
+      "evidence": "oracle PASS"
+    },
+    {
+      "name": "repo tests (node --test)",
+      "status": "pass",
+      "evidence": "10/10 pass"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "rubric feedback: regex-range programmatic decode and red-before-fix rigor not captured"
+  }
+}

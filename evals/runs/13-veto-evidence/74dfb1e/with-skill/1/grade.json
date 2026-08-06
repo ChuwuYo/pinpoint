@@ -1,0 +1,63 @@
+{
+  "scenario": "13-veto-evidence",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "explicit costing: missed lookup on rare long word cheaper than metered popups on phrases"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "longer/mixed/whitespace degrade to toolbar, cheaper direction, reachability cited"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "MAX_CJK_WORD_LENGTH=4 named, documented as stand-in for longest plausible headword, tunable"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "cap boundary 4-popup/5-toolbar, single char, idiom, mixed, whitespace; oracle PASS; tests confirmed red pre-fix"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "owning predicate only; consumer grep-verified router.js:8"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "known gap (ありがとう at 5 chars) disclosed as deliberate absence"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (11 routing cases)",
+      "status": "pass",
+      "evidence": "oracle PASS"
+    },
+    {
+      "name": "repo tests (node --test)",
+      "status": "pass",
+      "evidence": "12/12 pass"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "rubric feedback: pre-fix failure oracle (tests red before fix) not captured by rubric"
+  }
+}

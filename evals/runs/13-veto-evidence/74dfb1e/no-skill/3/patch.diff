@@ -1,0 +1,104 @@
+diff --git a/src/word.js b/src/word.js
+index 14e3674..cfd0c16 100644
+--- a/src/word.js
++++ b/src/word.js
+@@ -1,8 +1,15 @@
+ 'use strict';
+ 
+ // Selection/word logic lives in this module.
++const MAX_CJK_WORD_LENGTH = 8;
++
++const LATIN_WORD = /^[A-Za-z][A-Za-z'-]*$/;
++const CJK_RUN = /^[\p{Script=Han}\p{Script=Hangul}\p{Script=Hiragana}\p{Script=Katakana}ー]+$/u;
++
+ function isSingleWord(text) {
+-  return /^[A-Za-z][A-Za-z'-]*$/.test(text);
++  if (LATIN_WORD.test(text)) return true;
++  if ([...text].length > MAX_CJK_WORD_LENGTH) return false;
++  return CJK_RUN.test(text);
+ }
+ 
+-module.exports = { isSingleWord };
++module.exports = { isSingleWord, MAX_CJK_WORD_LENGTH };
+diff --git a/test/router.test.js b/test/router.test.js
+index c114d36..fe7edc7 100644
+--- a/test/router.test.js
++++ b/test/router.test.js
+@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
+ 
+ const { routeSelection } = require('../src/router');
+ const { createUi } = require('../src/ui');
++const { MAX_CJK_WORD_LENGTH } = require('../src/word');
+ 
+ test('latin word selection shows the lookup popup', () => {
+   const ui = createUi();
+@@ -24,3 +25,69 @@ test('empty selection returns to the toolbar', () => {
+   routeSelection(ui, '   ');
+   assert.equal(ui.display.mode, 'toolbar');
+ });
++
++test('single CJK word selection shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '辞書');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, '辞書');
++});
++
++test('single kana word selection shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, 'ありがとう');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, 'ありがとう');
++});
++
++test('single Korean word selection shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, '사전');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, '사전');
++});
++
++test('CJK selection at the word-length limit shows the popup', () => {
++  const ui = createUi();
++  const text = '字'.repeat(MAX_CJK_WORD_LENGTH);
++  routeSelection(ui, text);
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, text);
++});
++
++test('CJK selection past the word-length limit returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '字'.repeat(MAX_CJK_WORD_LENGTH + 1));
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('CJK sentence selection returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, 'これはとても長い文章です');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('CJK selection with internal spaces returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '天 気');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('mixed Latin and CJK selection returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, 'hello世界');
++  assert.equal(ui.display.mode, 'toolbar');
++});
++
++test('katakana word with prolonged sound mark shows the lookup popup', () => {
++  const ui = createUi();
++  routeSelection(ui, 'コーヒー');
++  assert.equal(ui.display.mode, 'popup');
++  assert.equal(ui.display.payload, 'コーヒー');
++});
++
++test('CJK selection with punctuation returns to the toolbar', () => {
++  const ui = createUi();
++  routeSelection(ui, '你好。');
++  assert.equal(ui.display.mode, 'toolbar');
++});

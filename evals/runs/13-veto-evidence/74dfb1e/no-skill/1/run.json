@@ -1,0 +1,51 @@
+{
+  "scenario": "13-veto-evidence",
+  "scenario_revision": 1,
+  "condition": "no-skill",
+  "repetition": 1,
+  "randomized_order": false,
+  "model": {
+    "id": "kimi-for-coding/k3",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "desktop session, 2026-08-06"
+  },
+  "pinpoint_commit": "74dfb1e",
+  "skill_catalog": [],
+  "invocation_method": "none",
+  "fixture": {
+    "ref": "scenarios/13-veto-evidence/fixture",
+    "hash": "64b6495652e254362e589084147e7ad1dc4faee28cb8bdeda46b0bb49e4f7c43",
+    "clean_start_proof": "fresh copy of frozen fixture; hash matches"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "node --test",
+      "exit": 0,
+      "log": "12/12 pass"
+    },
+    {
+      "cmd": "node checks.cjs --oracle <candidate>",
+      "exit": 0,
+      "log": "oracle PASS"
+    }
+  ],
+  "final_response": "final.md",
+  "patch": "patch.diff",
+  "repo_state": {
+    "before": "clean git baseline of frozen fixture",
+    "after": "working tree with candidate changes; patch.diff captured"
+  },
+  "status": "PASS",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [],
+  "redactions": []
+}

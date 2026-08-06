@@ -1,0 +1,63 @@
+{
+  "scenario": "13-veto-evidence",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "undecidability treated as premise not veto; both directions bounded (paid surface vs reachable toolbar)"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "every input routes; degradation target is toolbar; oracle 11/11"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "MAX_CJK_WORD_LENGTH=8 exported, code-point counted, documented; verifiable in diff"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "10 boundary tests incl. at-limit/over-limit, mixed, punctuation; oracle PASS"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "word.js only; existing fallback reused"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "mixed/punctuation selections degrade to toolbar instead of earning heuristics"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (11 routing cases)",
+      "status": "pass",
+      "evidence": "oracle PASS"
+    },
+    {
+      "name": "repo tests (node --test)",
+      "status": "pass",
+      "evidence": "13/13 pass"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "third repetition added because no-skill reps 1 and 2 disagreed on critical items"
+  }
+}
