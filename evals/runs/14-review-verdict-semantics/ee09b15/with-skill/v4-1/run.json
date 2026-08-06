@@ -17,7 +17,6 @@
     "pinpoint-review"
   ],
   "invocation_method": "explicit",
-  "purpose": "spot-check for skill change ee09b15 (Gate status field + finalized report shape, PR 5 items 3.4/3.8): variant v4 exercises the clean-branch CLEAR path with advisory nits",
   "fixture": {
     "ref": "scenarios/14-review-verdict-semantics (generator: setup.cjs, variant v4)",
     "hash": "dad80f3f97c79382272de6ebab3bdb6986e8dccb9cf0dde337d36ebecb00823e",
