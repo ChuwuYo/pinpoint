@@ -492,7 +492,7 @@ false-accept/false-reject costs are asymmetric.
 - [ ] If results remain unstable after the third repetition, report the
   instability and keep the rule's status as unproven.
 - [x] Publish a compact baseline summary under
-  `evals/baselines/<commit>/summary.md`.
+  `evals/baselines/<commit>/<scenario>.md` (plus `<scenario>.results.json`).
 
 ### Exit criteria
 

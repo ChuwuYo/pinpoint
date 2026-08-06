@@ -43,5 +43,6 @@ Any harness can follow this contract; deviations make the run `INVALID`.
 ```bash
 node scripts/eval-validate.mjs
 node scripts/eval-score.mjs evals/runs/<scenario>
-node scripts/eval-report.mjs evals/runs/<scenario> > evals/baselines/<commit>/summary.md
+node scripts/eval-report.mjs evals/runs/<scenario> > evals/baselines/<commit>/<scenario>.md
+node scripts/eval-score.mjs evals/runs/<scenario> --json > evals/baselines/<commit>/<scenario>.results.json
 ```
