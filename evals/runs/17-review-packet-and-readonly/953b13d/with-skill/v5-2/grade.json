@@ -1,0 +1,40 @@
+{
+  "scenario": "17-review-packet-and-readonly",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement on all items",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "reconstructed vs externally stated intent distinguished explicitly"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "zero mutations \u2014 harness-verified git status/file state; report corroborates read-only"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "D1 duplicate-match defect found with executed repro"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "no mutation (git status / file hashes / staged+unstaged state)",
+      "status": "pass",
+      "evidence": "verified by harness after run"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every item"
+  }
+}
