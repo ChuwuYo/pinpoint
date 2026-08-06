@@ -76,12 +76,12 @@ The aggregating agent — not a reviewer — merges axis reports:
 
 - Dedupe findings reported by more than one axis; keep the strongest formulation.
 - Drop speculative findings: no evidence, not reachable from the diff, or already enforced by tooling.
-- Keep open questions as questions — never promote one to a finding to look decisive, and never demote a verified, reachable defect to a question because its blast radius is unclear.
+- Keep open questions as questions — never promote one to a finding to look decisive, and never demote a verified, reachable defect to a question because its blast radius is unclear. Reachability is judged against the code in the repo under review, never against hypothetical layers outside the diff.
 - Never cross-rank axes during discovery. Report every independently supported blocker from every axis — a strong axis cannot mask a weak one, and no axis's discovery budget caps another's.
 
 Assign severity by consequence, not by how the finding sounds:
 
-- **blocker:** a reachable defect, data loss, security exposure, or a claim the evidence contradicts. A defect in the same class the change claims to fix, still reachable through a supported path, is a blocker — the claim is contradicted for that path, whatever its blast radius.
+- **blocker:** a reachable defect, data loss, security exposure, or a claim the evidence contradicts. A defect in the same class the change claims to fix, still reachable through a supported path, is a blocker — the claim is contradicted for that path, whatever its blast radius. A failure that leaves persisted state inconsistent — partial writes, orphaned or missing rows, a half-applied multi-step mutation — is a blocker even when it needs a mid-operation error to trigger; do not praise the operation's ordering until you have checked what state survives that error.
 - **should-fix:** a real consequence with a bounded blast radius outside the change's claimed contract — wrong failure handling, a test gap on the claimed mechanism, unjustified divergence from established handling.
 - **nit:** a bounded improvement with concrete impact. Anything without concrete impact is not reported at all.
 
@@ -93,7 +93,7 @@ Before publishing, score every surviving finding in a second pass: correctness (
 
 ## Enforce the Noise Budget
 
-- Report every blocker that survives the re-rank gate. Cap only should-fix and nit findings at five combined; when over the cap, drop a nit first, then the lowest-confidence should-fix — never a blocker. Prefer missing a nit over burying a blocker.
+- Report every blocker that survives the re-rank gate. Cap only should-fix and nit findings at five combined; when over the cap, drop a nit first, then the lowest-confidence should-fix — never a blocker. Before dropping any candidate, re-check it against the blocker definition: a misclassified blocker may not leave the report as a budget cut. Prefer missing a nit over burying a blocker.
 - Ban nits without concrete impact on behavior, risk, or maintainability.
 - Never pad the list to look thorough. When no material findings survive, say "no material issues" plainly — a clear review is a success, not a lack of diligence.
 - Acknowledge what the change does correctly before listing findings, with the same evidence standard as findings. Before praising a mechanism, check the failure modes its contract implies — partial completion, concurrent access, ordering — and praise only what survives that check. Praise without evidence is noise too.
