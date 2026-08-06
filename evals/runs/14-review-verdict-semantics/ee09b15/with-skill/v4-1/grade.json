@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Verdict CLEAR with blocker 0 / should-fix 0; only one advisory nit (fractional-cent coverage gap) plus open questions; what-holds-up cites concrete verified evidence (gate run 9/9 exit 0, file:line reads, preserved pre-existing test). Gate status field present: PASS with command and exit status."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "blind-2 matched on every statement (S2 CLEAR+no fabrication+evidence YES; S3 dedicated labeled gate field before verdict YES). Residual: verdict line counts nit 0 while one advisory nit is listed — cosmetic count/shape mismatch, no behavioral effect (nit stayed advisory)."
+  }
+}

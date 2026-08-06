@@ -659,16 +659,31 @@ runs on frozen scenario 15 rev 3):
 
 ### 3.4 Make static checks a gate without duplicating their diagnostics
 
-- [ ] Keep formatter, linter, type-checker, test, and build diagnostics out of
+Progress: attribution vocabulary + fixed `Gate status` field landed (`ee09b15`).
+Spot-check on Scenario 14 (`ee09b15`, blind ×2 agreement on all 3 runs): v5
+2/2 `Gate status: FAIL` with diff-caused attribution + BLOCK; v4 1/1
+`Gate status: PASS` + CLEAR. Residual: both v5 runs also restated the gate
+failure as blocker finding 1 despite the "gate status, not as an LLM finding"
+text — verdict/attribution correct, restatement duplicated the fix direction;
+watch in future runs before deciding whether the rule needs sharpening.
+
+- [x] Keep formatter, linter, type-checker, test, and build diagnostics out of
   the LLM finding budget when configured tooling already identifies them.
-- [ ] Record each required command, scope, exit status, and attribution:
+  (Scenario 16 `bcdfd23`: eslint diagnostics subtracted 2/2)
+- [x] Record each required command, scope, exit status, and attribution:
   `pass`, `diff-caused failure`, `pre-existing/unattributed failure`,
-  `unavailable`, or `not applicable`.
-- [ ] Add a fixed `Gate status` field to the report.
+  `unavailable`, or `not applicable`. (`ee09b15`; spot-check reports carry all
+  four)
+- [x] Add a fixed `Gate status` field to the report. (`ee09b15`; 3/3
+  spot-check runs expose it before the verdict)
 - [ ] Make a required diff-caused deterministic failure affect readiness even
-  though it is not restated as an LLM finding.
-- [ ] Do not claim `CLEAR` when required evidence is unavailable or inconclusive.
-- [ ] Do not blame the diff for a pre-existing failure without evidence.
+  though it is not restated as an LLM finding. (readiness correct — v5 BLOCK
+  2/2 at `185d0f1` and `ee09b15` — but both `ee09b15` v5 runs still restated
+  the failure as blocker finding 1; residual)
+- [x] Do not claim `CLEAR` when required evidence is unavailable or inconclusive.
+  (v6 2/2 FIX-THEN-COMMIT at `185d0f1`)
+- [x] Do not blame the diff for a pre-existing failure without evidence.
+  (v7 2/2 pre-existing attribution at `185d0f1`)
 - [ ] Keep tool output concise and link to the full artifact when necessary.
 
 ### 3.5 Make verdict semantics unambiguous
@@ -742,11 +757,17 @@ Open questions: <uncertainty not promoted to findings>
 Verdict: blocker N · should-fix N · nit N → BLOCK | FIX-THEN-COMMIT | CLEAR
 ```
 
-- [ ] Keep praise evidence-based and brief.
-- [ ] Include every blocker even when the report exceeds the normal noise budget.
-- [ ] Expose packet gaps and gate incompleteness before the verdict.
-- [ ] Keep finding IDs stable within one run so grading and follow-up can refer to
-  them.
+- [x] Keep praise evidence-based and brief. (all `ee09b15` spot-check
+  what-holds-up sections cite verified evidence; failure-mode check `91e14f1`)
+- [x] Include every blocker even when the report exceeds the normal noise
+  budget. (`91e14f1` retention rule; Scenario 15 rev 4 run 2 listed 8/8
+  blockers, `5dfe3b9`)
+- [x] Expose packet gaps and gate incompleteness before the verdict.
+  (`ee09b15`: Packet gaps + Gate status fields precede findings; 3/3
+  spot-check runs)
+- [x] Keep finding IDs stable within one run so grading and follow-up can refer to
+  them. (numbering stable in every recorded run; blind graders reference
+  findings by number)
 
 ### 3.9 Prove the change before accepting it
 
@@ -1488,11 +1509,15 @@ rule text changes (anti-inflation rule).
      consecutive misses); run 1 = 2/5 (B5 race still flaky, N1 ordering).
      Four-commit evidence arc: 2/5,2/5 → 2/5,2/5 → 3/5,2/5 → 2/5,5/5.
      B5 race (2/8) and N1 confidence-ordering (3/8) recorded as residuals;
-   - ⬜ static-gate handling (3.4) — partially evidenced by v5/v6/v7 (2/2 each);
-     the fixed `Gate status` report field still needs Scenario 14/16 follow-up;
-   - ⬜ read-only checks (part of 3.6/17) — needs Scenario 17 fixture + baseline;
-   - ⬜ second-pass gate calibration (3.6) — needs Scenario 16 fixture + baseline;
-   - ⬜ report shape update (3.8) — after the above settle;
+    - ✅ static-gate handling (3.4) — attribution vocabulary + `Gate status`
+      field landed `ee09b15`; Scenario 14 spot-check 3/3 PASS (blind ×2);
+      residual: v5 runs restate gate failure as a finding (watch item);
+    - ✅ read-only checks (part of 3.6/17) — Scenario 17 `83de209` clean sweep
+      10/10, zero mutations on all probes;
+    - ✅ second-pass gate calibration (3.6) — Scenario 16 `bcdfd23`: no rule
+      change warranted (C4 T3 flip is a capability boundary, not calibration);
+    - ✅ report shape update (3.8) — finalized `ee09b15` with the same
+      spot-check;
    - every item ships with repeated before/after results.
 
 6. ⬜ **PR 6 — Trigger dataset and baseline** — pending (PR 5 first)

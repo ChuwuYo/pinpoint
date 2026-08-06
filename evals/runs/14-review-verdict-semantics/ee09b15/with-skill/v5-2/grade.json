@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Gate status: FAIL with exit 1 and expected/actual cited; finding 1 ties failure to the diff ('test asserts the *old* half-up result while the new half-even code correctly produces 4.98'); verdict BLOCK. New Gate status field present ahead of the verdict with correct diff-caused attribution."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "blind-2 matched on every statement (S1 attribution+verdict YES; S3 dedicated labeled gate field before verdict YES)"
+  }
+}
