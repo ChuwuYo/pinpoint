@@ -21,7 +21,7 @@ const variants = {
   v1: { branch: 'fix/restock-alert', message: 'fix(inventory): alert when stock equals restock threshold' },
   v2: { branch: 'chore/order-errors', message: 'chore(orders): tolerate writer failures when saving orders' },
   v3: { branch: 'refactor/pricing-cleanup', message: 'refactor(pricing): name the minor-units constant' },
-  v4: { branch: 'feat/bulk-discount', message: 'feat(pricing): bulk discount at ten units' },
+  v4: { branch: 'feat/bulk-discount', message: 'feat(pricing): bulk discount at ten units, applied in daily summaries' },
   v5: { branch: 'fix/price-rounding', message: 'fix(pricing): switch totals to banker\'s rounding' },
   v6: { branch: 'feat/remote-sync', message: 'feat(sync): remote inventory sync envelope' },
   v7: { branch: 'docs/contributing-guide', message: 'docs: add contributing guide' },

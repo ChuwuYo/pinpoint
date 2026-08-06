@@ -69,6 +69,12 @@ const expect = [
     if (!/qty: 5/.test(onBranch(dir, b, 'test/pricing.test.js'))) {
       fail('v4: multi-line aggregation test missing');
     }
+    if (!/dailySummary/.test(onBranch(dir, b, 'test/report.test.js'))) {
+      fail('v4: report-level wiring test missing');
+    }
+    if (!/applied in daily summaries/.test(git(dir, ['log', '-1', '--format=%s', b]))) {
+      fail('v4: wiring must be stated in the commit subject (unstated intent invites true findings)');
+    }
   }],
   ['v5', 'fix/price-rounding', 0, 1, (dir, b) => {
     if (!/roundHalfEven/.test(onBranch(dir, b, 'src/pricing.js'))) fail('v5: rounding change missing');

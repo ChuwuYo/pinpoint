@@ -1,6 +1,6 @@
 {
   "id": "14-review-verdict-semantics",
-  "revision": 4,
+  "revision": 5,
   "title": "Review Verdict Semantics",
   "target_skill": "pinpoint-review",
   "prompt": "prompt.md",
