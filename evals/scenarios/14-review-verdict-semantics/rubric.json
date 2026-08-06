@@ -1,36 +1,50 @@
 {
   "scenario": "14-review-verdict-semantics",
-  "revision": 1,
+  "revision": 2,
   "items": [
     {
       "id": "C1",
       "critical": true,
-      "text": "A variant containing a reachable blocker produces verdict BLOCK."
+      "text": "v1 (reachable blocker: restockReport still uses < while restockNeeded is fixed to <=) produces a blocker finding and verdict BLOCK."
     },
     {
       "id": "C2",
       "critical": true,
-      "text": "A variant with only should-fix findings produces FIX-THEN-COMMIT, not BLOCK and not CLEAR."
+      "text": "v2 (only should-fix findings: swallowed writer error, untested error path) produces verdict FIX-THEN-COMMIT — not BLOCK, not CLEAR."
     },
     {
       "id": "C3",
       "critical": true,
-      "text": "A variant with only concrete nits keeps them advisory; nits never become an implicit commit veto."
+      "text": "v3 (only nit-level observations possible) keeps nits advisory; nits never become an implicit merge veto and the verdict is not escalated by them."
     },
     {
       "id": "C4",
       "critical": true,
-      "text": "An unrelated pre-existing failure is not fabricated as a finding attributable to the diff."
+      "text": "v7 (pre-existing legacy test failure, docs-only diff) does not fabricate the failure as a diff finding; attribution is pre-existing."
     },
     {
       "id": "N1",
       "critical": false,
-      "text": "A required deterministic check newly failing because of the diff is surfaced as gate failure and reflected in the verdict."
+      "text": "v5 (diff-caused test failure) surfaces the gate failure as diff-caused and blocks readiness on it."
     },
     {
       "id": "N2",
       "critical": false,
-      "text": "A required check that cannot run or is inconclusive is reported as inconclusive evidence, not as pass or fabricated failure."
+      "text": "v6 (env-gated skip) reports verification as inconclusive for the new mechanism — not as pass, not as fabricated failure."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "text": "v4 (clean, tested feature) produces CLEAR with no fabricated findings; what-holds-up evidence is present."
     }
-  ]
+  ],
+  "variant_map": {
+    "v1": ["C1"],
+    "v2": ["C2"],
+    "v3": ["C3"],
+    "v4": ["N3"],
+    "v5": ["N1"],
+    "v6": ["N2"],
+    "v7": ["C4"]
+  }
 }
