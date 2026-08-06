@@ -166,7 +166,7 @@ permitted large trace as a release or workflow artifact and link it from
 
 ---
 
-## Phase 0 — Repair suite consistency
+## Phase 0 — Repair suite consistency — DONE (PR 1, `b7ecc8a`)
 
 ### Goal
 
@@ -236,7 +236,7 @@ skills/pinpoint-help/SKILL.md
 
 ---
 
-## Phase 1 — Build the minimum reproducible evaluation system
+## Phase 1 — Build the minimum reproducible evaluation system — DONE (PR 2, `74dfb1e`)
 
 ### Goal
 
@@ -428,7 +428,7 @@ tests/*
 
 ---
 
-## Phase 2 — Complete the existing Scenario 13 baseline
+## Phase 2 — Complete the existing Scenario 13 baseline — DONE (PR 3, `29df513` + `43b6ffe`)
 
 This phase incorporates the existing unfinished **Scenario 13 baseline run**
 without weakening its original intent.
@@ -506,7 +506,7 @@ false-accept/false-reject costs are asymmetric.
 
 ---
 
-## Phase 3 — Harden `pinpoint-review`
+## Phase 3 — Harden `pinpoint-review` — IN PROGRESS (3.1–3.2 done in PR 4; 3.5 first item done `e28fc49`; 3.3/3.4/3.6–3.8 blocked on Scenario 14–17 fixtures)
 
 ### Goal
 
@@ -1397,58 +1397,71 @@ decision explicitly changes them:
 Keep changes reviewable and preserve a clean evidence trail. The preferred
 sequence is:
 
-1. **PR 1 — Suite consistency**
+**Current position (2026-08-06):** PRs 1–4 delivered; PR 5 in progress (1 of 4
+hardening items evidenced). Next concrete step: build Scenario 14
+(`review-verdict-semantics`) fixtures to unlock the remaining PR 5 items —
+3.3 blocker retention, 3.4 static-gate handling, 3.6 read-only checks, and the
+3.7 re-rank gate calibration each need their own frozen baseline before any
+rule text changes (anti-inflation rule).
+
+1. ✅ **PR 1 — Suite consistency** (`b7ecc8a`)
    - fix `INSTALL.md`;
    - add the lightweight CI consistency check and CI path coverage;
    - no Skill behavior changes.
 
-2. **PR 2 — Evaluation contract and canary skeleton**
+2. ✅ **PR 2 — Evaluation contract and canary skeleton** (`74dfb1e`)
    - add schemas, validation/scoring/report scripts, manual harness contract;
    - convert Scenario 13 structure;
    - use synthetic records only.
 
-3. **PR 3 — Scenario 13 fixture and baseline**
-   - freeze fixture/rubric;
+3. ✅ **PR 3 — Scenario 13 fixture and baseline** (`29df513`, fix `43b6ffe`)
+   - freeze fixture/rubric (hash `64b64956`);
    - publish repeated no-Skill/with-Skill results;
    - make any core wording change only in a follow-up commit with before/after
      evidence.
 
-4. **PR 4 — Review fixtures and current baseline**
-   - complete Scenario 12;
-   - add Scenarios 14–17;
-   - record current `pinpoint-review` behavior without changing it.
+4. ✅ **PR 4 — Review fixtures and current baseline** (`8d2a6fe`, naming `a3c8e57`)
+   - complete Scenario 12 (generator `setup.cjs`, frozen hash `b3037a29`);
+   - add Scenarios 14–17 as structured specs (`fixture_status: planned`);
+   - record current `pinpoint-review` behavior without changing it
+     (no-Skill 0/2, with-Skill 1/3 — C4 severity calibration failing 2/3).
 
-5. **PR 5 — `pinpoint-review` rule hardening**
-   - fix blocker retention, static-gate handling, verdict semantics, and
-     read-only checks;
-   - calibrate the second-pass finding gate and update the report shape;
-   - include repeated before/after results.
+5. 🔶 **PR 5 — `pinpoint-review` rule hardening** — IN PROGRESS
+   - ✅ verdict severity boundary (3.5, first item): `e28fc49` + after-evidence
+     `7a513f0` — Scenario 12 with-Skill 1/3 → 3/3 PASS, no regressions;
+   - ⬜ blocker retention (3.3) — needs Scenario 15 fixture + baseline first;
+   - ⬜ static-gate handling (3.4) — needs Scenario 14 fixture + baseline first;
+   - ⬜ remaining verdict semantics (3.5) — needs Scenario 14 fixture + baseline;
+   - ⬜ read-only checks (part of 3.6/17) — needs Scenario 17 fixture + baseline;
+   - ⬜ second-pass gate calibration (3.6) — needs Scenario 16 fixture + baseline;
+   - ⬜ report shape update (3.8) — after the above settle;
+   - every item ships with repeated before/after results.
 
-6. **PR 6 — Trigger dataset and baseline**
+6. ⬜ **PR 6 — Trigger dataset and baseline** — pending (PR 5 first)
    - add bilingual positive/negative routing cases;
    - record current confusion matrix;
    - do not edit descriptions yet.
 
-7. **PR 7 — Description and routing isolation**
+7. ⬜ **PR 7 — Description and routing isolation** — pending (PR 6 first)
    - narrow overlapping descriptions;
    - update commands, help, and both READMEs together;
    - publish post-change trigger results and behavior regression results.
 
-8. **PR 8 — Installer and package matrix**
+8. ⬜ **PR 8 — Installer and package matrix** — pending
    - add global isolation, all-harness/all-Skill assertions, conflict atomicity,
      discovery checks, and tarball smoke tests.
 
-9. **PRs 9+ — Remaining scenario fixtures**
+9. ⬜ **PRs 9+ — Remaining scenario fixtures** — pending
    - follow the Phase 6 order;
    - keep one or a small coherent group of fixtures per PR;
    - publish baseline artifacts with each fixture.
 
-10. **Decision PR — Scenario 11**
-    - add only the refactoring fixture and baseline decision;
-    - create `pinpoint-refactor` in a later PR only if the decision gate supports
-      it.
+10. ⬜ **Decision PR — Scenario 11** — pending
+     - add only the refactoring fixture and baseline decision;
+     - create `pinpoint-refactor` in a later PR only if the decision gate supports
+       it.
 
-11. **Release-candidate PR — External evidence and 1.0**
+11. ⬜ **Release-candidate PR — External evidence and 1.0** — pending
     - update release benchmark, known limitations, installer matrix, and external
       pilot summary;
     - verify every 1.0 gate explicitly.
