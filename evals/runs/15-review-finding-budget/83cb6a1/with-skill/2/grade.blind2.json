@@ -1,0 +1,14 @@
+{
+  "run_id": "15-review-finding-budget-83cb6a1-with-skill-2",
+  "grader": "blind-2",
+  "scores": {
+    "C1": {"score": 0, "evidence": "B3 explicitly reasoned away in holds-up (declared unreachable through public API despite f9 verifying duplicate membership); B5 praised, no race check"},
+    "C2": {"score": 1, "evidence": "f4 merges both notify sites into one finding"},
+    "C3": {"score": 1, "evidence": "f5 names trialExpired-never-flags and banner-wrong-date; strict literal-Invalid-Date-banner reading would flip to 0"},
+    "C4": {"score": 0, "evidence": "B3/B5 omitted; B3 via incorrect unreachability conclusion"},
+    "N1": {"score": 0, "evidence": "SF-medium f8/f9 precede SF-high f10 — severity-then-confidence violated; SF1 survives but both prongs required"}
+  },
+  "total": 2,
+  "passed": false,
+  "notes": "B2 present via name-vs-id framing (f8); injection never named anywhere. SF2 mislabeled blocker."
+}

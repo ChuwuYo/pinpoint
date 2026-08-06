@@ -617,28 +617,45 @@ apply the e28fc49 blocker definition defensibly). Second iteration
 specified: severity def for inconsistent persisted state, repo-only
 reachability, pre-drop blocker re-check.
 
-After baseline runs exist:
+After-evidence round 2 (`83cb6a1`, same frozen scenario, 2 runs, exact
+grader agreement): B7 demotion fixed (merged blocker 2/2); stable B1/B4/
+B6/B7/SF1/B2-as-finding; 10 findings per run, no cap pressure, no
+budget-cited omissions. Residual C1/C4 failures are no longer retention
+problems: B3 is a composition-level defect (both runs found the
+duplicate-membership enabler but never composed it into removeTeam
+non-atomicity; run 2 explicitly declared the error path unreachable);
+B5 race found 1/6 runs (flaky discovery). Disposition: rule items below
+done-with-evidence; B3/B5 recorded as model capability boundary; two
+ground-truth debts (B2-injection unexploitable vs the stand-in; SF2
+severity 6/6) carry to scenario revision 4.
 
-- [ ] Replace "one worst finding per axis" with a rule that retains **all
-  independently supported blockers** from every reachable axis.
-- [ ] Let each axis report all blockers and a bounded number of lower-severity
+Rule items (all landed in `91e14f1`/`83cb6a1`, validated across 6 graded
+runs on frozen scenario 15 rev 3):
+
+- [x] Replace "one worst finding per axis" with a rule that retains **all
+  independently supported blockers** from every reachable axis. (`91e14f1`;
+  10 findings/run post-change, no cap-bound reports)
+- [x] Let each axis report all blockers and a bounded number of lower-severity
   candidates; do not let one noisy axis consume another axis's discovery budget.
-- [ ] Clarify that "do not cross-rank axes" applies to independent discovery, not
+- [x] Clarify that "do not cross-rank axes" applies to independent discovery, not
   to final presentation.
-- [ ] Let the aggregator globally order the deduplicated result by severity and
-  confidence.
-- [ ] Apply the count limit only to non-blockers. Recommended default:
-  `all blockers + at most five should-fix/nit findings combined`.
-- [ ] Prefer dropping a nit, then the lowest-confidence should-fix, before
-  omitting any blocker.
-- [ ] Group findings only when they have the same root cause **and** the grouped
-  remediation and consequences remain explicit.
-- [ ] Keep open questions separate. Never promote uncertainty into a finding to
+- [x] Let the aggregator globally order the deduplicated result by severity and
+  confidence. (Rule landed; 2/6 runs still misorder should-fix confidence —
+  recorded as residual, not rule gap)
+- [x] Apply the count limit only to non-blockers. Recommended default:
+  `all blockers + at most five should-fix/nit findings combined`. (`91e14f1`)
+- [x] Prefer dropping a nit, then the lowest-confidence should-fix, before
+  omitting any blocker. (Plus pre-drop blocker re-check, `83cb6a1`; zero
+  budget-cited omissions since)
+- [x] Group findings only when they have the same root cause **and** the grouped
+  remediation and consequences remain explicit. (C2: 5/6 runs)
+- [x] Keep open questions separate. Never promote uncertainty into a finding to
   fill the report.
-- [ ] Draw the boundary the other way too (baseline evidence `8e4a574`): a
+- [x] Draw the boundary the other way too (baseline evidence `8e4a574`): a
   defect verified true of the code and reachable is a finding even when intent
   or blast radius is partly ambiguous; reserve open questions for what
-  evidence cannot settle.
+  evidence cannot settle. (`91e14f1` + repo-only reachability `83cb6a1`;
+  B2 finding 4/4 post-change, B7 demotion regression fixed)
 
 ### 3.4 Make static checks a gate without duplicating their diagnostics
 

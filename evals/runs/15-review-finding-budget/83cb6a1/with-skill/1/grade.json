@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement on all items",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "5/7 blockers as findings (B1 f1, B4 f2, B6 f4, B7 f5 merged, B2 f6 semantic-mismatch framing). B3 not found: happy-path holds-up only; f10 found the duplicate-membership enabler but framed it as seat inflation, never composed into removeTeam non-atomicity. B5 not found: seat cap praised, no concurrency check. Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 5 merges both notify sites into one owner-id root-cause blocker (notify.js:10-16 vs teams.js:8). Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 4 names trialExpired false for expired trials AND banner 'trial ends Invalid Date' (plus MM.DD misparse bonus). Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "B3/B5 omitted; no budget cited (10 findings: 5 blocker + 5 should-fix, within the should-fix+nit cap). Omission mechanism is discovery/composition, not retention. Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Ordering clean (blocker high x5, should-fix high x3, should-fix medium x2); SF1 survives as should-fix finding 8. Both blind graders agree."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s15-i2a: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every item (3/5), including the B2 semantic-framing borderline (counted present, injection named only in dropped-candidate/open-question)"
+  }
+}

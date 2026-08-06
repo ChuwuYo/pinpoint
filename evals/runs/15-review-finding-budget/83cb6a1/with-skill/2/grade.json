@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement on all items",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "5/7 blockers as findings (B1 f2, B4 f3, B6 f5, B7 f4 merged, B2 f8 semantic-mismatch framing, injection never named). B3 not found: holds-up explicitly considered the mid-operation error and declared it unreachable through the public API — despite f9 verifying duplicate membership (the composed reachability path). B5 not found: seat limit praised, no race check. Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 4 merges both notify sites into one blocker (notify.js:11,15 vs teams.js:8). Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 5 names trialExpired never flags expired trials (Invalid Date/NaN) AND banner shows wrong date (via misparse example); both graders scored 1, noting a stricter literal 'Invalid Date banner' reading would flip to 0. Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "B3/B5 omitted; no budget cited. B3's omission is an explicit (incorrect) unreachability conclusion in holds-up. Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "SF1 survives as should-fix finding 10, but should-fix medium findings 8-9 precede should-fix high finding 10, violating severity-then-confidence ordering (second consecutive run with this violation). Both blind graders agree."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s15-i2b: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every item (2/5), including the generous C3=1 reading and its strict-reading caveat"
+  }
+}

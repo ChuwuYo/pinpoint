@@ -1,0 +1,14 @@
+{
+  "run_id": "15-review-finding-budget-83cb6a1-with-skill-1",
+  "grader": "blind-2",
+  "scores": {
+    "C1": {"score": 0, "evidence": "B3/B5 absent (holds-up praise only); f10 found duplicate-membership enabler but framed as seat inflation, not composed into removeTeam non-atomicity"},
+    "C2": {"score": 1, "evidence": "f5 merges invoiceEmail+renewalNotice into one owner-id root-cause finding"},
+    "C3": {"score": 1, "evidence": "f4 names trialExpired-false-forever and banner Invalid Date"},
+    "C4": {"score": 0, "evidence": "B3/B5 omitted, no budget citation"},
+    "N1": {"score": 1, "evidence": "blocker/high x5 -> SF/high x3 -> SF/medium x2; SF1 survives as should-fix f8"}
+  },
+  "total": 3,
+  "passed": false,
+  "notes": "B2 present via semantic-mismatch framing (f6); injection named only in dropped-candidate + open question. SF2 mislabeled blocker (present for C1 purposes, forfeits SF2 for N1 — N1 satisfied by SF1)."
+}
