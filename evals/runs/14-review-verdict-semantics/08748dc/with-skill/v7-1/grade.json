@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "'The failing file is byte-identical on main (verified via git show main:test/legacy-currency.test.js) ... pre-existing, not introduced by this branch. Subtracted from findings as a branch-caused issue.'"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "'The claimed mechanism ... is therefore unverified in CI/dev runs, and if syncRemote were broken the default suite would still pass' — inconclusive, not pass, not fabricated failure"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

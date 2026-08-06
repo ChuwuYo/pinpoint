@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Verdict: blocker 0 · should-fix 3 · nit 1 → FIX-THEN-COMMIT; findings are should-fix only (serialization swallowed; no test of claimed mechanism)"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

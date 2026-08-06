@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Finding 1 [blocker]: 'the branch does not update the test that encodes the old round-half-up behavior; npm test fails with 4.98 !== 4.99 ... The deliverable state of the branch is a red suite'; Verdict BLOCK"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

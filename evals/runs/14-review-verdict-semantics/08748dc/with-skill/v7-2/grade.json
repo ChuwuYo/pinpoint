@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "'one pre-existing failure in test/legacy-currency.test.js:10... exists identically on main — it is not introduced by this branch and is subtracted from findings.' Verdict CLEAR"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

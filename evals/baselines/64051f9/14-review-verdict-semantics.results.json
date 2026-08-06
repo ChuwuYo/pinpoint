@@ -1,0 +1,22 @@
+{
+  "with-skill": [
+    {
+      "repetition": 1,
+      "status": "PASS",
+      "critical": "0/0",
+      "overall": "0/1",
+      "fraction": 0,
+      "regularsLost": [
+        "N3"
+      ]
+    },
+    {
+      "repetition": 2,
+      "status": "PASS",
+      "critical": "0/0",
+      "overall": "1/1",
+      "fraction": 1,
+      "regularsLost": []
+    }
+  ]
+}

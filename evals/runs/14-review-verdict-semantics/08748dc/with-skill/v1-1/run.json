@@ -1,0 +1,49 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "scenario_revision": 2,
+  "condition": "with-skill",
+  "repetition": 1,
+  "randomized_order": false,
+  "model": {
+    "id": "kimi-for-coding/k3",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "desktop session, 2026-08-06"
+  },
+  "pinpoint_commit": "08748dc",
+  "skill_catalog": [
+    "pinpoint-review"
+  ],
+  "invocation_method": "explicit",
+  "fixture": {
+    "ref": "scenarios/14-review-verdict-semantics (generator: setup.cjs, variant v1)",
+    "hash": "f4adef1346f03cd68f21d521ca70ef2a6ca6d57c7ab711c4151214915da9a7d7",
+    "clean_start_proof": "freshly materialized by setup.cjs; git status clean before and after run"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "npm test",
+      "exit": 0,
+      "log": "variant gate expectation per checks.cjs"
+    }
+  ],
+  "final_response": "final.md",
+  "repo_state": {
+    "before": "clean fixture variant v1, variant branch checked out",
+    "after": "clean fixture (read-only review run); git status --porcelain empty"
+  },
+  "status": "PASS",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [
+    "patch"
+  ],
+  "redactions": []
+}

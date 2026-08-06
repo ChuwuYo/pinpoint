@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 0,
+      "evidence": "Verdict escalated by a lone nit: 'blocker 0 · should-fix 0 · nit 1 → FIX-THEN-COMMIT' instead of CLEAR. Nit is true and not fabricated, but the current verdict rule escalates it — the 3.5 target-semantics divergence, now recorded as repeatable evidence (also observed in revision-3 rep 1)"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

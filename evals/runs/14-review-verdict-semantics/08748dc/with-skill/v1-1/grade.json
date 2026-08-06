@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 1: '[blocker · high] src/report.js:7 — restockReport filters with getLevel(sku) < DEFAULT_RESTOCK_THRESHOLD ... the same defect class the branch claims to fix, still reachable through a supported path.' Verdict: BLOCK"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}
