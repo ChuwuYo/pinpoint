@@ -1474,7 +1474,15 @@ rule text changes (anti-inflation rule).
    - ✅ verdict semantics (3.5): `185d0f1` — Scenario 14 built (revisions 2–5,
      frozen `dad80f3f`), baseline `f3f2369` (nit escalation N3 1/2), fixed,
      after-evidence 4/4 PASS (advisory nits under CLEAR, no regressions);
-   - ⬜ blocker retention (3.3) — needs Scenario 15 fixture + baseline first;
+   - ✅ blocker retention (3.3): `91e14f1` + `83cb6a1` — Scenario 15 built
+     (revisions 2–3, frozen `0cbc9764`), baseline `1ec6111`, two hardening
+     iterations with after-evidence; all nine rule items done-with-evidence;
+     B3 (defect composition) and B5 (race, 1/6) recorded as model capability
+     boundary; two ground-truth debts (B2-injection vs stand-in, SF2 severity)
+     carry to Scenario 15 revision 4;
+   - ⬜ Scenario 15 revision 4 — settle the two ground-truth debts (make
+     injection reachable against the stand-in or relabel B2; relabel SF2 to
+     blocker), re-freeze, spot-check 2 runs;
    - ⬜ static-gate handling (3.4) — partially evidenced by v5/v6/v7 (2/2 each);
      the fixed `Gate status` report field still needs Scenario 14/16 follow-up;
    - ⬜ read-only checks (part of 3.6/17) — needs Scenario 17 fixture + baseline;
