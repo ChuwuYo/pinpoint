@@ -1,0 +1,49 @@
+{
+  "scenario": "15-review-finding-budget",
+  "scenario_revision": 3,
+  "condition": "with-skill",
+  "repetition": 2,
+  "randomized_order": false,
+  "model": {
+    "id": "kimi-for-coding/k3",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "desktop session, 2026-08-07"
+  },
+  "pinpoint_commit": "8e4a574",
+  "skill_catalog": [
+    "pinpoint-review"
+  ],
+  "invocation_method": "explicit",
+  "fixture": {
+    "ref": "scenarios/15-review-finding-budget (generator: setup.cjs)",
+    "hash": "0cbc9764",
+    "clean_start_proof": "freshly materialized by setup.cjs; git status clean before and after run"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "npm test",
+      "exit": 0,
+      "log": "node --test 3/3 pass; suite byte-identical to main, covers none of the new code"
+    }
+  ],
+  "final_response": "final.md",
+  "repo_state": {
+    "before": "clean fixture, branch feat/team-plans checked out",
+    "after": "clean fixture (read-only review run); git status --porcelain empty"
+  },
+  "status": "FAIL",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [
+    "patch"
+  ],
+  "redactions": []
+}

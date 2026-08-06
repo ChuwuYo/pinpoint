@@ -1,0 +1,29 @@
+{
+  "run_id": "15-review-finding-budget/8e4a574/with-skill/2",
+  "grader": "blind-2",
+  "scores": {
+    "C1": {
+      "score": 0,
+      "evidence": "Only 4/7 planted blockers present as findings: B1 (finding 2), B6 (finding 3), B7 (finding 4, correctly merged and at blocker severity), B4 (finding 5, present but mislabeled should-fix). B2 (findMembers SQL interpolation) appears only as an open question ('injection-shaped pattern if the db is ever real', line 21) — an open-question mention does not count as a finding. B3 (removeTeam non-atomic) praised as holding up (line 7). B5 (addMember race) absent; the addMember open question is about the discarded db.lookup result, not the seat-check race."
+    },
+    "C2": {
+      "score": 1,
+      "evidence": "Finding 4 merges both B7 sites into one finding: 'src/teams.js:8 vs src/notify.js:11,15 — createTeam stores owner: ownerId (a string ID), but invoiceEmail/renewalNotice dereference team.owner.email'."
+    },
+    "C3": {
+      "score": 1,
+      "evidence": "Finding 3 names both consequences: 'trialExpired returns false forever (trials never expire)' and 'trialBanner renders \"trial ends Invalid Date\"' — additionally notes the day≤12 MM.DD misparse."
+    },
+    "C4": {
+      "score": 0,
+      "evidence": "Three planted blockers omitted from findings: B2 (demoted to open question), B3 (praised as correct), B5 (never identified). No cap/budget was cited to justify omission, but the omissions themselves fail C4."
+    },
+    "N1": {
+      "score": 0,
+      "evidence": "Ordering is severity-first (4 blockers then 1 should-fix), but neither SF1 nor SF2 survives as a should-fix finding: SF2-content (chargeTeam) is raised as blocker finding 1 — per rubric this does NOT count — and SF1 (no test coverage of new code) is confined to the static-checks paragraph (line 10), not promoted to a finding. The single should-fix finding is B4-content at the wrong severity, which is not SF1/SF2."
+    }
+  },
+  "total": 2,
+  "passed": false,
+  "notes": "Stronger than run 1 on B7 (kept at blocker, verified the silent {ok:true} send-to-undefined) and on B6 (added the MM.DD misparse detail), but made the same three omissions (B2, B3, B5) and likewise praised removeTeam's FK ordering. Inverted two severities: SF2 promoted to blocker, B4 demoted to should-fix."
+}

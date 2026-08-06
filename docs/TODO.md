@@ -596,6 +596,16 @@ primary hardening target for 3.3+.
 
 ### 3.3 Clarify discovery, aggregation, and finding retention
 
+Baseline (`8e4a574`, Scenario 15 rev 3 frozen hash `0cbc9764`, 2 runs,
+2 blind graders exact agreement): C2/C3 pass repeatably (exact-dup merge
+and multi-consequence naming work); C1/C4/N1 fail 2/2 — only 4/7 blockers
+survive. The binding mechanism is **open-question demotion + holds-up
+praise**, not the finding cap (cap never cited; both runs landed exactly at
+5 findings). Repeatable evidence: B3 non-atomicity praised as correct
+ordering both runs; B5 check-then-act race missed both runs; B2 found but
+demoted to an open question in run 2 ("harmless against the stand-in");
+SF2 over-escalated to blocker both runs; SF1 never became a finding.
+
 After baseline runs exist:
 
 - [ ] Replace "one worst finding per axis" with a rule that retains **all
@@ -614,6 +624,10 @@ After baseline runs exist:
   remediation and consequences remain explicit.
 - [ ] Keep open questions separate. Never promote uncertainty into a finding to
   fill the report.
+- [ ] Draw the boundary the other way too (baseline evidence `8e4a574`): a
+  defect verified true of the code and reachable is a finding even when intent
+  or blast radius is partly ambiguous; reserve open questions for what
+  evidence cannot settle.
 
 ### 3.4 Make static checks a gate without duplicating their diagnostics
 

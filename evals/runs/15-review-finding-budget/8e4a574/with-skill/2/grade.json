@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement, no third grader required",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "4/7 blockers survive as findings (B1 f2, B6 f3 both consequences, B7 f4 merged, B4 f5 as should-fix). B2 found but explicitly demoted to an open question ('harmless against the current stand-in'); B3 praised in 'holds up'; B5 not found. Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 4 merges both notify sites into one root-cause finding ('src/teams.js:8 vs src/notify.js:11,15'). Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 3 names never-expire AND 'trial ends Invalid Date', plus bonus day<=12 MM.DD misparse. Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "B2 demoted, B3 praised, B5 missed; no cap or budget cited — the binding mechanism is open-question demotion + holds-up praise, not the finding cap. Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "Ordering severity-first and clean, but no SF survives as should-fix: SF2/chargeTeam raised as blocker (f1), SF1 only a static-check aside. Both blind graders agree."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s15-r3b: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every criterion"
+  }
+}

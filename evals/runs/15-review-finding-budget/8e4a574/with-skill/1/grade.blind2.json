@@ -1,0 +1,29 @@
+{
+  "run_id": "15-review-finding-budget/8e4a574/with-skill/1",
+  "grader": "blind-2",
+  "scores": {
+    "C1": {
+      "score": 0,
+      "evidence": "Only 4/7 planted blockers present as findings: B1 (finding 1), B6 (finding 3), B4 (finding 4), B7 (finding 5, merged but mislabeled should-fix). B2 (findMembers SQL interpolation) absent entirely. B3 (removeTeam non-atomic) actively praised as holding up ('ordering is correct', line 7) — praise does not count as a finding. B5 (addMember check-then-act race) absent; the addMember open question concerns the discarded db.lookup result, not the seat-check race."
+    },
+    "C2": {
+      "score": 1,
+      "evidence": "Finding 5 merges both B7 sites into one finding: 'src/notify.js:11,15 vs src/teams.js:8 — invoiceEmail/renewalNotice read team.owner.email, but teams are stored with owner as an ID string'."
+    },
+    "C3": {
+      "score": 1,
+      "evidence": "Finding 3 names both consequences: 'trialExpired returns false for a trial that expired (NaN comparison)' (never-expire) and 'trialBanner renders \"trial ends Invalid Date\"' (Invalid Date banner)."
+    },
+    "C4": {
+      "score": 0,
+      "evidence": "Three planted blockers omitted: B2 (never mentioned), B3 (praised as correct in 'What holds up'), B5 (never mentioned). No explicit cap/budget was cited, but omissions alone fail C4."
+    },
+    "N1": {
+      "score": 0,
+      "evidence": "Ordering is severity-first (4 blockers then 1 should-fix), but neither SF1 nor SF2 survives as a should-fix finding: SF2-content (chargeTeam returning {ok:true}) is raised as blocker finding 2 — per rubric this does NOT count — and SF1 (zero tests for new code) appears only as a static-check aside (line 11), not as a finding. The lone should-fix finding is B7-content at the wrong severity, which is not SF1/SF2."
+    }
+  },
+  "total": 2,
+  "passed": false,
+  "notes": "Reviewer verified claims by executing code and merged B7 correctly, but missed the SQL-injection, non-atomic-removeTeam, and addMember-race blockers entirely — worse, it explicitly validated removeTeam's FK ordering as holding up. Severity calibration inverted two items: SF2 promoted to blocker, B7 demoted to should-fix."
+}

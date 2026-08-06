@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement, no third grader required",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "4/7 blockers survive as findings (B1 f1, B6 f3 both consequences, B4 f4, B7 f5 merged). B2 absent entirely; B3 praised in 'What holds up' ('ordering is correct'); B5 absent (open question covers discarded lookup, not the check-then-act race). Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 5 merges both notify sites: 'src/notify.js:11,15 — invoiceEmail/renewalNotice read team.owner.email' as a single finding. Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 3 names both consequences: 'trialExpired returns false for a trial that expired' AND 'trialBanner renders \"trial ends Invalid Date\"'. Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "B2/B3/B5 not findings; no cap or budget cited for omissions — the binding mechanism is demotion/miss, not the finding cap. Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "Ordering severity-first and clean, but no SF survives as should-fix: SF2/chargeTeam raised as blocker (f2), SF1 zero-new-tests only a static-check aside. Both blind graders agree."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s15-r3a: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every criterion"
+  }
+}
