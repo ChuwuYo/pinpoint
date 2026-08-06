@@ -1,0 +1,26 @@
+{
+  "id": "12-review-noise-gate",
+  "revision": 1,
+  "title": "Review Noise Gate",
+  "target_skill": "pinpoint-review",
+  "prompt": "prompt.md",
+  "rubric": "rubric.json",
+  "fixture_generator": "setup.cjs",
+  "fixture_status": "frozen",
+  "fixture_requirements": [
+    "A real blocker reachable from the diff, requiring context beyond the changed hunks (the currency path).",
+    "At least two decoys: code that looks defective but is a documented intentional contract or deliberate platform workaround.",
+    "A configured linter whose output covers at least two style or typing issues present in the diff.",
+    "Contribution notes documenting the intentional contracts behind the decoys.",
+    "A plausible-but-unreachable concern (preview.js timezone) that tempts speculative reporting."
+  ],
+  "deterministic_checks": [
+    "node evals/scenarios/12-review-noise-gate/setup.cjs <target-dir>",
+    "node evals/scenarios/12-review-noise-gate/checks.cjs <target-dir>",
+    "git -C <target-dir> status --porcelain (must be empty before and after a review run)"
+  ],
+  "required_capabilities": ["read files", "run git commands", "run the repo's configured linter"],
+  "allowed_mutations": [],
+  "timeout_minutes": 30,
+  "conditions": ["no-skill", "with-skill"]
+}

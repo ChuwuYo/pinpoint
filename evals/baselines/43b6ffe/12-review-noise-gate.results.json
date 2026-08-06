@@ -1,0 +1,46 @@
+{
+  "no-skill": [
+    {
+      "repetition": 1,
+      "status": "FAIL",
+      "critical": "2/4",
+      "overall": "5/7",
+      "fraction": 0.7142857142857143,
+      "regularsLost": []
+    },
+    {
+      "repetition": 2,
+      "status": "FAIL",
+      "critical": "2/4",
+      "overall": "5/7",
+      "fraction": 0.7142857142857143,
+      "regularsLost": []
+    }
+  ],
+  "with-skill": [
+    {
+      "repetition": 1,
+      "status": "PASS",
+      "critical": "4/4",
+      "overall": "7/7",
+      "fraction": 1,
+      "regularsLost": []
+    },
+    {
+      "repetition": 2,
+      "status": "FAIL",
+      "critical": "3/4",
+      "overall": "6/7",
+      "fraction": 0.8571428571428571,
+      "regularsLost": []
+    },
+    {
+      "repetition": 3,
+      "status": "FAIL",
+      "critical": "3/4",
+      "overall": "6/7",
+      "fraction": 0.8571428571428571,
+      "regularsLost": []
+    }
+  ]
+}

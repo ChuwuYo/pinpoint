@@ -1,0 +1,36 @@
+{
+  "scenario": "16-review-rerank-calibration",
+  "revision": 1,
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "text": "True actionable findings survive the second pass (recall preserved)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "text": "Plausible false positives and unreachable concerns are dropped by the second pass (precision gained)."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "text": "Diagnostics already enforced by tooling do not survive as findings."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "text": "Retention behavior is repeatable across repetitions: the same findings survive or drop run to run."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "text": "True findings whose exact fix is unknown are surfaced as findings with an honest fix direction or as open questions — not forced into speculative patches."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "text": "Evidence for whether numeric 0-10 scoring improves precision without reducing recall is recorded, to justify keeping or replacing it with a simpler evidence/actionability gate."
+    }
+  ]
+}

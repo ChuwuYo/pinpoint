@@ -1,0 +1,64 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 1: 'the cache key covers only `locale`, but `buildReport` also reads `settings.currency`... Reproduced: after switching USD→EUR at locale `de-DE`, export still returns `1.234,56 $` instead of `1.234,56 €`'"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "'Repository contracts in CONTRIBUTING.md are respected: `src/csv.js` single-line contract untouched, `src/notify.js` fire-and-forget webhook untouched' — decoys acknowledged as contracts, not reported as defects"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "'Both are tooling-enforced, so subtracted from findings — but the branch does not pass its own lint gate and cannot merge as-is' — lint reported as gate status, not as review findings"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "'**Verdict:** blocker 0 · should-fix 3 · nit 0 → **FIX-THEN-COMMIT** — not ready to merge' — severity counts plus single verdict from the allowed set"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Three findings ordered high, high, medium with confidence tags and file:line evidence; under five, no nits"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "'**What holds up:** The stated bug is fixed at the owning boundary... invalidation works as claimed' — acknowledges correct work without padding"
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Each finding carries repro/verification ('Reproduced', 'verified by grep'); the `lines`-cache issue demoted to Open questions: 'pre-existing behavior... flagging for the author, not as a finding'"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": true,
+    "resolution": "C4 borderline: planted blocker was classified [should-fix] not [blocker], and this evaluator accepted the verdict as internally consistent with the report's own severities; evaluators of repetitions 2 and 3 held the planted blocker must produce BLOCK. Recorded as scenario signal for severity-calibration hardening."
+  }
+}

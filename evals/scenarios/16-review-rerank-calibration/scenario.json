@@ -1,0 +1,20 @@
+{
+  "id": "16-review-rerank-calibration",
+  "revision": 1,
+  "title": "Review Re-rank Calibration",
+  "target_skill": "pinpoint-review",
+  "prompt": "prompt.md",
+  "rubric": "rubric.json",
+  "fixture_status": "planned",
+  "fixture_requirements": [
+    "True actionable findings, true findings whose exact code fix is unknown, plausible false positives, unreachable concerns, open questions, and diagnostics already enforced by tooling — planted with known ground truth.",
+    "Enough material to measure which findings survive the second pass across repetitions."
+  ],
+  "deterministic_checks": [
+    "planted ground-truth inventory vs survived/dropped findings (planned)"
+  ],
+  "required_capabilities": ["read files", "run git commands", "run the repo's configured checks"],
+  "allowed_mutations": [],
+  "timeout_minutes": 45,
+  "conditions": ["with-skill"]
+}

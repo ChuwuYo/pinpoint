@@ -1,0 +1,64 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 3: 'Cache key omits `currency`; stale totals persist for currency changes' with runtime repro 'applySettings({ currency: EUR }) ... → \"1.234,56 $\" (stale; expected \"1.234,56 €\")'"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "'CONTRIBUTING.md contracts (CSV single-line cells, fire-and-forget webhook) — untouched by this diff; no violations' — decoys acknowledged, not reported as defects"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 0,
+      "evidence": "Lint output listed as numbered review findings: '### 1. BLOCKER — Lint failure: loose equality (eqeqeq)' and '### 2. BLOCKER — Lint failure: unused variable (no-unused-vars)'"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "Closes with '**NOT READY TO MERGE.**' — no severity counts given and verdict is not one of BLOCK/FIX-THEN-COMMIT/CLEAR"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Findings ordered BLOCKER,BLOCKER,MAJOR,MINOR, each with file:line; 4 findings total; minor finding states concrete impact"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "'The core mechanism works (verified at runtime: switching en-US → de-DE re-renders totals correctly)' — acknowledges correct behavior without padding"
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "'Checks Performed' lists diff review, eslint run, and runtime probe; finding 4 downgraded after verification: 'behavior verified correct... Not a defect'"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

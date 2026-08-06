@@ -1,0 +1,21 @@
+{
+  "id": "15-review-finding-budget",
+  "revision": 1,
+  "title": "Review Finding Budget",
+  "target_skill": "pinpoint-review",
+  "prompt": "prompt.md",
+  "rubric": "rubric.json",
+  "fixture_status": "planned",
+  "fixture_requirements": [
+    "More than five independent, reachable blockers spread across multiple concern axes.",
+    "Lower-severity findings and exact-duplicate findings planted alongside.",
+    "Two findings that share a root cause but have separate consequences."
+  ],
+  "deterministic_checks": [
+    "planted finding inventory vs reported findings diff (planned)"
+  ],
+  "required_capabilities": ["read files", "run git commands"],
+  "allowed_mutations": [],
+  "timeout_minutes": 45,
+  "conditions": ["no-skill", "with-skill"]
+}

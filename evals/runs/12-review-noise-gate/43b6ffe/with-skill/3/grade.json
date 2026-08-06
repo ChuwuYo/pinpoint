@@ -1,0 +1,64 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 1: 'cache key omits `settings.currency`, but `buildReport` consumes it (src/export.js:12). Reproduced: after `applySettings({currency:'EUR'})`, `getReport` still serves the USD-formatted report — the exact stale-totals defect class this branch fixes for locale.'"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "'the csv.js and notify.js contracts are untouched' — neither documented contract reported as a defect; no decoy findings appear"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "'configured ESLint (`eqeqeq`, `no-unused-vars`) fails on the branch — 2 errors... Subtracted from findings per workflow, but the branch does not pass its own lint gate.'"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "'blocker 0 · should-fix 3 · nit 0 → FIX-THEN-COMMIT' — the planted blocker was found (finding 1) but downgraded to should-fix; a blocker must produce BLOCK, yet the verdict is FIX-THEN-COMMIT"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "3 findings ordered high→medium with file:line evidence, each with reproduced/grep-verified evidence; ≤5 findings, zero nits"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "'What holds up' section acknowledges correct work: 'The fix addresses the stated bug at the right boundary... Verified empirically'"
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Findings carry verification evidence ('Reproduced:', 'grep confirms'); the `lines`-cache concern demoted to 'Open questions' as pre-existing"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": true,
+    "resolution": "C4 failed on the same mechanism as repetition 2: planted blocker classified [should-fix] → FIX-THEN-COMMIT. Repeatable severity-calibration failure (2/3 with-skill repetitions), the hardening target for Phase 3.3+."
+  }
+}

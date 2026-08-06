@@ -1,0 +1,64 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "F3 — High: 'the cache is keyed on `locale` only, but `buildReport` also depends on `settings.currency` ... Verified at runtime: after `applySettings({ currency: 'EUR' })` with locale unchanged, `exportReport` still returns `1.234,56 $`'"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "'`csv.js`/`notify.js` contracts in CONTRIBUTING.md are untouched' — decoys acknowledged as contracts, not reported as defects"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 0,
+      "evidence": "Lint output listed as review findings: '**F1 — Blocker: lint failure, `eqeqeq`**' and '**F2 — Blocker: lint failure, `no-unused-vars` + dead code**'"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "'## Verdict **Not ready to merge.**' — no severity counts and none of the required verdict tokens (BLOCK, FIX-THEN-COMMIT, CLEAR)"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Findings ordered Blocker, Blocker, High, Low, each with file:line evidence; 4 findings, no bare nits"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "'## What works: The reported bug is genuinely fixed... `setLocale` validation and the `RangeError` are reasonable.'"
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "'## Verification performed: Ran repo linter ... Ran a runtime repro'; F3 'Verified at runtime'"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

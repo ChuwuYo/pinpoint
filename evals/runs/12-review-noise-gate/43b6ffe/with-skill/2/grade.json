@@ -1,0 +1,64 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 1: 'the cache key covers only `locale`, not the other inputs to `buildReport` (`settings.currency`...). after `applySettings({ currency: 'EUR' })`, `getReport` returns the stale USD-formatted `\"$1,234.56\"` instead of `\"€1,234.56\"` (reproduced)'"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "'Repository contracts in CONTRIBUTING.md are untouched: csv.js single-line-cell normalization and notify.js fire-and-forget webhook are unchanged' — both decoys explicitly acknowledged as contracts"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "'These two violations are enforced by tooling, so they are subtracted from the findings list — but the branch does not pass its own configured linter and cannot merge as-is'"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "Verdict: 'blocker 0 · should-fix 2 · nit 0 → **FIX-THEN-COMMIT**' — the planted blocker (found as finding 1) was downgraded to should-fix; rubric requires a blocker to produce BLOCK, and the verdict is not BLOCK"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Two findings only, both '[should-fix · high]' with file:line and reproduced evidence; no nits listed"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "'What holds up: The stated bug is genuinely fixed... Reproduced en-US → de-DE → en-US' — correct behavior acknowledged; list not padded"
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Each finding carries verification: '(reproduced)' for finding 1, 'grep confirms only its definition and export' and 'setLocale('fr-FR') throws RangeError though Intl formats fr-FR fine' for finding 2"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": true,
+    "resolution": "C4 failed: planted blocker found but classified [should-fix], verdict FIX-THEN-COMMIT instead of BLOCK — severity-calibration gap, not a discovery gap"
+  }
+}

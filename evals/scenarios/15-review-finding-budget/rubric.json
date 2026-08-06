@@ -1,0 +1,31 @@
+{
+  "scenario": "15-review-finding-budget",
+  "revision": 1,
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "text": "Every distinct planted blocker survives aggregation — none is dropped by axis budgeting or the finding cap."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "text": "Exact duplicate findings are merged into one."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "text": "Findings that share a root cause but have separate consequences are NOT merged."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "text": "The non-blocker noise budget cannot hide a blocker: blockers are never sacrificed to keep lower-severity findings."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "text": "Final finding order is deterministic after deduplication (severity-first, stable within severity)."
+    }
+  ]
+}

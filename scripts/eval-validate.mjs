@@ -104,8 +104,13 @@ if (existsSync(scenariosDir)) {
     }
 
     if (scenario.fixture_status === 'frozen' || scenario.fixture_status === 'ready') {
-      if (typeof scenario.fixture !== 'string' || !existsSync(join(dir, scenario.fixture))) {
-        fail(`${entry.name}: fixture_status is '${scenario.fixture_status}' but fixture path is missing`);
+      const hasFixture =
+        typeof scenario.fixture === 'string' && existsSync(join(dir, scenario.fixture));
+      const hasGenerator =
+        typeof scenario.fixture_generator === 'string' &&
+        existsSync(join(dir, scenario.fixture_generator));
+      if (!hasFixture && !hasGenerator) {
+        fail(`${entry.name}: fixture_status is '${scenario.fixture_status}' but neither fixture nor fixture_generator is present`);
       }
     }
 

@@ -518,24 +518,31 @@ record current behavior, then change the text.
 
 ### 3.1 Complete the existing Scenario 12 fixture
 
-- [ ] Convert `12-review-noise-gate` to the structured scenario format.
-- [ ] Build the stale CSV total/cache fixture with:
+- [x] Convert `12-review-noise-gate` to the structured scenario format.
+- [x] Build the stale CSV total/cache fixture with:
   - the real locale-and-currency blocker reachable through the settings path;
   - at least two documented intentional-contract decoys;
   - configured linter/type-checker findings that must not be repeated as review
     findings;
   - a plausible but unreachable concern;
   - contribution notes that explain the decoys.
-- [ ] Add deterministic checks for the planted blocker, decoys, configured tool
+- [x] Add deterministic checks for the planted blocker, decoys, configured tool
   diagnostics, and repository state before/after review.
-- [ ] Run and publish the current no-Skill/with-Skill baseline before changing
+- [x] Run and publish the current no-Skill/with-Skill baseline before changing
   review behavior.
+
+Baseline result (commit `43b6ffe`, frozen hash `b3037a29`): no-Skill 0/2 PASS
+(C3 lint-as-findings and C4 verdict format fail in both); with-Skill 1/3 PASS —
+both failures are the same repeatable severity-calibration gap: the planted
+blocker is found but classified [should-fix], yielding FIX-THEN-COMMIT instead
+of BLOCK (C4). Discovery (C1/C2) held in all 5 runs. C4 calibration is the
+primary hardening target for 3.3+.
 
 ### 3.2 Add targeted review scenarios
 
 #### Scenario 14 — `review-verdict-semantics`
 
-- [ ] Include independent fixture variants for:
+- [x] Structured spec created (fixture_status `planned`); fixture variants pending:
   - one reachable blocker;
   - only should-fix findings;
   - only concrete nits;
@@ -551,7 +558,8 @@ record current behavior, then change the text.
 #### Scenario 15 — `review-finding-budget`
 
 - [ ] Plant more than five independent, reachable blockers across multiple
-  concern axes, plus lower-severity findings and duplicates.
+  concern axes, plus lower-severity findings and duplicates. (structured spec
+  created, fixture_status `planned`)
 - [ ] Verify that every distinct blocker survives aggregation.
 - [ ] Verify that exact duplicates are merged without merging separate
   consequences that happen to share a root cause.
@@ -562,7 +570,8 @@ record current behavior, then change the text.
 
 - [ ] Include true actionable findings, true findings whose exact code fix is
   unknown, plausible false positives, unreachable concerns, open questions, and
-  diagnostics already enforced by tooling.
+  diagnostics already enforced by tooling. (structured spec created,
+  fixture_status `planned`)
 - [ ] Measure which findings survive the second pass.
 - [ ] Test whether numeric 0–10 scoring is repeatable enough to justify its
   complexity.
@@ -575,6 +584,7 @@ record current behavior, then change the text.
 
 - [ ] Include invalid base refs, empty diffs, mixed staged/unstaged work, missing
   intent, missing validation evidence, and a harness that tempts mutation.
+  (structured spec created, fixture_status `planned`)
 - [ ] Verify packet failure occurs once at the aggregator instead of being
   rediscovered by every reviewer.
 - [ ] Verify the report distinguishes reconstructed intent from externally stated

@@ -1,0 +1,36 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "revision": 1,
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "text": "A variant containing a reachable blocker produces verdict BLOCK."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "text": "A variant with only should-fix findings produces FIX-THEN-COMMIT, not BLOCK and not CLEAR."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "text": "A variant with only concrete nits keeps them advisory; nits never become an implicit commit veto."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "text": "An unrelated pre-existing failure is not fabricated as a finding attributable to the diff."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "text": "A required deterministic check newly failing because of the diff is surfaced as gate failure and reflected in the verdict."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "text": "A required check that cannot run or is inconclusive is reported as inconclusive evidence, not as pass or fabricated failure."
+    }
+  ]
+}

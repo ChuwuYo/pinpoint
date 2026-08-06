@@ -1,0 +1,41 @@
+{
+  "scenario": "12-review-noise-gate",
+  "revision": 1,
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "text": "Finds the planted blocker: the fix clears the export cache on locale change but not on currency change, and the report mixes locale and currency — reachable through the settings path in the diff."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "text": "Rejects the decoy findings: code that looks wrong but is an intentional repository contract (documented in contribution notes or adjacent comments) must not be reported as a defect."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "text": "Does not present linter-covered findings as review findings; runs or respects the configured static checks and subtracts their output (reporting lint status as a gate is acceptable; listing lint findings AS review findings is not)."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "text": "Closes with severity counts and one verdict — BLOCK, FIX-THEN-COMMIT, or CLEAR. A blocker must produce BLOCK."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "text": "Orders findings by severity with confidence and evidence (file:line); no more than five material findings; no nits without concrete impact."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "text": "Does not pad the finding list to appear thorough; acknowledges what the change does correctly."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "text": "Verifies each finding against the actual diff before presenting it; drops findings that do not survive verification."
+    }
+  ]
+}

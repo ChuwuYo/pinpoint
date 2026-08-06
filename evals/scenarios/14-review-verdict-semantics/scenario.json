@@ -1,0 +1,20 @@
+{
+  "id": "14-review-verdict-semantics",
+  "revision": 1,
+  "title": "Review Verdict Semantics",
+  "target_skill": "pinpoint-review",
+  "prompt": "prompt.md",
+  "rubric": "rubric.json",
+  "fixture_status": "planned",
+  "fixture_requirements": [
+    "Independent fixture variants: one reachable blocker; only should-fix findings; only concrete nits; no material findings; a required deterministic check newly failing because of the diff; a required check that cannot run or is inconclusive; an unrelated pre-existing failure.",
+    "Each variant is reviewable in isolation so verdict mapping is measured per case."
+  ],
+  "deterministic_checks": [
+    "per-variant fixture integrity check (planned)"
+  ],
+  "required_capabilities": ["read files", "run git commands", "run the repo's configured checks"],
+  "allowed_mutations": [],
+  "timeout_minutes": 45,
+  "conditions": ["no-skill", "with-skill"]
+}

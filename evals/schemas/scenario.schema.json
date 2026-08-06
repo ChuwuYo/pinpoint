@@ -27,6 +27,7 @@
     "prompt": { "type": "string" },
     "rubric": { "type": "string" },
     "fixture": { "type": "string" },
+    "fixture_generator": { "type": "string" },
     "fixture_status": { "enum": ["planned", "ready", "frozen"] },
     "fixture_requirements": { "type": "array", "items": { "type": "string" } },
     "deterministic_checks": { "type": "array", "items": { "type": "string" } },
