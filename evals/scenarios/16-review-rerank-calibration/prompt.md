@@ -1,1 +1,1 @@
-PLANNED — prompt is written when the fixture is built. Calibration scenario: measures second-pass retention behavior, so it runs with-skill only; no-skill is not meaningful here.
+The branch `feat/batch-discounts` adds batch quantity discounts: batch totals with member/quantity discounts, paged batch review windows, batch stock release, and completion hooks. Review the branch diff against `main` and tell me whether it is ready to merge.

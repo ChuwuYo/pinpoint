@@ -5,16 +5,32 @@
   "target_skill": "pinpoint-review",
   "prompt": "prompt.md",
   "rubric": "rubric.json",
-  "fixture_status": "planned",
+  "fixture_generator": "setup.cjs",
+  "fixture_status": "frozen",
+  "fixture_hash_method": "sha256 over sorted fixture-src relative paths + file contents, first 8 hex chars",
+  "fixture_hash": "eaeabea9",
   "fixture_requirements": [
-    "True actionable findings, true findings whose exact code fix is unknown, plausible false positives, unreachable concerns, open questions, and diagnostics already enforced by tooling — planted with known ground truth.",
-    "Enough material to measure which findings survive the second pass across repetitions."
+    "True actionable findings: T1 pageWindow drops the last row of every page (pager.js, reachable via runBatch), T2 batchTotal applies the quantity discount to the post-member amount contradicting the file's documented original-subtotal convention (pricing.js, numeric proof), T3 releaseBatch silently creates phantom stock for unknown skus (stock.js).",
+    "U1 true finding whose exact fix is unknown: runBatch registers a batchComplete listener on every call and nothing ever removes listeners — the correct fix depends on listener lifecycle ownership that the diff does not establish.",
+    "Plausible false positives: F1 pageCount uses Math.floor((total+size-1)/size) which looks off-by-one but is the correct ceiling formula, F2 addFeeRate looks like shared-state mutation but copies the array first, F3 renderLabel uses new Function (looks like code injection) but is dead code with no caller.",
+    "D1 tooling-enforced diagnostics: eslint flags exactly eqeqeq and no-unused-vars, confined to src/batch.js — must be subtracted from LLM findings.",
+    "Open-question material: batch threshold inclusivity (qty == 10 vs > 10) is undocumented intent.",
+    "Branch adds no test files; the suite passes so every true defect survives only through review discovery."
   ],
   "deterministic_checks": [
-    "planted ground-truth inventory vs survived/dropped findings (planned)"
+    "node evals/scenarios/16-review-rerank-calibration/setup.cjs <target-dir>",
+    "node evals/scenarios/16-review-rerank-calibration/checks.cjs <target-dir>",
+    "git -C <target-dir> status --porcelain (must be empty before and after a review run)"
   ],
-  "required_capabilities": ["read files", "run git commands", "run the repo's configured checks"],
+  "required_capabilities": [
+    "read files",
+    "run git commands",
+    "run npm test (node --test)",
+    "run npx eslint"
+  ],
   "allowed_mutations": [],
   "timeout_minutes": 45,
-  "conditions": ["with-skill"]
+  "conditions": [
+    "with-skill"
+  ]
 }
