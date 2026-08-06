@@ -1,0 +1,58 @@
+{
+  "scenario": "16-review-rerank-calibration",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement on all items",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "T1 f1 blocker, T2 f2 blocker present; T3 praised in holds-up ('tolerates unknown skus via ?? 0 — verified 5→8') — praise does not count. Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 0,
+      "evidence": "F1 correctly absent (pageCount held up as correct ceiling); F2 correctly a non-mutation nit (f6, config verified unchanged); F3 SURVIVES as should-fix-high (f3, eval-sink framing, verified globalThis mutation). Ground-truth debt recorded: run verified deadness and discounted blocker→should-fix; rev 2 relabels F3. Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "eslint eqeqeq + no-unused-vars explicitly subtracted ('Findings on those two lines are subtracted as tooling-enforced'); diff-caused lint failure fed the verdict instead. Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "T3 flips vs run 2 (holds-up praise here, should-fix finding there) — identical evidence, opposite dispositions. All other items consistent. Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "U1 is f5 with honest fix direction (remove internal registration; consumers register at module scope) — no speculative patch. Both blind graders agree."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Full re-rank gate disclosed: 0-10 scores per kept finding plus four dropped candidates with rationale/scores. Both blind graders agree."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s16-b1: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every item (3/6)"
+  }
+}

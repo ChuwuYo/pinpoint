@@ -1,6 +1,6 @@
 {
   "id": "16-review-rerank-calibration",
-  "revision": 1,
+  "revision": 2,
   "title": "Review Re-rank Calibration",
   "target_skill": "pinpoint-review",
   "prompt": "prompt.md",
@@ -12,7 +12,7 @@
   "fixture_requirements": [
     "True actionable findings: T1 pageWindow drops the last row of every page (pager.js, reachable via runBatch), T2 batchTotal applies the quantity discount to the post-member amount contradicting the file's documented original-subtotal convention (pricing.js, numeric proof), T3 releaseBatch silently creates phantom stock for unknown skus (stock.js).",
     "U1 true finding whose exact fix is unknown: runBatch registers a batchComplete listener on every call and nothing ever removes listeners — the correct fix depends on listener lifecycle ownership that the diff does not establish.",
-    "Plausible false positives: F1 pageCount uses Math.floor((total+size-1)/size) which looks off-by-one but is the correct ceiling formula, F2 addFeeRate looks like shared-state mutation but copies the array first, F3 renderLabel uses new Function (looks like code injection) but is dead code with no caller.",
+    "Plausible false positives: F1 pageCount uses Math.floor((total+size-1)/size) which looks off-by-one but is the correct ceiling formula, F2 addFeeRate looks like shared-state mutation but copies the array first, F3 renderLabel uses new Function (looks like code injection) and is exported but has no caller. Rev 2 relabel: F3 may survive at most as a should-fix acknowledging the missing caller (2/2 baseline runs verified deadness and discounted severity rather than dropping — defensible; the rev 1 drop-or-fail expectation was the miscalibration).",
     "D1 tooling-enforced diagnostics: eslint flags exactly eqeqeq and no-unused-vars, confined to src/batch.js — must be subtracted from LLM findings.",
     "Open-question material: batch threshold inclusivity (qty == 10 vs > 10) is undocumented intent.",
     "Branch adds no test files; the suite passes so every true defect survives only through review discovery."

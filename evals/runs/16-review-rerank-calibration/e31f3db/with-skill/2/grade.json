@@ -1,0 +1,58 @@
+{
+  "scenario": "16-review-rerank-calibration",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement on all items",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "T1 f1 blocker, T2 f2 blocker, T3 f6 should-fix (phantom stock verified, divergence from reserve's throw named) — all present. Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 0,
+      "evidence": "F1 correctly absent; F2 correctly a non-mutation nit (f7); F3 SURVIVES as should-fix-high (f5, eval-sink, verified live PID execution) despite self-noted 'no in-repo caller exists yet' — kept via the future-caller argument. Ground-truth debt recorded; rev 2 relabels F3. Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "eslint pair explicitly subtracted; diff-caused gate failure factored into verdict. Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "T3 flips vs run 1 (finding here, praise there). Everything else consistent, including the shared F3 disposition. Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "U1 is f3 with honest fix direction (register once at wiring time; delete internal registration). Both blind graders agree."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Inline per-finding 0-10 scores plus a disclosed second-pass severity re-check ('re-read against the blocker definition before accepting severity') — direct evidence the 83cb6a1 pre-drop re-check is applied. Both blind graders agree."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s16-b2: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every item (4/6)"
+  }
+}

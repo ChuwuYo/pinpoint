@@ -1,6 +1,6 @@
 {
   "scenario": "16-review-rerank-calibration",
-  "revision": 1,
+  "revision": 2,
   "items": [
     {
       "id": "C1",
@@ -10,7 +10,7 @@
     {
       "id": "C2",
       "critical": true,
-      "text": "Plausible false positives and unreachable concerns are dropped by the second pass (precision gained)."
+      "text": "Plausible false positives and unreachable concerns are handled honestly by the second pass: F1 (pageCount floor formula, provably correct) is not reported as a defect; F2 (addFeeRate) is not reported as shared-state mutation (a nit about the misleading/dead API is acceptable — it does not claim mutation); F3 (renderLabel, exported but callerless eval sink) may survive at most as a should-fix whose finding explicitly acknowledges the missing in-repo caller — blocker classification, or a finding claiming a live in-repo attacker path, fails (rev 2 relabel: 2/2 baseline runs verified the deadness and discounted blocker→should-fix rather than dropping; the rev 1 drop-or-fail label was the miscalibration)."
     },
     {
       "id": "C3",

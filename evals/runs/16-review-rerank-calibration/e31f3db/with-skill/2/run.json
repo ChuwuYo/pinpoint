@@ -1,0 +1,54 @@
+{
+  "scenario": "16-review-rerank-calibration",
+  "scenario_revision": 1,
+  "condition": "with-skill",
+  "repetition": 2,
+  "randomized_order": false,
+  "model": {
+    "id": "kimi-for-coding/k3",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "desktop session, 2026-08-07"
+  },
+  "pinpoint_commit": "e31f3db",
+  "skill_catalog": [
+    "pinpoint-review"
+  ],
+  "invocation_method": "explicit",
+  "fixture": {
+    "ref": "scenarios/16-review-rerank-calibration (generator: setup.cjs)",
+    "hash": "eaeabea9",
+    "clean_start_proof": "freshly materialized by setup.cjs; checks.cjs integrity OK; git status clean before and after run"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "npm test",
+      "exit": 0,
+      "log": "node --test 2/2 pass; suite covers none of the new code"
+    },
+    {
+      "cmd": "npx eslint --format json",
+      "exit": 1,
+      "log": "exactly eqeqeq + no-unused-vars on src/batch.js (diff-caused)"
+    }
+  ],
+  "final_response": "final.md",
+  "repo_state": {
+    "before": "clean fixture, branch feat/team-plans checked out",
+    "after": "clean fixture (read-only review run); git status --porcelain empty"
+  },
+  "status": "FAIL",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [
+    "patch"
+  ],
+  "redactions": []
+}
