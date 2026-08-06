@@ -2,8 +2,9 @@
 
 const db = require('./db');
 
-function addUser(id, email) {
-  db.put('users', id, { email });
+// trialEndsOn comes from the legacy import in DD.MM.YYYY format.
+function addUser(id, email, trialEndsOn) {
+  db.put('users', id, { email, trialEndsOn });
 }
 
 function removeUser(id) {

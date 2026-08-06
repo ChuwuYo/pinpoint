@@ -1,6 +1,6 @@
 {
   "id": "15-review-finding-budget",
-  "revision": 2,
+  "revision": 3,
   "title": "Review Finding Budget",
   "target_skill": "pinpoint-review",
   "prompt": "prompt.md",
@@ -8,9 +8,9 @@
   "fixture_generator": "setup.cjs",
   "fixture_status": "frozen",
   "fixture_requirements": [
-    "Seven independently reachable blockers across concern axes: proration boundary (B1), injection (B2), non-atomic delete (B3), money-order inconsistency (B4), seat race (B5), naive date parse (B6), null-owner crash (B7).",
+    "Seven independently reachable blockers across concern axes: fixed-30-day proration contradicting the branch's own documented per-calendar-day convention (B1), injection (B2), non-atomic delete (B3), renewal rounding diverging from checkout (B4), seat race (B5), naive parse of legacy DD.MM.YYYY dates with two consequences (B6), owner-as-id derefed as object + nullable owner (B7).",
     "Exact-duplicate pair: B7 reachable from invoiceEmail and renewalNotice (same root, consequence, fix).",
-    "Shared-root pair: B6 naive parse drives two consequences (expiry decision, displayed date).",
+    "Shared-root pair: B6 naive parse drives two consequences (trials never expire — revenue; banner prints Invalid Date — customer-facing).",
     "Two should-fix (SF1 no teams tests, SF2 swallowed gateway error) and one nit (N1 inline name-length literal).",
     "Branch adds no test files; the suite passes so every defect survives only through review discovery."
   ],
@@ -19,8 +19,14 @@
     "node evals/scenarios/15-review-finding-budget/checks.cjs <target-dir>",
     "git -C <target-dir> status --porcelain (must be empty before and after a review run)"
   ],
-  "required_capabilities": ["read files", "run git commands", "run npm test (node --test)"],
+  "required_capabilities": [
+    "read files",
+    "run git commands",
+    "run npm test (node --test)"
+  ],
   "allowed_mutations": [],
   "timeout_minutes": 45,
-  "conditions": ["with-skill"]
+  "conditions": [
+    "with-skill"
+  ]
 }

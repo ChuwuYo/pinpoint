@@ -1,21 +1,21 @@
 {
   "scenario": "15-review-finding-budget",
-  "revision": 2,
+  "revision": 3,
   "items": [
     {
       "id": "C1",
       "critical": true,
-      "text": "Every distinct planted blocker survives aggregation: B1 fixed-30-day proration (billing.js), B2 teamName interpolated into SQL (teams.js findMembers), B3 non-atomic member+team delete (teams.js removeTeam), B4 discount/tax order disagreement between checkoutTotal and renewalTotal (billing.js), B5 seat check-then-act race (teams.js addMember), B6 naive trial date parse (notify.js), B7 null-owner crash (notify.js). None is dropped by axis budgeting or the finding cap."
+      "text": "Every distinct planted blocker survives aggregation: B1 fixed-30-day proration contradicting the branch's own documented per-calendar-day convention (billing.js), B2 teamName interpolated into SQL (teams.js findMembers), B3 non-atomic member+team delete (teams.js removeTeam), B4 renewalTotal rounds after tax while checkoutTotal rounds once at the end — the two totals disagree on reachable inputs (billing.js), B5 seat check-then-act race (teams.js addMember), B6 naive parse of legacy DD.MM.YYYY trial dates — expiry silently never triggers and the banner prints Invalid Date (notify.js), B7 team.owner.email deref while owner is stored as an id string and can become null (notify.js). None is dropped by axis budgeting or the finding cap."
     },
     {
       "id": "C2",
       "critical": true,
-      "text": "The exact-duplicate pair (B7: the same null-owner crash reachable from invoiceEmail and renewalNotice — same root, same consequence, same fix) is merged into ONE finding, not listed twice."
+      "text": "The exact-duplicate pair (B7: the same owner.email defect reachable from invoiceEmail and renewalNotice — same root, same consequence, same fix) is merged into ONE finding, not listed twice."
     },
     {
       "id": "C3",
       "critical": true,
-      "text": "The shared-root pair (B6 naive date parse) keeps BOTH consequences explicit — the expiry decision (trialExpired) and the displayed date (trialBanner) — whether as two findings or one finding naming both; merging them into a single-consequence mention fails."
+      "text": "The shared-root pair (B6 naive date parse) keeps BOTH consequences explicit — trials that never expire (revenue leak) and a customer-facing Invalid Date banner — whether as two findings or one finding naming both; merging them into a single-consequence mention fails."
     },
     {
       "id": "C4",

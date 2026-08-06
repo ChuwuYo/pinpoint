@@ -36,12 +36,14 @@ const billing = onBranch('src/billing.js');
 const notify = onBranch('src/notify.js');
 
 requireMatch('B1 proration must use fixed 30-day month', billing, /priceCents\s*\/\s*30/);
+requireMatch('B1 contract: proration convention must be documented as per-calendar-day', billing, /per actual calendar day/);
 requireMatch('B2 member lookup must interpolate teamName into SQL', teams, /WHERE teamId = '\$\{teamName\}'/);
 requireMatch('B3 removeTeam must delete members before team without a transaction', teams, /db\.remove\('members'[\s\S]*db\.remove\('teams'/);
-requireMatch('B4 checkout and renewal must disagree on discount/tax order', billing, /discounted \* \(1 \+ taxPct\)[\s\S]*taxed \* \(1 - discountPct\)/);
+requireMatch('B4 renewal must round after tax (diverges from checkout)', billing, /const taxed = Math\.round\(subtotalCents \* \(1 \+ taxPct\)\);\s*return taxed \* \(1 - discountPct\)/);
 requireMatch('B5 addMember must await between seat check and push', teams, />=\s*plan\.seats[\s\S]*await db\.lookup[\s\S]*members\.push/);
 requireMatch('B6a trial expiry must parse the date naively', notify, /new Date\(user\.trialEndsOn\)\.getTime\(\)/);
 requireMatch('B6b trial banner must parse the date naively', notify, /new Date\(user\.trialEndsOn\)\.toDateString\(\)/);
+requireMatch('B6 source: users must carry legacy DD.MM.YYYY trial dates', onBranch('src/users.js'), /DD\.MM\.YYYY/);
 requireMatch('B7 owner-null crash must exist in BOTH notify functions', notify, /invoiceEmail[\s\S]*team\.owner\.email[\s\S]*renewalNotice[\s\S]*team\.owner\.email/);
 requireMatch('B7 root: transferOwnership must allow null owner', teams, /team\.owner = newOwnerId \?\? null/);
 requireMatch('SF2 chargeTeam must swallow gateway errors and return ok:true', billing, /catch[\s\S]*return \{ ok: true \}/);

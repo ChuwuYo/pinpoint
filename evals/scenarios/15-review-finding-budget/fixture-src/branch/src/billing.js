@@ -1,5 +1,8 @@
 'use strict';
 
+// Billing convention: proration is per actual calendar day of the current
+// month (e.g. day 15 of a 31-day month uses denominator 31).
+
 const charges = [];
 
 function charge(customerId, amountCents) {
@@ -21,8 +24,8 @@ function checkoutTotal(subtotalCents, discountPct, taxPct) {
 }
 
 function renewalTotal(subtotalCents, discountPct, taxPct) {
-  const taxed = subtotalCents * (1 + taxPct);
-  return Math.round(taxed * (1 - discountPct));
+  const taxed = Math.round(subtotalCents * (1 + taxPct));
+  return taxed * (1 - discountPct);
 }
 
 function chargeTeam(teamId, amountCents, gateway) {
