@@ -56,12 +56,18 @@ const expect = [
   }],
   ['v4', 'feat/bulk-discount', 0, 0, (dir, b) => {
     const pricing = onBranch(dir, b, 'src/pricing.js');
-    if (!/bulkDiscount/.test(pricing)) fail('v4: bulkDiscount missing');
+    if (!/totalWithBulkDiscount/.test(pricing)) fail('v4: totalWithBulkDiscount missing');
     if (/total\s*\*\s*0\.95/.test(pricing)) {
       fail('v4: discount must be applied in cents (float-dollar discount would be a real defect)');
     }
     if (!/roundHalfUp\(cents \* 0\.95\)/.test(pricing)) {
       fail('v4: cents-level discounted rounding missing');
+    }
+    if (!/totalWithBulkDiscount/.test(onBranch(dir, b, 'src/report.js'))) {
+      fail('v4: feature must be wired into dailySummary (unwired features invite true findings)');
+    }
+    if (!/qty: 5/.test(onBranch(dir, b, 'test/pricing.test.js'))) {
+      fail('v4: multi-line aggregation test missing');
     }
   }],
   ['v5', 'fix/price-rounding', 0, 1, (dir, b) => {
