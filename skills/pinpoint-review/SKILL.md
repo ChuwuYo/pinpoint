@@ -62,8 +62,9 @@ static checks already enforce. If a concern may be real but the intent is
 unclear, return it as an open question, not a finding. But a defect you
 verified in code you read — reachable from the diff — is a finding even when
 its intent or blast radius is unsettled: put the defect in the finding and
-the unsettled part in an open question. Severity and confidence carry the
-uncertainty. If nothing on your axis
+the unsettled part in an open question. Confidence carries the uncertainty —
+never lower a finding's severity to express doubt about its blast radius or
+the change's intended scope; severity follows the consequence definitions. If nothing on your axis
 is material, answer exactly: "no material findings on this axis".
 Send findings to the aggregating agent only.
 ```
