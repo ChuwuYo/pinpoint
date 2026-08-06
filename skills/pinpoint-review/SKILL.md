@@ -59,7 +59,11 @@ Report only code you actually read — cite the hunk, never infer from filenames
 or hunk headers. For each finding give: file:line, what is wrong, why it
 matters, fix direction, and confidence (high, medium, low). Skip anything the
 static checks already enforce. If a concern may be real but the intent is
-unclear, return it as an open question, not a finding. If nothing on your axis
+unclear, return it as an open question, not a finding. But a defect you
+verified in code you read — reachable from the diff — is a finding even when
+its intent or blast radius is unsettled: put the defect in the finding and
+the unsettled part in an open question. Severity and confidence carry the
+uncertainty. If nothing on your axis
 is material, answer exactly: "no material findings on this axis".
 Send findings to the aggregating agent only.
 ```
@@ -72,8 +76,8 @@ The aggregating agent — not a reviewer — merges axis reports:
 
 - Dedupe findings reported by more than one axis; keep the strongest formulation.
 - Drop speculative findings: no evidence, not reachable from the diff, or already enforced by tooling.
-- Keep open questions as questions — never promote one to a finding to look decisive.
-- Never cross-rank axes. Report each axis's worst finding so a strong axis cannot mask a weak one.
+- Keep open questions as questions — never promote one to a finding to look decisive, and never demote a verified, reachable defect to a question because its blast radius is unclear.
+- Never cross-rank axes during discovery. Report every independently supported blocker from every axis — a strong axis cannot mask a weak one, and no axis's discovery budget caps another's.
 
 Assign severity by consequence, not by how the finding sounds:
 
@@ -89,10 +93,10 @@ Before publishing, score every surviving finding in a second pass: correctness (
 
 ## Enforce the Noise Budget
 
-- Cap material findings at five. Prefer missing a nit over burying a blocker.
+- Report every blocker that survives the re-rank gate. Cap only should-fix and nit findings at five combined; when over the cap, drop a nit first, then the lowest-confidence should-fix — never a blocker. Prefer missing a nit over burying a blocker.
 - Ban nits without concrete impact on behavior, risk, or maintainability.
 - Never pad the list to look thorough. When no material findings survive, say "no material issues" plainly — a clear review is a success, not a lack of diligence.
-- Acknowledge what the change does correctly before listing findings, with the same evidence standard as findings. Praise without evidence is noise too.
+- Acknowledge what the change does correctly before listing findings, with the same evidence standard as findings. Before praising a mechanism, check the failure modes its contract implies — partial completion, concurrent access, ordering — and praise only what survives that check. Praise without evidence is noise too.
 
 ## Report in a Fixed Shape
 
