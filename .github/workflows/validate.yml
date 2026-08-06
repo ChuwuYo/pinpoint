@@ -6,9 +6,13 @@ on:
       - "skills/**"
       - "commands/**"
       - "bin/**"
+      - "scripts/**"
       - "package.json"
       - "README.md"
+      - "README.zh-CN.md"
       - "INSTALL.md"
+      - "docs/**"
+      - "evals/**"
       - "tests/**"
       - ".github/workflows/validate.yml"
   pull_request:
@@ -16,9 +20,13 @@ on:
       - "skills/**"
       - "commands/**"
       - "bin/**"
+      - "scripts/**"
       - "package.json"
       - "README.md"
+      - "README.zh-CN.md"
       - "INSTALL.md"
+      - "docs/**"
+      - "evals/**"
       - "tests/**"
       - ".github/workflows/validate.yml"
 
@@ -55,10 +63,41 @@ jobs:
       - name: Validate packaged commands and installer metadata
         run: node bin/pinpoint-install.mjs --check
 
+      - name: Check five-Skill inventory consistency
+        shell: bash
+        run: |
+          set -euo pipefail
+          section() {
+            awk -v a="$2" '$0 ~ "^" a { on = 1; next } /^## / { on = 0 } on' "$1"
+          }
+          has_name() { grep -Eq "(^|[^[:alnum:]-])$1([^[:alnum:]-]|$)"; }
+          fail=0
+          check_section() {
+            file="$1"; anchor="$2"
+            content="$(section "$file" "$anchor")"
+            for name in pinpoint pinpoint-review pinpoint-commit pinpoint-pr pinpoint-help; do
+              if ! has_name "$name" <<< "$content"; then
+                echo "::error file=${file}::${name} missing from section '${anchor}'"
+                fail=1
+              fi
+            done
+          }
+          check_section INSTALL.md "## Explicit invocation"
+          check_section INSTALL.md "## Install one Skill"
+          check_section INSTALL.md "## Verify"
+          check_section README.md "## Skills"
+          check_section README.md "## Commands"
+          check_section README.zh-CN.md "## Skills"
+          check_section README.zh-CN.md "## 命令"
+          check_section skills/pinpoint-help/SKILL.md "## Choose the Skill"
+          check_section skills/pinpoint-help/SKILL.md "## Explain Invocation"
+          exit "$fail"
+
       - name: Validate the packaged entrypoint
         run: npm exec --yes --package=. -- pinpoint-install --version
 
   installer-smoke:
+    needs: validate
     strategy:
       fail-fast: false
       matrix:

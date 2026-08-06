@@ -53,6 +53,7 @@ picker and `$` mentions rather than third-party bare slash commands.
 | Workflow | Claude Code, Cursor, OpenCode | Codex |
 | --- | --- | --- |
 | Fix and optimization workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
+| Review workflow | `/pinpoint-review <request>` | `$pinpoint-review` or `/skills` |
 | Commit workflow | `/pinpoint-commit <request>` | `$pinpoint-commit` or `/skills` |
 | PR workflow | `/pinpoint-pr <request>` | `$pinpoint-pr` or `/skills` |
 | Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |
@@ -83,6 +84,7 @@ Use the exact Skill name:
 
 ```bash
 npx skills add ChuwuYo/pinpoint --skill pinpoint -g
+npx skills add ChuwuYo/pinpoint --skill pinpoint-review -g
 npx skills add ChuwuYo/pinpoint --skill pinpoint-commit -g
 npx skills add ChuwuYo/pinpoint --skill pinpoint-pr -g
 npx skills add ChuwuYo/pinpoint --skill pinpoint-help -g
@@ -101,8 +103,8 @@ https://github.com/ChuwuYo/pinpoint globally. Verify all five names afterward.
 ```
 
 Codex discovers newly installed Skills automatically. In a new task, invoke one
-with `$pinpoint`, `$pinpoint-commit`, `$pinpoint-pr`, or `$pinpoint-help`, or
-select it through `/skills`.
+with `$pinpoint`, `$pinpoint-review`, `$pinpoint-commit`, `$pinpoint-pr`, or
+`$pinpoint-help`, or select it through `/skills`.
 
 ## Verify
 
@@ -117,6 +119,7 @@ confirm that the result includes:
 
 ```text
 pinpoint
+pinpoint-review
 pinpoint-commit
 pinpoint-pr
 pinpoint-help
