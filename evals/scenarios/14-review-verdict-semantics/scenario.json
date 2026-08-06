@@ -1,6 +1,6 @@
 {
   "id": "14-review-verdict-semantics",
-  "revision": 2,
+  "revision": 3,
   "title": "Review Verdict Semantics",
   "target_skill": "pinpoint-review",
   "prompt": "prompt.md",
@@ -17,8 +17,14 @@
     "node evals/scenarios/14-review-verdict-semantics/checks.cjs <target-root>",
     "git -C <target-root>/<variant> status --porcelain (must be empty before and after a review run)"
   ],
-  "required_capabilities": ["read files", "run git commands", "run npm test (node --test)"],
+  "required_capabilities": [
+    "read files",
+    "run git commands",
+    "run npm test (node --test)"
+  ],
   "allowed_mutations": [],
   "timeout_minutes": 60,
-  "conditions": ["with-skill"]
+  "conditions": [
+    "with-skill"
+  ]
 }
