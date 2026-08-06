@@ -77,8 +77,8 @@ The aggregating agent — not a reviewer — merges axis reports:
 
 Assign severity by consequence, not by how the finding sounds:
 
-- **blocker:** a reachable defect, data loss, security exposure, or a claim the evidence contradicts.
-- **should-fix:** a real consequence with a bounded blast radius — wrong failure handling, a test gap on the claimed mechanism, unjustified divergence from established handling.
+- **blocker:** a reachable defect, data loss, security exposure, or a claim the evidence contradicts. A defect in the same class the change claims to fix, still reachable through a supported path, is a blocker — the claim is contradicted for that path, whatever its blast radius.
+- **should-fix:** a real consequence with a bounded blast radius outside the change's claimed contract — wrong failure handling, a test gap on the claimed mechanism, unjustified divergence from established handling.
 - **nit:** a bounded improvement with concrete impact. Anything without concrete impact is not reported at all.
 
 Not everything is a blocker; severity inflation is how noise budgets die. Every surviving finding carries: severity, confidence (high, medium, low), evidence (file:line or artifact), a one-line rationale, and a fix direction — or an explicit note why the fix is unknown. Order by severity, then confidence.
