@@ -25,7 +25,7 @@ Before spawning any reviewer, confirm the base ref resolves and the diff is non-
 
 ## Run Static Checks First
 
-Run the repository's configured formatter check, linter, type checker, and build for the touched scope. Subtract their output: never report a finding that configured tooling already enforces. The review's budget belongs to what static analysis cannot decide.
+Run the repository's configured formatter check, linter, type checker, and build for the touched scope. Subtract their output: never report a finding that configured tooling already enforces. The review's budget belongs to what static analysis cannot decide. Record each required command with its scope, exit status, and attribution: `pass`, `diff-caused failure`, `pre-existing/unattributed failure`, `unavailable`, or `not applicable`. A diff-caused failure of a required gate blocks the merge on its own — report it in the gate status, not as an LLM finding. Never blame the diff for a pre-existing failure without evidence, and never claim gates pass when required evidence is unavailable or inconclusive.
 
 ## Review by Concern Axis
 
@@ -102,14 +102,20 @@ Before publishing, score every surviving finding in a second pass: correctness (
 
 ```text
 ## Review report
-Scope: <base..head>   Packet gaps: <none | what could not be obtained>
+Scope: <base..head or exact worktree scope>
+Mode: <independent-axis | single-reviewer>
+Packet gaps: <none | what could not be obtained>
+Gate status: <each required command → pass | diff-caused failure | pre-existing/unattributed | unavailable | not applicable>
 What holds up: <what the change does correctly, with evidence>
 Static checks: <what configured tooling already enforces — subtracted>
 Findings:
   1. [blocker · high] file:line — what is wrong — why it matters — fix direction
+Advisory nits: <bounded improvements with concrete impact; never commit-blocking by themselves>
 Open questions: <concerns the intent could not settle — never promoted to findings>
 Verdict: blocker N · should-fix N · nit N → BLOCK | FIX-THEN-COMMIT | CLEAR
 ```
+
+Finding numbers are stable within one run — grading and follow-up refer to them. Every blocker appears in the findings list even when the report exceeds the normal noise budget; advisory nits never escalate the verdict on their own.
 
 A fixed shape keeps reviews comparable across runs: the requester can tell at a glance whether this review is stricter than the last, and why.
 
