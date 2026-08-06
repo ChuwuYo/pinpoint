@@ -1,0 +1,64 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 1: 'the cache key stores/compares only settings.locale, but buildReport also formats with settings.currency... after applySettings({ currency: 'EUR' }) with locale unchanged, exportReport still returns the cached 123,45 $... still reachable through the exported, supported applySettings({ currency }) path'"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "'CONTRIBUTING.md contracts are untouched: csv.js single-line cells and notify.js fire-and-forget webhook are not modified by the diff'"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "'eslint... fails on this branch, exit 1... Per workflow these two defects are subtracted from the findings below, but the branch does not pass its own lint gate'"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "'Verdict: blocker 1 · should-fix 2 · nit 0 → **BLOCK**'"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Three findings ordered blocker→should-fix→should-fix, each with confidence and file:line evidence; no nits"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "'What holds up:' section — 'The reported defect is fixed on its stated path, verified by execution... Commit message follows the repo's Conventional Commits rule'"
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Findings verified by reproduction; stale-`lines`-cache checked against main and dropped: 'This predates the branch (identical on main), so it is not a diff finding'"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

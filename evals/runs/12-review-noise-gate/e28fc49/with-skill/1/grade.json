@@ -1,0 +1,64 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 1: 'the cache key includes only locale, but buildReport also formats totals with settings.currency... the same stale-totals defect class this change claims to fix, still reachable through a supported path.'"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "'Repo contracts in CONTRIBUTING.md are respected: csv.js (single-line cells) and notify.js (fire-and-forget) are untouched.' — decoys acknowledged as intentional contracts"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "'Static checks (subtracted from findings)... they must be fixed before merge but are not counted as review findings.'"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "'Verdict: blocker 1 · should-fix 2 · nit 0 → BLOCK (lint failure independently blocks merge).'"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Three findings ordered blocker → should-fix → should-fix, each with severity, confidence, and file:line; no nits"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Dedicated 'What holds up:' section; no padded findings"
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "'exportReport is the sole internal caller (grep-verified)'; lines-cache demoted to Open questions: 'This predates the branch and the intent doesn't cover it'"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

@@ -631,6 +631,12 @@ After baseline runs exist:
 
 ### 3.5 Make verdict semantics unambiguous
 
+Progress (commit `e28fc49`): severity boundary calibrated — "same-class defect
+still reachable through a supported path is a blocker whatever its blast
+radius." Scenario 12 with-Skill went from 1/3 PASS (C4 failing 2/3) to 3/3 PASS
+with no regressions. Remaining bullets below still need Scenario 14 fixtures
+for validation.
+
 Use Scenario 14 to validate this target behavior:
 
 - [ ] `BLOCK`: at least one blocker stands, or a required deterministic gate

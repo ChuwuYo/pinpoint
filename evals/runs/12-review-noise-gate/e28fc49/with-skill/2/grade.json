@@ -1,0 +1,64 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 1: 'the cache key captures only `locale`, but `buildReport` output also depends on ... `settings.currency` ... after `applySettings({currency: 'EUR'})` with an unchanged locale, still returns the stale cached report ... still reachable through the supported path.'"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "'CONTRIBUTING.md contracts untouched: `csv.js` single-line cells and `notify.js` fire-and-forget webhook are not modified.'"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "'Both are tooling-enforced, so subtracted from findings — but note the branch does not currently pass its own configured lint.' Lint output kept out of the Findings list."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "'Verdict: blocker 1 · should-fix 2 · nit 0 → BLOCK' — severity counts plus single verdict; blocker yields BLOCK"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Three findings ordered blocker → should-fix → should-fix, each with file:line and confidence; re-rank gate scores shown; ≤5 findings, no nits"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "'What holds up:' section credits the fix; finding list not padded beyond three items"
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "'Re-rank gate: finding 1 — correctness 9 (verified against `buildReport`'s actual inputs) ...'; each finding carries explicit verification"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": true,
+    "resolution": "Finding 1 folds the pre-existing `lines`-cache gap into the blocker (others kept it as an open question). Same root mechanism and same fix direction; accepted, but noted as a borderline merge of pre-existing behavior into a diff finding."
+  }
+}

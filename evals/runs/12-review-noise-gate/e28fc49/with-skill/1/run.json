@@ -1,0 +1,46 @@
+{
+  "scenario": "12-review-noise-gate",
+  "scenario_revision": 1,
+  "condition": "with-skill",
+  "repetition": 1,
+  "randomized_order": true,
+  "model": {
+    "id": "kimi-for-coding/k3",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "desktop session, 2026-08-06"
+  },
+  "pinpoint_commit": "e28fc49",
+  "skill_catalog": ["pinpoint-review"],
+  "invocation_method": "explicit",
+  "fixture": {
+    "ref": "scenarios/12-review-noise-gate (generator: setup.cjs)",
+    "hash": "b3037a2900f0a6ecd323dfeb38cb96af0e2da29c12744e82ff325cbf64de499a",
+    "clean_start_proof": "freshly materialized by setup.cjs; git status clean before and after run"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0",
+      "eslint 9.39.1 (fixture-pinned)"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "npx eslint src/",
+      "exit": 1,
+      "log": "eqeqeq + no-unused-vars errors in src/export.js"
+    }
+  ],
+  "final_response": "final.md",
+  "repo_state": {
+    "before": "clean fixture, branch fix/export-total checked out",
+    "after": "clean fixture (read-only review run); git status --porcelain empty"
+  },
+  "status": "PASS",
+  "infrastructure_errors": [],
+  "omitted_artifacts": ["patch"],
+  "redactions": []
+}
