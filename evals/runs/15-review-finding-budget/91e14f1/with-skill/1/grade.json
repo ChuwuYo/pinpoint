@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement on all C* items",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "4/7 blockers as findings (B1 f1, B6 f3 both consequences, B4 f6 as should-fix, B2 f7 as should-fix wrong-results framing). B3 praised in holds-up again ('respecting db.remove's FK-style throw'); B5 race not found (f5 is ghost-user discard, not the race); B7 verified but demoted to an open question ('if a join layer exists outside the diff'). Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 0,
+      "evidence": "B7's two notify sites appear only in one open question, not as a finding. Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 3 names never-expire ('returns false for a trial expired 5 years ago') AND 'trial ends Invalid Date', plus MM.DD swap bonus. Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "B3/B5/B7 not findings; no budget cited (8 findings reported, blockers-first rule irrelevant here — demotion/miss is the mechanism). Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Ordering severity-then-confidence clean (3 blockers high, then should-fix high/high/high/medium/medium); SF1 survives as should-fix finding 8. Both blind graders agree."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s15-after1: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every item (2/5)"
+  }
+}

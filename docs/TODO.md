@@ -606,6 +606,17 @@ ordering both runs; B5 check-then-act race missed both runs; B2 found but
 demoted to an open question in run 2 ("harmless against the stand-in");
 SF2 over-escalated to blocker both runs; SF1 never became a finding.
 
+After-evidence (`91e14f1`, same frozen scenario, 2 runs): C1/C4 still fail
+2/2 — 3.3 not resolved — but mechanisms shifted: B2 a finding 2/2, SF1 a
+should-fix finding 2/2, B5 race found and verified by concurrent execution
+1/2, finding counts 8/11 (was exactly-5 cap-bound). New/persistent: B3
+fails 2/2 (praised again; then recognized but nit-tier + budget-dropped —
+rule-interaction failure), B7 demoted 1/2 via hypothetical external join
+layer, SF2 over-escalation 4/4 total (recorded as rubric debt — reviewers
+apply the e28fc49 blocker definition defensibly). Second iteration
+specified: severity def for inconsistent persisted state, repo-only
+reachability, pre-drop blocker re-check.
+
 After baseline runs exist:
 
 - [ ] Replace "one worst finding per axis" with a rule that retains **all

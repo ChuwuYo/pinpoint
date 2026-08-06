@@ -1,0 +1,8 @@
+{
+  "run_id": "15-review-finding-budget-91e14f1-with-skill-1",
+  "grader": "blind-2",
+  "scores": {"C1": 0, "C2": 0, "C3": 1, "C4": 0, "N1": 1},
+  "total": 2,
+  "passed": false,
+  "notes": "Mapping: F1(blocker,billing.js:17-19 /30 vs convention)=B1. F2(blocker,chargeTeam {ok:true})=SF2-content mislabeled blocker (not a planted blocker; does not satisfy N1 SF requirement). F3(blocker,notify.js new Date vs DD.MM.YYYY)=B6, names BOTH consequences (trialExpired false forever + banner 'Invalid Date') -> C3=1. F4(transferOwnership ?? null)=extra, not ground truth. F5(addMember discards lookup)=extra. F6(renewalTotal unrounded + order)=B4, severity mislabel counts as present. F7(findMembers interpolates arg into teamId= filter)=B2 site/mechanism identified though framed as wrong-results not injection; counted present (borderline, moot). F8(no tests)=SF1 as should-fix finding. B7 (owner-as-id -> team.owner.email undefined) appears ONLY as an open question -> NOT present per rubric; C2=0. B3 (removeTeam non-atomic) absent; holds-up bullet 3 actually praises removeTeam ordering. B5 (addMember check-then-act race) absent; holds-up bullet 1 praises seat cap. C1=0 (B3,B5,B7 missing). C4=0 (three planted blockers omitted; no budget citation but omissions suffice). N1=1: ordering is blocker-high x3, SF-high x3, SF-medium x2 (severity-first), and SF1 survives as should-fix finding."
+}

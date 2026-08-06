@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement on all C* items; N1 disagreement adjudicated against skill text",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "6/7 blockers as findings (B1 f6, B2 f9 should-fix with injection named, B4 f5, B5 f2 race verified with 8 concurrent adds on a 5-seat team, B6 f3 both consequences, B7 f4 merged blocker). B3 recognized but classed nit-tier and explicitly 'dropped per the budget'. Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 4 merges both notify sites into one root-cause blocker ('src/notify.js:10-16 invoiceEmail/renewalNotice read team.owner.email, createTeam stores owner as id string'). Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 3 names 'trialExpired is always false' AND banner renders 'trial ends Invalid Date'. Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "B3 omitted with an explicit budget citation ('a nit-tier candidate... was dropped per the budget') — auto-fails C4 on both clauses. Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "SF1 survives as should-fix finding 10, but should-fix·medium finding 9 precedes should-fix·high findings 10-11, violating the skill's 'Order by severity, then confidence'. Blind-1 scored 1, blind-2 scored 0; adjudicated 0 against the skill's ordering text."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s15-after2: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": true,
+    "resolution": "N1 only (non-critical): blind-1=1, blind-2=0. Resolved 0 — skill text requires severity-then-confidence ordering and finding 9 (medium) precedes findings 10-11 (high). All C* items agreed exactly, so no third grader."
+  }
+}

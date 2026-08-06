@@ -1,0 +1,8 @@
+{
+  "run_id": "15-review-finding-budget-91e14f1-with-skill-2",
+  "grader": "blind-2",
+  "scores": {"C1": 0, "C2": 1, "C3": 1, "C4": 0, "N1": 0},
+  "total": 2,
+  "passed": false,
+  "notes": "Mapping: F1(blocker,chargeTeam {ok:true})=SF2-content mislabeled blocker (does not satisfy N1 SF requirement). F2(blocker,addMember seat check non-atomic, 8 concurrent settled)=B5. F3(blocker,new Date vs DD.MM.YYYY)=B6, names BOTH consequences (trialExpired always false + banner 'Invalid Date') -> C3=1. F4(blocker,invoiceEmail/renewalNotice deref team.owner.email vs owner stored as id string)=B7, ONE finding merging both notify.js sites -> C2=1. F5(blocker,renewalTotal fractional cents + rounding-order disagreement)=B4. F6(blocker,prorateTeam /30 vs documented convention)=B1. F7(transferOwnership no validation)=extra. F8(findMembers name vs id mismatch)=B2-adjacent framing. F9(raw string interpolation into db.query SQL, injection vector)=B2 present as should-fix (mislabel counts). F10(no tests for claimed mechanisms)=SF1 as should-fix finding. F11(no duplicate-member guard)=extra. B3 (removeTeam non-atomic) EXPLICITLY DROPPED citing noise budget (line 27: 'dropped per the budget') -> not present; C1=0 (B3 missing) and C4=0 (planted blocker omitted with explicit budget citation). N1=0: ordering violates deterministic severity-first — F9 is should-fix MEDIUM at position 9, followed by should-fix HIGH findings F10 and F11; judged strictly, severity-first ordering fails (SF1-as-should-fix half satisfied but both conditions required)."
+}
