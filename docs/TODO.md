@@ -260,27 +260,27 @@ works end to end. Scenario 13 is the canary.
 
 ### 1.1 Define a versioned scenario contract
 
-- [ ] Add `evals/schemas/scenario.schema.json`.
-- [ ] Give every scenario a stable ID, title, target Skill, prompt path, rubric
+- [x] Add `evals/schemas/scenario.schema.json`.
+- [x] Give every scenario a stable ID, title, target Skill, prompt path, rubric
   path, fixture path or generator, deterministic check commands, required
   capabilities, allowed mutations, timeout policy, and supported conditions.
-- [ ] Separate `prompt.md` from `rubric.json`. The candidate agent must receive
+- [x] Separate `prompt.md` from `rubric.json`. The candidate agent must receive
   only the prompt and normal repository instructions, never evaluator-only
   fixture notes, planted-fault descriptions, expected verdicts, or rubric
   items.
-- [ ] Freeze the prompt, rubric, fixture commit/hash, and deterministic checks
+- [x] Freeze the prompt, rubric, fixture commit/hash, and deterministic checks
   before collecting comparison runs.
-- [ ] Record scenario revisions explicitly. Do not compare runs across materially
+- [x] Record scenario revisions explicitly. Do not compare runs across materially
   different fixtures or rubrics as though they were the same scenario.
 - [ ] Define a deterministic reset command that restores a clean fixture before
   every repetition.
-- [ ] Permit scenario-specific setup, but forbid setup that reveals the planted
+- [x] Permit scenario-specific setup, but forbid setup that reveals the planted
   fault to the candidate.
 
 ### 1.2 Define a normalized run record
 
-- [ ] Add `evals/schemas/run.schema.json`.
-- [ ] Record, at minimum:
+- [x] Add `evals/schemas/run.schema.json`.
+- [x] Record, at minimum:
   - scenario and scenario revision;
   - `no-skill`, `with-skill`, or `trigger` condition;
   - repetition index and randomized execution order;
@@ -295,26 +295,26 @@ works end to end. Scenario 13 is the canary.
   - start/end repository state;
   - status: `PASS`, `FAIL`, `INVALID`, or `UNSCORED`;
   - infrastructure errors and omitted artifacts.
-- [ ] Mark missing tools, broken fixtures, harness outages, truncated traces, and
+- [x] Mark missing tools, broken fixtures, harness outages, truncated traces, and
   contaminated Skill catalogs as `INVALID`; never score them as agent failure.
-- [ ] Redact credentials and private content before retaining artifacts. Record
+- [x] Redact credentials and private content before retaining artifacts. Record
   the redaction and artifact checksum.
 
 ### 1.3 Define machine-readable grading without discarding the current protocol
 
-- [ ] Add `evals/schemas/grading.schema.json`.
-- [ ] Preserve the current rule that each critical item is binary and any missed
+- [x] Add `evals/schemas/grading.schema.json`.
+- [x] Preserve the current rule that each critical item is binary and any missed
   critical item fails the scenario.
-- [ ] Preserve regular item scores of `1`, `0.5`, or `0`, unless later evaluator
+- [x] Preserve regular item scores of `1`, `0.5`, or `0`, unless later evaluator
   agreement data justifies a change.
-- [ ] Require an evidence pointer for every score: transcript span, command,
+- [x] Require an evidence pointer for every score: transcript span, command,
   changed line, test result, or artifact.
-- [ ] Record evaluator identity/type and whether grading was human or model-based.
-- [ ] Use a fresh evaluator context that sees the prompt, hidden rubric, and run
+- [x] Record evaluator identity/type and whether grading was human or model-based.
+- [x] Use a fresh evaluator context that sees the prompt, hidden rubric, and run
   artifacts, but not the Skill's intended benefit, prior scores, or the other
   A/B condition.
-- [ ] Add a disagreement field and a tie-break process for semantic items.
-- [ ] Keep deterministic checks separate from semantic grading so the report can
+- [x] Add a disagreement field and a tie-break process for semantic items.
+- [x] Keep deterministic checks separate from semantic grading so the report can
   distinguish "the artifact is wrong" from "the explanation is incomplete."
 
 ### 1.4 Add metrics appropriate to each Skill class
@@ -322,93 +322,93 @@ works end to end. Scenario 13 is the canary.
 For core implementation scenarios, retain critical pass rate and overall rubric
 score, then add:
 
-- [ ] root-cause/ownership correctness;
-- [ ] regression-test relevance;
-- [ ] scope expansion beyond the proven owner;
-- [ ] unsupported completion or preservation claims;
-- [ ] mutation outside the authorized files;
-- [ ] commit/push/PR/merge/deploy authorization violations;
-- [ ] fixture success at the real consumer boundary.
+- [x] root-cause/ownership correctness;
+- [x] regression-test relevance;
+- [x] scope expansion beyond the proven owner;
+- [x] unsupported completion or preservation claims;
+- [x] mutation outside the authorized files;
+- [x] commit/push/PR/merge/deploy authorization violations;
+- [x] fixture success at the real consumer boundary.
 
 For review scenarios, add:
 
-- [ ] true positives, false positives, and false negatives;
-- [ ] precision and recall for planted material findings;
-- [ ] blocker retention;
-- [ ] duplicate/static-tool finding rate;
-- [ ] verdict correctness;
-- [ ] mutation count;
-- [ ] unsupported praise or evidence claims.
+- [x] true positives, false positives, and false negatives;
+- [x] precision and recall for planted material findings;
+- [x] blocker retention;
+- [x] duplicate/static-tool finding rate;
+- [x] verdict correctness;
+- [x] mutation count;
+- [x] unsupported praise or evidence claims.
 
 For trigger scenarios, add:
 
-- [ ] per-Skill precision and recall;
-- [ ] confusion matrix;
-- [ ] critical authorization-boundary misroutes;
-- [ ] read-only versus mutating-workflow misroutes;
-- [ ] explicit-invocation and automatic-trigger results reported separately.
+- [x] per-Skill precision and recall;
+- [x] confusion matrix;
+- [x] critical authorization-boundary misroutes;
+- [x] read-only versus mutating-workflow misroutes;
+- [x] explicit-invocation and automatic-trigger results reported separately.
 
 ### 1.5 Make repeated A/B runs comparable
 
-- [ ] Run each condition at least twice.
-- [ ] Add a third run when repetitions disagree on any critical item or verdict.
-- [ ] Use the same scenario revision, model, model settings, harness, tool
+- [x] Run each condition at least twice.
+- [x] Add a third run when repetitions disagree on any critical item or verdict.
+- [x] Use the same scenario revision, model, model settings, harness, tool
   availability, fixture, and evaluator policy for both conditions.
-- [ ] Randomize condition execution order to reduce sequence and operator bias.
-- [ ] Use a fresh agent session and freshly reset fixture for every repetition.
-- [ ] For quality evaluation, invoke the target Skill explicitly so routing noise
+- [x] Randomize condition execution order to reduce sequence and operator bias.
+- [x] Use a fresh agent session and freshly reset fixture for every repetition.
+- [x] For quality evaluation, invoke the target Skill explicitly so routing noise
   does not contaminate behavior measurement.
-- [ ] Evaluate automatic triggering separately in Phase 4.
-- [ ] For `no-skill`, use an isolated Skill catalog and isolated home/config
+- [x] Evaluate automatic triggering separately in Phase 4.
+- [x] For `no-skill`, use an isolated Skill catalog and isolated home/config
   directories. Merely omitting an explicit invocation is insufficient if the
   Skill can still auto-load.
-- [ ] Report raw repetitions and condition variance. Do not hide a regression
+- [x] Report raw repetitions and condition variance. Do not hide a regression
   inside a mean score.
-- [ ] Compare critical pass counts first, then regular score, then efficiency or
+- [x] Compare critical pass counts first, then regular score, then efficiency or
   style metrics.
 
 ### 1.6 Add the smallest useful tooling
 
-- [ ] Add `scripts/eval-validate.mjs` to validate scenarios, run records, grading
+- [x] Add `scripts/eval-validate.mjs` to validate scenarios, run records, grading
   records, file references, fixture hashes, and required artifacts.
-- [ ] Add `scripts/eval-score.mjs` to compute scenario results and A/B comparison
+- [x] Add `scripts/eval-score.mjs` to compute scenario results and A/B comparison
   tables from normalized records.
-- [ ] Add `scripts/eval-report.mjs` to generate a stable Markdown summary without
+- [x] Add `scripts/eval-report.mjs` to generate a stable Markdown summary without
   overwriting raw results.
-- [ ] Document a manual, harness-neutral execution contract in
+- [x] Document a manual, harness-neutral execution contract in
   `evals/harnesses/manual.md`.
 - [ ] Add `scripts/eval-run.mjs` only when one harness has a stable, testable
   adapter. Do not block the first evidence on a universal runner.
-- [ ] Make scripts fail with actionable messages and nonzero exit codes.
+- [x] Make scripts fail with actionable messages and nonzero exit codes.
 - [ ] Add fixture self-checks that prove the planted behavior exists before an
   agent run and that the oracle can distinguish correct from incorrect output.
-- [ ] Run schema, fixture, and report-generation checks in CI.
-- [ ] Do not run paid or nondeterministic model calls automatically on every
+- [x] Run schema, fixture, and report-generation checks in CI.
+- [x] Do not run paid or nondeterministic model calls automatically on every
   pull request. Run model evaluations deliberately for behavior-changing work
   and release candidates.
 
 ### 1.7 Migrate one canary before migrating the suite
 
-- [ ] Convert Scenario 13 into the directory format.
-- [ ] Validate the full path from clean fixture to normalized report using dummy
+- [x] Convert Scenario 13 into the directory format.
+- [x] Validate the full path from clean fixture to normalized report using dummy
   or dry-run records before collecting model results.
-- [ ] Update `evals/SCORING.md` and add `evals/README.md` with exact reproduction
+- [x] Update `evals/SCORING.md` and add `evals/README.md` with exact reproduction
   commands.
-- [ ] Leave the other scenario specifications readable during migration; migrate
+- [x] Leave the other scenario specifications readable during migration; migrate
   them incrementally in their owning phase instead of creating empty fixtures.
 
 ### Exit criteria
 
 - [ ] A clean checkout can validate Scenario 13's metadata and fixture.
-- [ ] The candidate-visible input is mechanically separated from the hidden
+- [x] The candidate-visible input is mechanically separated from the hidden
   rubric and evaluator-only fixture notes.
-- [ ] A maintainer can create, validate, score, and report both conditions using
+- [x] A maintainer can create, validate, score, and report both conditions using
   documented commands.
-- [ ] Missing or contaminated artifacts become `INVALID`, not misleading
+- [x] Missing or contaminated artifacts become `INVALID`, not misleading
   `PASS`/`FAIL` results.
-- [ ] At least one synthetic result set proves the scorer catches a critical
+- [x] At least one synthetic result set proves the scorer catches a critical
   regression, a false positive, and an infrastructure-invalid run.
-- [ ] CI validates evaluation structure without invoking a model.
+- [x] CI validates evaluation structure without invoking a model.
 
 ### Likely files
 

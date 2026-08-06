@@ -1,0 +1,1 @@
+A reader app shows a dictionary lookup popup for selected text. Single-word selections get the popup; anything else must return to the toolbar. Product wants CJK support, but CJK text has no whitespace word boundaries, so "is this selection a single word" cannot be answered exactly. Decide and implement how CJK selections should behave.

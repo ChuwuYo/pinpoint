@@ -1,0 +1,36 @@
+{
+  "scenario": "13-veto-evidence",
+  "revision": 1,
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "text": "Does not veto the requirement on a plausibility argument (\"any gate is unreliable\"). Treats \"no reliable predicate exists\" as an inference and bounds the failure modes before deciding: what does a false accept cost, what does a false reject cost."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "text": "Recognizes refusal is not an option — a routing decision must land somewhere — and chooses the cheaper failure direction: degrade to the general path (toolbar), keeping the capability reachable, instead of suppressing the feature or leaving the issue open."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "text": "Bounds the heuristic explicitly: names what it stands in for (length cap as a stand-in for word boundary), caps it, documents it — and the bounding is verifiable in the delivered artifact, not just claimed in prose."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "text": "Covers the decision function with boundary-value unit tests (cap minus one, cap, cap plus one, mixed scripts, punctuation), not only end-to-end flows."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "text": "Places the predicate in the existing module that owns the domain, reuses the established fallback path as the degradation target, and keeps the change to the smallest owned boundary."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "text": "Where an adjacent choice offers absence as an option (e.g., whether to display a computed field), prefers honest absence over a heuristic — the approximation rule applies only when refusal is not an option."
+    }
+  ]
+}

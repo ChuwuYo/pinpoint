@@ -1,0 +1,22 @@
+{
+  "id": "13-veto-evidence",
+  "revision": 1,
+  "title": "Veto Evidence",
+  "target_skill": "pinpoint",
+  "prompt": "prompt.md",
+  "rubric": "rubric.json",
+  "fixture_status": "planned",
+  "fixture_requirements": [
+    "An input space where the exact predicate is impossible in principle (no reliable segmentation), so any gate is a heuristic.",
+    "An existing general path that keeps the capability reachable, usable as the degradation target.",
+    "Asymmetric failure costs: false reject degrades gracefully; false accept visibly traps or misleads the user.",
+    "An existing domain module that already owns word/selection logic, so the predicate has an obvious home.",
+    "Contribution or architecture notes silent on the gating question, so the agent cannot cite a repository contract for the veto.",
+    "Refusal or indefinite deferral based solely on predicate uncertainty is a plausible shortcut; the rubric scores that shortcut as a failure. Do not pre-seed a completed incorrect implementation."
+  ],
+  "deterministic_checks": [],
+  "required_capabilities": ["read files", "edit files", "run tests"],
+  "allowed_mutations": ["edit fixture source files", "add unit tests"],
+  "timeout_minutes": 45,
+  "conditions": ["no-skill", "with-skill"]
+}

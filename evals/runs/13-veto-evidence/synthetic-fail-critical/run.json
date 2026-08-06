@@ -1,0 +1,41 @@
+{
+  "scenario": "13-veto-evidence",
+  "scenario_revision": 1,
+  "condition": "with-skill",
+  "repetition": 2,
+  "randomized_order": false,
+  "model": {
+    "id": "synthetic",
+    "settings": "synthetic"
+  },
+  "harness": {
+    "name": "synthetic",
+    "version": "0"
+  },
+  "pinpoint_commit": "synthetic",
+  "skill_catalog": [
+    "pinpoint"
+  ],
+  "invocation_method": "explicit",
+  "fixture": {
+    "ref": "synthetic",
+    "hash": "synthetic",
+    "clean_start_proof": "synthetic"
+  },
+  "environment": {
+    "os": "synthetic",
+    "runtimes": []
+  },
+  "commands": [],
+  "final_response": "final.md",
+  "repo_state": {
+    "before": "synthetic",
+    "after": "synthetic"
+  },
+  "status": "FAIL",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [
+    "patch"
+  ],
+  "redactions": []
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pinpoint evaluation scenario",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "revision",
+    "title",
+    "target_skill",
+    "prompt",
+    "rubric",
+    "fixture_status",
+    "conditions",
+    "required_capabilities",
+    "allowed_mutations",
+    "deterministic_checks",
+    "timeout_minutes"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[0-9]{2}-[a-z0-9-]+$" },
+    "revision": { "type": "number" },
+    "title": { "type": "string" },
+    "target_skill": {
+      "enum": ["pinpoint", "pinpoint-review", "pinpoint-commit", "pinpoint-pr", "pinpoint-help"]
+    },
+    "prompt": { "type": "string" },
+    "rubric": { "type": "string" },
+    "fixture": { "type": "string" },
+    "fixture_status": { "enum": ["planned", "ready", "frozen"] },
+    "fixture_requirements": { "type": "array", "items": { "type": "string" } },
+    "deterministic_checks": { "type": "array", "items": { "type": "string" } },
+    "required_capabilities": { "type": "array", "items": { "type": "string" } },
+    "allowed_mutations": { "type": "array", "items": { "type": "string" } },
+    "timeout_minutes": { "type": "number" },
+    "conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "enum": ["no-skill", "with-skill", "trigger"] }
+    }
+  }
+}

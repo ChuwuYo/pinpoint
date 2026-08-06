@@ -96,6 +96,12 @@ jobs:
       - name: Validate the packaged entrypoint
         run: npm exec --yes --package=. -- pinpoint-install --version
 
+      - name: Validate evaluation assets
+        run: node scripts/eval-validate.mjs
+
+      - name: Test evaluation tooling
+        run: node tests/eval-tools.mjs
+
   installer-smoke:
     needs: validate
     strategy:

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pinpoint evaluation run record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scenario",
+    "scenario_revision",
+    "condition",
+    "repetition",
+    "randomized_order",
+    "model",
+    "harness",
+    "pinpoint_commit",
+    "skill_catalog",
+    "invocation_method",
+    "fixture",
+    "environment",
+    "commands",
+    "repo_state",
+    "status",
+    "infrastructure_errors",
+    "omitted_artifacts",
+    "redactions"
+  ],
+  "properties": {
+    "scenario": { "type": "string" },
+    "scenario_revision": { "type": "number" },
+    "condition": { "enum": ["no-skill", "with-skill", "trigger"] },
+    "repetition": { "type": "number" },
+    "randomized_order": { "type": "boolean" },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "settings"],
+      "properties": {
+        "id": { "type": "string" },
+        "settings": { "type": "string" }
+      }
+    },
+    "harness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "pinpoint_commit": { "type": "string" },
+    "skill_catalog": { "type": "array", "items": { "type": "string" } },
+    "invocation_method": { "enum": ["explicit", "automatic", "none"] },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "hash", "clean_start_proof"],
+      "properties": {
+        "ref": { "type": "string" },
+        "hash": { "type": "string" },
+        "clean_start_proof": { "type": "string" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["os", "runtimes"],
+      "properties": {
+        "os": { "type": "string" },
+        "runtimes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["cmd", "exit"],
+        "properties": {
+          "cmd": { "type": "string" },
+          "exit": { "type": "number" },
+          "log": { "type": "string" }
+        }
+      }
+    },
+    "final_response": { "type": "string" },
+    "patch": { "type": "string" },
+    "repo_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["before", "after"],
+      "properties": {
+        "before": { "type": "string" },
+        "after": { "type": "string" }
+      }
+    },
+    "status": { "enum": ["PASS", "FAIL", "INVALID", "UNSCORED"] },
+    "infrastructure_errors": { "type": "array", "items": { "type": "string" } },
+    "omitted_artifacts": { "type": "array", "items": { "type": "string" } },
+    "redactions": { "type": "array", "items": { "type": "string" } }
+  }
+}

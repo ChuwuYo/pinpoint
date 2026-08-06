@@ -1,0 +1,22 @@
+{
+  "scenario": "13-veto-evidence",
+  "run": "run.json",
+  "evaluator": {
+    "id": "synthetic",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "unscored: invalid run"
+    }
+  ],
+  "deterministic_checks": [],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

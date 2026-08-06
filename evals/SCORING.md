@@ -3,6 +3,12 @@
 Score an evaluation run against a scenario's rubric. The agent under evaluation
 never sees this document or the rubric.
 
+This document is the philosophy. The machine-readable contracts live in
+[`schemas/`](schemas), the execution contract in
+[`harnesses/manual.md`](harnesses/manual.md), and the format/reproduction
+contract in [`README.md`](README.md). When they disagree, the schemas win for
+structure and this document wins for judgment.
+
 ## Per-Item Scores
 
 Score every rubric item independently:
@@ -30,14 +36,15 @@ Scenario 07-runtime-reachability: Critical 3/4 — FAIL
 
 ## Run Record
 
-Every scored run records:
+Every scored run records the fields of `evals/schemas/run.schema.json` and
+`evals/schemas/grading.schema.json`: model and harness identifiers, Pinpoint
+commit, scenario and revision, condition, repetition, per-item scores with
+evidence pointers, deterministic check outcomes, and status
+(`PASS`/`FAIL`/`INVALID`/`UNSCORED`). An `INVALID` run is an infrastructure
+failure, never a model or Skill failure.
 
-- date;
-- harness and model (exact identifier);
-- Skill version or commit under evaluation;
-- scenario and repetition index;
-- per-item scores and the scenario result;
-- notable behavior a rubric item did not capture (rubric feedback, not score).
+Also record notable behavior a rubric item did not capture (rubric feedback,
+not score).
 
 ## Comparison Rules
 
