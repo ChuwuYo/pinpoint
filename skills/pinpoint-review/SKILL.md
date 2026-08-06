@@ -113,8 +113,8 @@ A fixed shape keeps reviews comparable across runs: the requester can tell at a 
 
 End every review with severity counts (blocker, should-fix, nit) and one verdict:
 
-- **BLOCK** — a blocker finding stands.
-- **FIX-THEN-COMMIT** — only should-fix or nit findings stand.
-- **CLEAR** — no material findings.
+- **BLOCK** — a blocker finding stands, or a required deterministic gate fails because of the diff.
+- **FIX-THEN-COMMIT** — no blocker stands, but at least one should-fix stands, or required verification is missing or inconclusive.
+- **CLEAR** — no blocker or should-fix stands and required gates pass. Nits stay advisory: they never escalate the verdict on their own.
 
 Findings are hypotheses, not proof. The requester must verify each finding independently, fix confirmed ones, and reject false positives with evidence.
