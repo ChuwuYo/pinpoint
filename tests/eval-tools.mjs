@@ -17,7 +17,7 @@ if (validate.status !== 0) {
   throw new Error(`eval-validate failed:\n${validate.stdout}${validate.stderr}`);
 }
 
-const runsDir = join(root, 'evals', 'runs', '13-veto-evidence');
+const runsDir = join(root, 'evals', 'runs', '_synthetic');
 const score = run('eval-score.mjs', runsDir, '--json');
 if (score.status !== 0) {
   throw new Error(`eval-score failed:\n${score.stdout}${score.stderr}`);

@@ -53,6 +53,7 @@ Trigger scenarios: per-Skill precision/recall, confusion matrix, authorization
 misroutes, read-only/mutating misroutes; explicit and automatic invocation
 reported separately.
 
-Synthetic records under `runs/13-veto-evidence/synthetic-*` exist to prove the
-tooling catches a critical regression, a regular-item loss, and an
-infrastructure-invalid run; they are not evidence about any model.
+Synthetic records under `runs/_synthetic/` exist to prove the tooling catches a
+critical regression, a regular-item loss, and an infrastructure-invalid run;
+they are not evidence about any model. Keep them out of scenario directories so
+real evidence never mixes with tooling fixtures.
