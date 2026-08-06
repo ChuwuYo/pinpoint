@@ -1480,9 +1480,14 @@ rule text changes (anti-inflation rule).
      B3 (defect composition) and B5 (race, 1/6) recorded as model capability
      boundary; two ground-truth debts (B2-injection vs stand-in, SF2 severity)
      carry to Scenario 15 revision 4;
-   - ⬜ Scenario 15 revision 4 — settle the two ground-truth debts (make
-     injection reachable against the stand-in or relabel B2; relabel SF2 to
-     blocker), re-freeze, spot-check 2 runs;
+   - ✅ Scenario 15 revision 4 (`5dfe3b9`, frozen `8c40c70b`) — both
+     ground-truth debts settled (B2 injection executable against a naive
+     OR-evaluating stand-in with a checks.cjs runtime assertion; SF2
+     reclassified blocker B8). Spot-check: run 2 = **5/5, first full PASS**
+     (all 8 blockers, B3 found 2/2 via the new injection path after 6
+     consecutive misses); run 1 = 2/5 (B5 race still flaky, N1 ordering).
+     Four-commit evidence arc: 2/5,2/5 → 2/5,2/5 → 3/5,2/5 → 2/5,5/5.
+     B5 race (2/8) and N1 confidence-ordering (3/8) recorded as residuals;
    - ⬜ static-gate handling (3.4) — partially evidenced by v5/v6/v7 (2/2 each);
      the fixed `Gate status` report field still needs Scenario 14/16 follow-up;
    - ⬜ read-only checks (part of 3.6/17) — needs Scenario 17 fixture + baseline;

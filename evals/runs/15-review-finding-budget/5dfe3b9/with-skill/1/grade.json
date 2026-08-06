@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement on all items",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "7/8 blockers present: B1 f4, B2 f2 (executable injection AT findMembers site), B3 f1 (via injection path: 'half-applied mutation'), B4 f5, B6 f6+f7, B7 f8 merged, B8 f3. B5 race absent (seat cap praised sequentially only). Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 8 merges both notify sites (notify.js:11,15) into one owner-id blocker. Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "B6 both consequences explicit across f6 (trialExpired false forever) and f7 (banner Invalid Date / wrong date). Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "B5 omitted; no budget cited. Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "SF1 survives as should-fix f12, but should-fix ordering runs high, medium, medium, high (f12 after f10/f11) — confidence ordering violated (third occurrence). Both blind graders agree."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s15-r4a: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every item (2/5)"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "two fresh general subagents, blinded to condition and to each other; exact agreement on all items",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "ALL 8 blockers present: B8 f1, B3 f2 (via injection path: 'inconsistent persisted state'), B6 f3 (both consequences), B1 f4, B7 f5 merged, B5 f6 (TOCTOU race verified 6 members in a 5-seat plan), B4 f7, B2 f11 (semantic-mismatch framing; injection class found at removeTeam site instead — recorded nuance). First C1 pass in scenario 15. Both blind graders agree."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 5 merges both notify sites into one blocker. Both blind graders agree."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Finding 3 names both consequences (trialExpired never flags + banner Invalid Date) plus MM.DD misparse bonus. Both blind graders agree."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "No planted blocker omitted; pre-gate dropped candidates are non-planted and evidence-justified ('verified atomic happy path'); no cap/budget citation anywhere. Both blind graders agree."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Strict severity-then-confidence ordering holds (7 blocker-high, blocker-medium, 2 should-fix-high, should-fix-medium); SF1 survives as should-fix f10. Both blind graders agree."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness (s15-r4b: 0 dirty)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "two blind graders scored identically on every item (5/5 PASS) — including the B2 semantic-framing and B3-via-injection-path borderline calls"
+  }
+}
