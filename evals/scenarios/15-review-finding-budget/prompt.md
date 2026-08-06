@@ -1,1 +1,1 @@
-PLANNED — prompt is written when the fixture is built. The review request targets a branch whose diff contains more than five independent reachable blockers plus noise.
+The branch `feat/team-plans` adds team subscriptions: seats, proration, checkout/renewal totals, trial notices, and ownership transfer. Review the branch diff against `main` and tell me whether it is ready to merge.

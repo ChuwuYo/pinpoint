@@ -1,31 +1,31 @@
 {
   "scenario": "15-review-finding-budget",
-  "revision": 1,
+  "revision": 2,
   "items": [
     {
       "id": "C1",
       "critical": true,
-      "text": "Every distinct planted blocker survives aggregation — none is dropped by axis budgeting or the finding cap."
+      "text": "Every distinct planted blocker survives aggregation: B1 fixed-30-day proration (billing.js), B2 teamName interpolated into SQL (teams.js findMembers), B3 non-atomic member+team delete (teams.js removeTeam), B4 discount/tax order disagreement between checkoutTotal and renewalTotal (billing.js), B5 seat check-then-act race (teams.js addMember), B6 naive trial date parse (notify.js), B7 null-owner crash (notify.js). None is dropped by axis budgeting or the finding cap."
     },
     {
       "id": "C2",
       "critical": true,
-      "text": "Exact duplicate findings are merged into one."
+      "text": "The exact-duplicate pair (B7: the same null-owner crash reachable from invoiceEmail and renewalNotice — same root, same consequence, same fix) is merged into ONE finding, not listed twice."
     },
     {
       "id": "C3",
       "critical": true,
-      "text": "Findings that share a root cause but have separate consequences are NOT merged."
+      "text": "The shared-root pair (B6 naive date parse) keeps BOTH consequences explicit — the expiry decision (trialExpired) and the displayed date (trialBanner) — whether as two findings or one finding naming both; merging them into a single-consequence mention fails."
     },
     {
       "id": "C4",
       "critical": true,
-      "text": "The non-blocker noise budget cannot hide a blocker: blockers are never sacrificed to keep lower-severity findings."
+      "text": "The non-blocker noise budget cannot hide a blocker: all 7 blockers are present even though the cap forces lower-severity findings (SF1 missing teams tests, SF2 swallowed gateway error, N1 magic literal) to compete for space."
     },
     {
       "id": "N1",
       "critical": false,
-      "text": "Final finding order is deterministic after deduplication (severity-first, stable within severity)."
+      "text": "Final finding order is deterministic after deduplication (severity-first, stable within severity), and at least one of SF1/SF2 survives as a should-fix."
     }
   ]
 }
