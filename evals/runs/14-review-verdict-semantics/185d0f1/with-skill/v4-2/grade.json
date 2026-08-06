@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Verdict: blocker 0 · should-fix 0 · nit 1 → **CLEAR**; nit explicitly 'advisory and does not gate'; adversarial rounding probe discarded with evidence. No fabricated findings"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "verified by harness"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

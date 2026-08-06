@@ -631,25 +631,25 @@ After baseline runs exist:
 
 ### 3.5 Make verdict semantics unambiguous
 
-Progress (commit `e28fc49`): severity boundary calibrated — "same-class defect
-still reachable through a supported path is a blocker whatever its blast
-radius." Scenario 12 with-Skill went from 1/3 PASS (C4 failing 2/3) to 3/3 PASS
-with no regressions. Remaining bullets below still need Scenario 14 fixtures
-for validation.
+Progress: severity boundary calibrated (`e28fc49`, Scenario 12 with-Skill
+1/3 → 3/3 PASS); verdict semantics aligned (`185d0f1`, Scenario 14 baseline
+f3f2369 + after-evidence) — v1 BLOCK 2/2, v2 FIX-THEN-COMMIT 2/2, v3/v4
+nits-advisory CLEAR 2/2+2/2, v5 diff-caused gate BLOCK 2/2, v6 inconclusive
+verification FIX-THEN-COMMIT 2/2, v7 pre-existing attribution 2/2.
 
 Use Scenario 14 to validate this target behavior:
 
-- [ ] `BLOCK`: at least one blocker stands, or a required deterministic gate
-  fails because of the diff.
-- [ ] `FIX-THEN-COMMIT`: no blocker stands, but at least one should-fix stands,
-  or required verification is missing/inconclusive.
-- [ ] `CLEAR`: no blocker or should-fix stands and required gates pass or are
-  genuinely not applicable.
-- [ ] Nits may be shown as advisory items under `CLEAR`; nits alone must not
-  block commit readiness.
-- [ ] Report pre-existing or unattributed gate failures separately. If the
-  three-verdict vocabulary remains confusing for evidence-only gaps, evaluate a
-  rename or fourth verdict in Scenario 14 before changing the public contract.
+- [x] `BLOCK`: at least one blocker stands, or a required deterministic gate
+  fails because of the diff. (v1 + v5, 2/2 each)
+- [x] `FIX-THEN-COMMIT`: no blocker stands, but at least one should-fix stands,
+  or required verification is missing/inconclusive. (v2 + v6, 2/2 each)
+- [x] `CLEAR`: no blocker or should-fix stands and required gates pass or are
+  genuinely not applicable. (v3 + v4)
+- [x] Nits may be shown as advisory items under `CLEAR`; nits alone must not
+  block commit readiness. (baseline N3 failed 1/2 on old text — repeatable;
+  fixed `185d0f1`; after-evidence v4 2/2 CLEAR with advisory nits)
+- [x] Report pre-existing or unattributed gate failures separately. (v7 2/2;
+  no rename/fourth verdict needed — three-verdict vocabulary held)
 - [ ] State that the verdict applies to the reviewed scope and evidence, not to
   unreviewed code or unexecuted environments.
 
@@ -1429,9 +1429,12 @@ rule text changes (anti-inflation rule).
 5. 🔶 **PR 5 — `pinpoint-review` rule hardening** — IN PROGRESS
    - ✅ verdict severity boundary (3.5, first item): `e28fc49` + after-evidence
      `7a513f0` — Scenario 12 with-Skill 1/3 → 3/3 PASS, no regressions;
+   - ✅ verdict semantics (3.5): `185d0f1` — Scenario 14 built (revisions 2–5,
+     frozen `dad80f3f`), baseline `f3f2369` (nit escalation N3 1/2), fixed,
+     after-evidence 4/4 PASS (advisory nits under CLEAR, no regressions);
    - ⬜ blocker retention (3.3) — needs Scenario 15 fixture + baseline first;
-   - ⬜ static-gate handling (3.4) — needs Scenario 14 fixture + baseline first;
-   - ⬜ remaining verdict semantics (3.5) — needs Scenario 14 fixture + baseline;
+   - ⬜ static-gate handling (3.4) — partially evidenced by v5/v6/v7 (2/2 each);
+     the fixed `Gate status` report field still needs Scenario 14/16 follow-up;
    - ⬜ read-only checks (part of 3.6/17) — needs Scenario 17 fixture + baseline;
    - ⬜ second-pass gate calibration (3.6) — needs Scenario 16 fixture + baseline;
    - ⬜ report shape update (3.8) — after the above settle;
