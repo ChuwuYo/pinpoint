@@ -71,7 +71,7 @@ function loadJson(path) {
 }
 
 const schemas = {};
-for (const name of ['scenario', 'run', 'grading']) {
+for (const name of ['scenario', 'run', 'grading', 'trigger-case']) {
   const schemaPath = join(evalsDir, 'schemas', `${name}.schema.json`);
   if (!existsSync(schemaPath)) {
     fail(`missing schema: evals/schemas/${name}.schema.json`);
@@ -192,6 +192,91 @@ function validateGrade(path) {
       const rubricIds = new Set((rubric?.items ?? []).map((item) => item.id));
       for (const item of grade.items) {
         if (!rubricIds.has(item.id)) fail(`${path}: graded item ${item.id} not in rubric`);
+      }
+    }
+  }
+}
+
+const triggerDir = join(evalsDir, 'trigger');
+const REQUIRED_TRIGGER_FAMILIES = [
+  'impl-not-review',
+  'review-not-impl',
+  'draft-commit-no-auth',
+  'commit-authorized',
+  'pr-draft-vs-publish',
+  'help',
+  'refactor-no-defect',
+  'generic-advice',
+  'sequence-no-merge',
+  'review-and-merge',
+];
+if (existsSync(triggerDir)) {
+  const triggerIds = new Set();
+  const familiesBySplit = { train: new Set(), validation: new Set() };
+  for (const split of ['train', 'validation']) {
+    const jsonlPath = join(triggerDir, `${split}.jsonl`);
+    if (!existsSync(jsonlPath)) {
+      fail(`trigger/${split}.jsonl: missing`);
+      continue;
+    }
+    const lines = readFileSync(jsonlPath, 'utf8').split('\n').filter((line) => line.trim() !== '');
+    for (const [index, line] of lines.entries()) {
+      const label = `trigger/${split}.jsonl:${index + 1}`;
+      let record;
+      try {
+        record = JSON.parse(line);
+      } catch (error) {
+        fail(`${label}: invalid JSON (${error.message})`);
+        continue;
+      }
+      if (schemas['trigger-case']) {
+        validateAgainst(record, schemas['trigger-case'], label);
+      }
+      if (typeof record.id === 'string') {
+        const prefix = split === 'train' ? 'TR-' : 'VA-';
+        if (!record.id.startsWith(prefix)) {
+          fail(`${label}: id ${record.id} must start with ${prefix}`);
+        }
+        if (triggerIds.has(record.id)) fail(`${label}: duplicate case id ${record.id}`);
+        triggerIds.add(record.id);
+      }
+      if (typeof record.family === 'string') familiesBySplit[split].add(record.family);
+      if (record.forbidden_skills?.includes(record.expected_primary)) {
+        fail(`${label}: expected_primary ${record.expected_primary} is also forbidden`);
+      }
+      if (record.allowed_secondary?.includes(record.expected_primary)) {
+        fail(`${label}: expected_primary ${record.expected_primary} duplicated in allowed_secondary`);
+      }
+    }
+  }
+  for (const family of REQUIRED_TRIGGER_FAMILIES) {
+    for (const split of ['train', 'validation']) {
+      if (!familiesBySplit[split].has(family)) {
+        fail(`trigger/${split}.jsonl: required hard-negative family '${family}' not represented`);
+      }
+    }
+  }
+  const catalogPath = join(triggerDir, 'catalog.json');
+  if (!existsSync(catalogPath)) {
+    fail('trigger/catalog.json: missing');
+  } else {
+    const catalog = loadJson(catalogPath);
+    if (catalog) {
+      const pinpointNames = ['pinpoint', 'pinpoint-review', 'pinpoint-commit', 'pinpoint-pr', 'pinpoint-help'];
+      const entries = Array.isArray(catalog.skills) ? catalog.skills : [];
+      if (entries.length === 0) fail('trigger/catalog.json: no skills recorded');
+      for (const name of pinpointNames) {
+        const entry = entries.find((skill) => skill.name === name);
+        if (!entry) {
+          fail(`trigger/catalog.json: Pinpoint skill '${name}' not recorded`);
+        } else if (typeof entry.description !== 'string' || entry.description.length === 0) {
+          fail(`trigger/catalog.json: '${name}' has no recorded description`);
+        }
+      }
+      for (const [index, entry] of entries.entries()) {
+        if (typeof entry.name !== 'string' || typeof entry.source !== 'string' || typeof entry.description !== 'string') {
+          fail(`trigger/catalog.json: skills[${index}] needs name, source, description`);
+        }
       }
     }
   }

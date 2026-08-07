@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pinpoint trigger-dataset case",
+  "type": "object",
+  "required": [
+    "id",
+    "locale",
+    "prompt",
+    "expected_primary",
+    "allowed_secondary",
+    "forbidden_skills",
+    "criticality",
+    "family",
+    "constraints",
+    "rationale"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^(TR|VA)-[0-9]{3}$"
+    },
+    "locale": {
+      "enum": ["en", "zh"]
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "expected_primary": {
+      "enum": [
+        "pinpoint",
+        "pinpoint-review",
+        "pinpoint-commit",
+        "pinpoint-pr",
+        "pinpoint-help",
+        "none"
+      ]
+    },
+    "allowed_secondary": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "pinpoint",
+          "pinpoint-review",
+          "pinpoint-commit",
+          "pinpoint-pr",
+          "pinpoint-help"
+        ]
+      }
+    },
+    "forbidden_skills": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "pinpoint",
+          "pinpoint-review",
+          "pinpoint-commit",
+          "pinpoint-pr",
+          "pinpoint-help"
+        ]
+      }
+    },
+    "criticality": {
+      "enum": ["critical", "normal"]
+    },
+    "family": {
+      "type": "string"
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rationale": {
+      "type": "string"
+    }
+  }
+}

@@ -856,16 +856,16 @@ separate.
 
 ### 4.2 Build trigger datasets before editing descriptions
 
-- [ ] Add `evals/trigger/train.jsonl` and `validation.jsonl`.
-- [ ] Give each case a stable ID, locale, prompt, expected primary Skill,
+- [x] Add `evals/trigger/train.jsonl` and `validation.jsonl`.
+- [x] Give each case a stable ID, locale, prompt, expected primary Skill,
   allowed secondary sequence, forbidden Skills, criticality, and rationale.
-- [ ] Include realistic English and Chinese prompts.
-- [ ] Include explicit and implicit requests, terse prompts, long issue reports,
+- [x] Include realistic English and Chinese prompts.
+- [x] Include explicit and implicit requests, terse prompts, long issue reports,
   typos, conversational phrasing, and mixed requests.
-- [ ] Include near-miss hard negatives, not only obvious unrelated prompts.
-- [ ] Keep a held-out validation set that is not used while rewriting
+- [x] Include near-miss hard negatives, not only obvious unrelated prompts.
+- [x] Keep a held-out validation set that is not used while rewriting
   descriptions.
-- [ ] Start with approximately 20 high-value near-miss cases covering the two
+- [x] Start with approximately 20 high-value near-miss cases covering the two
   most consequential routing boundaries: implementation versus standalone
   read-only review (~8), and drafting versus explicitly authorized delivery
   actions (~8), plus ~4 mixed-request, help, or merge-forbidden control cases.
@@ -878,19 +878,19 @@ separate.
 
 Required hard-negative families:
 
-- [ ] implementation request → `pinpoint`, not standalone `pinpoint-review`;
-- [ ] read-only diff/PR audit → `pinpoint-review`, not mutating `pinpoint`;
-- [ ] request to draft a commit message without committing → no implicit
+- [x] implementation request → `pinpoint`, not standalone `pinpoint-review`;
+- [x] read-only diff/PR audit → `pinpoint-review`, not mutating `pinpoint`;
+- [x] request to draft a commit message without committing → no implicit
   `pinpoint-commit` authorization;
-- [ ] explicit request to create the commit → `pinpoint-commit`;
-- [ ] request to draft PR text versus request to publish a PR → both remain
+- [x] explicit request to create the commit → `pinpoint-commit`;
+- [x] request to draft PR text versus request to publish a PR → both remain
   inside `pinpoint-pr`, with publication separately authorized;
-- [ ] help/install/which-command questions → `pinpoint-help`;
-- [ ] pure behavior-preserving refactor → no core defect workflow unless a
+- [x] help/install/which-command questions → `pinpoint-help`;
+- [x] pure behavior-preserving refactor → no core defect workflow unless a
   defect is also stated; keep unowned until Phase 7 proves a route;
-- [ ] generic architecture advice or code explanation → no Pinpoint Skill;
-- [ ] "commit, push, and open a PR" → explicit sequence with no merge permission;
-- [ ] "review and merge" → review may run, merge remains forbidden.
+- [x] generic architecture advice or code explanation → no Pinpoint Skill;
+- [x] "commit, push, and open a PR" → explicit sequence with no merge permission;
+- [x] "review and merge" → review may run, merge remains forbidden.
 
 ### 4.3 Isolate the trigger harness
 

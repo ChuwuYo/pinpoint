@@ -1,0 +1,56 @@
+{
+  "revision": 1,
+  "note": "Controlled catalog for trigger runs (4.3): the 5 Pinpoint skills under test plus 5 comparison skills that are realistic selector near-misses. Pinpoint descriptions are verbatim from skills/*/SKILL.md frontmatter at the recorded commit; comparison descriptions are verbatim from the harness's installed catalog. Never edit Pinpoint descriptions to improve trigger scores outside PR 7.",
+  "skills": [
+    {
+      "name": "pinpoint",
+      "source": "repo:skills/pinpoint/SKILL.md",
+      "description": "Trace ambiguous or high-risk software defects and performance problems to the owning runtime boundary, implement the smallest complete fix, validate the real mechanism, and run evidence-based adversarial review. Use for bug fixes, performance optimization, issue triage, architecture or regression review, cross-platform behavior, browser or native integration, accessibility, internationalization, external protocols, sync, persistence, UI geometry, or anything reported as broken or slow where blast radius and proof matter."
+    },
+    {
+      "name": "pinpoint-review",
+      "source": "repo:skills/pinpoint-review/SKILL.md",
+      "description": "Run evidence-based adversarial review of a diff, branch, or pull request using parallel concern-axis reviewers, a scored re-rank gate, and a strict noise budget. Use when reviewing code changes, auditing a fix or optimization before delivery, checking a diff for regressions, verifying claims against evidence, or when the pinpoint skill reaches its review stage. Read-only — never edits files."
+    },
+    {
+      "name": "pinpoint-commit",
+      "source": "repo:skills/pinpoint-commit/SKILL.md",
+      "description": "Inspect repository state, prepare repository-aligned commit messages, stage exact files, and create commits without touching unrelated work. Use when the user asks for a commit, commit message, staging review, commit splitting, conventional commit, or verification of what a commit contains."
+    },
+    {
+      "name": "pinpoint-pr",
+      "source": "repo:skills/pinpoint-pr/SKILL.md",
+      "description": "Inspect branch and remote topology, prepare evidence-backed pull request titles and bodies, and push or create pull requests only when authorized. Use when the user asks for a PR title, PR description, fork synchronization, branch publication, pull request creation, reviewer response, or final PR scope review."
+    },
+    {
+      "name": "pinpoint-help",
+      "source": "repo:skills/pinpoint-help/SKILL.md",
+      "description": "Explain the Pinpoint Skill suite, choose the correct workflow, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use Pinpoint, Pinpoint help, available Pinpoint workflows, or the difference between pinpoint, pinpoint-review, pinpoint-commit, and pinpoint-pr."
+    },
+    {
+      "name": "code-review",
+      "source": "installed:~/.agents/skills/code-review",
+      "description": "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\"."
+    },
+    {
+      "name": "review-swarm",
+      "source": "installed:~/.agents/skills/dimillian-skills/review-swarm",
+      "description": "Parallel read-only multi-agent review of a current git diff or explicit file scope to find behavioral regressions, security or privacy risks, performance or reliability issues, and contract or test coverage gaps. Use when the user asks for a review swarm, parallel review, diff review, regression review, security review, or wants high-signal issues plus a prioritized fix path without editing files."
+    },
+    {
+      "name": "caveman-commit",
+      "source": "installed:~/.agents/skills/caveman-commit",
+      "description": "Ultra-compressed commit message generator. Cuts noise from commit messages while preserving intent and reasoning. Conventional Commits format. Subject ≤50 chars, body only when \"why\" isn't obvious. Use when user says \"write a commit\", \"commit message\", \"generate commit\", \"/commit\", or invokes /caveman-commit. Auto-triggers when staging changes."
+    },
+    {
+      "name": "tdd",
+      "source": "installed:~/.agents/skills/tdd",
+      "description": "Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions \"red-green-refactor\", or wants integration tests."
+    },
+    {
+      "name": "debugging-instruments",
+      "source": "installed:~/.agents/skills/swift-ios-skills/skills/debugging-instruments",
+      "description": "Debug iOS apps and profile performance using LLDB, Memory Graph Debugger, and Instruments. Use when diagnosing crashes, memory leaks, retain cycles, main thread hangs, slow rendering, build failures, or when profiling CPU, memory, energy, and network usage."
+    }
+  ]
+}
