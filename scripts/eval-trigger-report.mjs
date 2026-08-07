@@ -72,16 +72,26 @@ for (const condition of ['automatic', 'explicit']) {
     const caseRecord = cases.get(record.case);
     const expected = record.expected_primary;
     const selected = record.selected_skills ?? [];
-    const cell = selected.length === 0 ? 'none' : selected.length === 1 ? selected[0] : 'multiple';
+    const pinpointSelected = selected.filter((name) => SKILLS.includes(name));
+    const cell =
+      pinpointSelected.length === 0
+        ? selected.length === 0
+          ? 'none'
+          : 'non-pinpoint'
+        : pinpointSelected.length === 1 && selected.length === 1
+          ? pinpointSelected[0]
+          : 'multiple';
     const key = `${expected} -> ${cell}`;
     matrix.set(key, (matrix.get(key) ?? 0) + 1);
     outcomeCounts.set(record.outcome, (outcomeCounts.get(record.outcome) ?? 0) + 1);
 
+    const allowedSecondary = new Set(caseRecord?.allowed_secondary ?? []);
     for (const skill of SKILLS) {
       const bucket = stats.get(skill);
       if (selected.includes(skill) && expected === skill) bucket.tp += 1;
-      else if (selected.includes(skill) && expected !== skill) bucket.fp += 1;
-      else if (!selected.includes(skill) && expected === skill) bucket.fn += 1;
+      else if (selected.includes(skill) && expected !== skill) {
+        if (!allowedSecondary.has(skill)) bucket.fp += 1;
+      } else if (!selected.includes(skill) && expected === skill) bucket.fn += 1;
     }
 
     if (caseRecord?.criticality === 'critical' && record.outcome !== 'correct') {
@@ -103,10 +113,10 @@ for (const condition of ['automatic', 'explicit']) {
 
   lines.push('### Confusion matrix (expected -> selected)');
   lines.push('');
-  lines.push('| expected | ' + [...labels, 'multiple'].join(' | ') + ' |');
-  lines.push('| --- | ' + [...labels, 'multiple'].map(() => '---').join(' | ') + ' |');
+  lines.push('| expected | ' + [...labels, 'multiple', 'non-pinpoint'].join(' | ') + ' |');
+  lines.push('| --- | ' + [...labels, 'multiple', 'non-pinpoint'].map(() => '---').join(' | ') + ' |');
   for (const expected of labels) {
-    const cells = [...labels, 'multiple'].map((cell) => matrix.get(`${expected} -> ${cell}`) ?? 0);
+    const cells = [...labels, 'multiple', 'non-pinpoint'].map((cell) => matrix.get(`${expected} -> ${cell}`) ?? 0);
     if (cells.every((count) => count === 0)) continue;
     lines.push(`| ${expected} | ${cells.join(' | ')} |`);
   }

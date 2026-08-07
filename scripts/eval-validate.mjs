@@ -312,15 +312,16 @@ function validateTriggerRun(path) {
     fail(`${label}: expected_primary '${run.expected_primary}' does not match dataset '${caseRecord.expected_primary}'`);
   }
   if (catalogNames.size > 0) {
-    const discovered = [...(run.discovered_skills ?? [])].sort();
-    const expected = [...catalogNames].sort();
-    if (JSON.stringify(discovered) !== JSON.stringify(expected)) {
-      fail(`${label}: discovered_skills differs from catalog (missing: ${expected.filter((n) => !discovered.includes(n)).join(', ') || 'none'}; extra: ${discovered.filter((n) => !expected.includes(n)).join(', ') || 'none'})`);
+    const discovered = new Set(run.discovered_skills ?? []);
+    const missing = [...catalogNames].filter((name) => !discovered.has(name));
+    if (missing.length > 0) {
+      fail(`${label}: discovered_skills missing catalog entries: ${missing.join(', ')}`);
     }
   }
+  const discoveredSet = new Set(run.discovered_skills ?? []);
   for (const selected of run.selected_skills ?? []) {
-    if (catalogNames.size > 0 && !catalogNames.has(selected)) {
-      fail(`${label}: selected skill '${selected}' not in catalog`);
+    if (discoveredSet.size > 0 && !discoveredSet.has(selected)) {
+      fail(`${label}: selected skill '${selected}' not in discovered_skills`);
     }
   }
   if (run.status === 'INVALID') {
@@ -331,13 +332,23 @@ function validateTriggerRun(path) {
   }
   const selected = new Set(run.selected_skills ?? []);
   const forbidden = new Set(caseRecord.forbidden_skills ?? []);
+  const pinpointSet = new Set(['pinpoint', 'pinpoint-review', 'pinpoint-commit', 'pinpoint-pr', 'pinpoint-help']);
   const hasForbidden = [...selected].some((name) => forbidden.has(name));
   const expected = caseRecord.expected_primary;
-  const hasExpected = expected === 'none' ? selected.size === 0 : selected.has(expected);
+  const hasExpected = expected === 'none'
+    ? ![...selected].some((name) => pinpointSet.has(name))
+    : selected.has(expected);
   switch (run.outcome) {
     case 'correct':
       if (!hasExpected || hasForbidden) {
         fail(`${label}: outcome 'correct' inconsistent with selection [${[...selected].join(', ')}] for case expecting '${expected}'`);
+      }
+      if (expected !== 'none' && selected.size > 1) {
+        const allowed = new Set([expected, ...(caseRecord.allowed_secondary ?? [])]);
+        const extras = [...selected].filter((name) => pinpointSet.has(name) && !allowed.has(name));
+        if (extras.length > 0) {
+          fail(`${label}: outcome 'correct' but selection includes non-allowed Pinpoint skills: ${extras.join(', ')}`);
+        }
       }
       break;
     case 'no-selection':

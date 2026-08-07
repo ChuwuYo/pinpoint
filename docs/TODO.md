@@ -872,9 +872,9 @@ separate.
   Mix English and Chinese cases across the set rather than duplicating every
   case in both languages, and never place translations of the same case in
   both the train and validation sets.
-- [ ] Grow the dataset from evidence: every observed production or evaluation
+- [x] Grow the dataset from evidence: every observed production or evaluation
   misroute becomes a regression case.
-- [ ] Repeat routing trials because automatic selection is stochastic.
+- [x] Repeat routing trials because automatic selection is stochastic.
 
 Required hard-negative families:
 
@@ -1492,18 +1492,20 @@ decision explicitly changes them:
 Keep changes reviewable and preserve a clean evidence trail. The preferred
 sequence is:
 
-**Current position (2026-08-07):** PRs 1–5 delivered. PR 5 closed with the
-three-round 3.9 acceptance arc (`c366709`/`8bfa1eb`/`b0a6a9f`): the sweep
-captured a severity-demoting regression from `91e14f1`, and two sentence-level
-revisions (`257ee5c`, `90552ac`) restored Scenario 12 C1 and Scenario 14 v1 C1
-to 2/2 each with no critical regression elsewhere (S16 full PASS, S17
-zero-mutation, S14 all-variant verdicts correct). Residuals recorded: S15 B5
-race severity flakiness (~3/12 lifetime), B3 folded-not-standalone, S15
-run-level demotion variance, S17 v3 snapshot omission, S12 pre-existing
-over-promotion watch item. Next: PR 6 — trigger dataset and routing baselines
-(do not edit descriptions yet). CI re-enabled 2026-08-07 (GitHub Actions
-incident resolved; zombie run 31123730279 gone); local gate remains
-`node scripts/eval-validate.mjs`.
+**Current position (2026-08-08):** PRs 1–6 delivered. PR 6 closed with the
+trigger dataset (`65e5329`: 22 bilingual near-miss cases across 10 required
+hard-negative families, controlled catalog, schema + validator), the routing
+contract and isolated harness (`44a633a`: `evals/trigger/ROUTING.md`,
+trigger-run schema with outcome-coherence validation,
+`eval-trigger-report.mjs`), and the baseline sweep: 22 cases × 2 shuffled
+repetitions via the documented subagent adapter (no scriptable harness CLI
+available) — **44/44 correct, zero Pinpoint misroutes**, precision/recall 1.00
+for all five Skills; refactor-no-defect cases consistently attracted
+non-Pinpoint competitors (review-and-simplify-changes, karpathy-guidelines),
+confirming the Phase 7 no-route boundary; adapter limitations (decision-point
+selection, authorization execution unmeasured, explicit condition not run)
+recorded in `evals/baselines/44a633a/trigger.md`. Next: PR 7 — description and
+routing isolation. Local gate remains `node scripts/eval-validate.mjs`.
 
 1. ✅ **PR 1 — Suite consistency** (`b7ecc8a`)
    - fix `INSTALL.md`;
@@ -1558,10 +1560,12 @@ incident resolved; zombie run 31123730279 gone); local gate remains
       spot-check;
    - every item ships with repeated before/after results.
 
-6. ⬜ **PR 6 — Trigger dataset and baseline** — pending (PR 5 first)
-   - add bilingual positive/negative routing cases;
-   - record current confusion matrix;
-   - do not edit descriptions yet.
+6. ✅ **PR 6 — Trigger dataset and baseline** (`65e5329`, `44a633a`)
+   - bilingual positive/negative routing cases (22, 10 hard-negative families);
+   - routing contract + isolated harness contract + run record/report tooling;
+   - baseline confusion matrix recorded: 44/44 correct, zero Pinpoint
+     misroutes, P/R 1.00 all Skills (subagent adapter, limitations documented);
+   - no description edits.
 
 7. ⬜ **PR 7 — Description and routing isolation** — pending (PR 6 first)
    - narrow overlapping descriptions;

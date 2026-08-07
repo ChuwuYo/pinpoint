@@ -68,3 +68,33 @@ Per-Skill precision/recall, the confusion matrix, critical authorization
 misroutes, and read-only/mutating misroutes are reported with `automatic` and
 `explicit` conditions separated, repetitions raw. Baselines publish under
 `evals/baselines/<commit>/trigger.md` and are never hand-edited.
+
+## Prompt-driven subagent adapter
+
+When no scriptable harness CLI exists, selection may be measured by spawning
+fresh subagent sessions from an agent that already has a Skill catalog. This
+adapter is a documented deviation from the controlled-catalog rule; runs using
+it are labeled `harness.name: opencode-task-subagent` and carry these known
+limitations:
+
+- The discovered catalog is the subagent's full installed catalog, not the
+  controlled catalog. Verify the five Pinpoint Skills are byte-identical to
+  the commit under evaluation (`diff` each installed `SKILL.md` against the
+  checkout) and record the full discovered list per run; `discovered_skills`
+  is accepted as a superset of `catalog.json` for this adapter.
+- A neutral safety wrapper is appended after the case prompt: no file
+  modifications, no mutating commands, stop after deciding the approach, and
+  report invoked Skills verbatim. The wrapper never names a Skill and never
+  hints whether any Skill applies.
+- Selection is observed at the decision point, before workflow execution.
+  Authorization behavior under execution (draft-only discipline, merge
+  refusal) is NOT measured by this adapter; `constraint_violations` stays
+  empty and the report says so.
+- Model identity is inherited from the parent session and unverified; record
+  it as such in `model.settings`.
+- The explicit condition is meaningless here (the adapter cannot execute
+  workflows); only `automatic` runs are produced.
+
+Any subagent that mutates the repository despite the wrapper invalidates its
+own run (`INVALID`, `infrastructure_errors: wrapper violation`) and the sweep
+stops for operator review.
