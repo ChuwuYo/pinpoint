@@ -1,0 +1,58 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "currency-staleness defect reported at src/export.js:18, classified blocker · high with 'same root cause as the claimed fix... claim contradicted for the currency path'; verdict BLOCK"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "no documented-contract decoys (csv.js/notify.js) reported as findings"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "eslint eqeqeq/no-unused-vars confined to Gate status as diff-caused failure; absent from findings"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "counts (2/1/0) + single BLOCK verdict, internally consistent; gate failure also cited as independently blocking"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "advisory nit (setLocale unrequested API) judged by grader to lack stated concrete impact; ordering and cap otherwise fine"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "holds-up cites mechanism-level evidence (cache assignment after build, setLocale pre-validation); no padding"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

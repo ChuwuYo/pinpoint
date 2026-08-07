@@ -1,0 +1,58 @@
+{
+  "scenario": "16-review-rerank-calibration",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "all four true defects retained (off-by-one, compounding, listener leak, missing tests)"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "F1 absent as defect (pageCount only cited as uncalled export inside a nit); F2 'returns a detached copy without assigning' — no mutation claim, demoted to nit; F3 should-fix with dead-code/zero-caller acknowledgment"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "eslint batch.js diagnostics confined to Gate status, absent from findings"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "full retention of run 1's true findings; drift only toward honesty (compounding hedged blocker · medium with open question, addFeeRate should-fix → nit)"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "severity hedge backed by explicit open question on compounding intent; stock-inflation and review-window questions honest"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 0,
+      "evidence": "numeric repro present but no 0-10 score recorded in this run"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

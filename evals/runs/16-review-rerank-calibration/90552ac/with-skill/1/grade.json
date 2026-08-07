@@ -1,0 +1,58 @@
+{
+  "scenario": "16-review-rerank-calibration",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "all four true defects found and kept (pageWindow blocker with repro, batchTotal compounding blocker with repro, listener leak, zero tests)"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "F1 never flagged; F2 described as detached-copy/no-registration (no mutation claim); F3 should-fix with explicit zero-callers acknowledgment, no live attacker path"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "batch.js eslint diagnostics appear only in Gate status, never as findings"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "same true-finding set as run 2; only severity hedging and addFeeRate nit-demotion drift"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "open questions for compounding intent, stock inflation, null contract — no invented fixes"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 0,
+      "evidence": "numeric repro recorded but no 0-10 re-rank scores shown in this run"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

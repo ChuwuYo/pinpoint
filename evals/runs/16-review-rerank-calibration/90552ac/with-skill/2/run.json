@@ -1,0 +1,54 @@
+{
+  "scenario": "16-review-rerank-calibration",
+  "scenario_revision": 2,
+  "condition": "with-skill",
+  "repetition": 2,
+  "randomized_order": false,
+  "model": {
+    "id": "kimi-for-coding/k3",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "desktop session, 2026-08-07"
+  },
+  "pinpoint_commit": "90552ac",
+  "skill_catalog": [
+    "pinpoint-review"
+  ],
+  "invocation_method": "explicit",
+  "fixture": {
+    "ref": "scenarios/16-review-rerank-calibration (generator: setup.cjs, rev 2)",
+    "hash": "eaeabea9",
+    "clean_start_proof": "freshly materialized by setup.cjs; checks.cjs integrity OK before and after run"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "npm test",
+      "exit": 0,
+      "log": "2/2 pre-existing tests pass"
+    },
+    {
+      "cmd": "npx eslint src/",
+      "exit": 1,
+      "log": "diff-caused failure (exit 0 on main)"
+    }
+  ],
+  "final_response": "final.md",
+  "repo_state": {
+    "before": "clean fixture, branch checked out",
+    "after": "clean fixture (read-only review run); checks.cjs integrity OK"
+  },
+  "status": "PASS",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [
+    "patch"
+  ],
+  "redactions": []
+}

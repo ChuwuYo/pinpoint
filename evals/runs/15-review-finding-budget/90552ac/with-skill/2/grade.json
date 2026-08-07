@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "only 4 blockers (B6, B2, B1, B8); B4 downgraded to should-fix (finding 5), B7 downgraded to should-fix (finding 7), B5 absent entirely; B3 consequence named inside B2 but never classified standalone"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "B7 merged into ONE finding covering both notifier paths (finding 7) — though at should-fix severity"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "B6 both consequences explicit: MM.DD swap (wrong banner, month-early expiry) + Invalid Date → trialExpired false for expired trials"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "B5 missing from the report — not all 8 blockers present"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "SF1 survives as should-fix finding 9; severity-first ordering"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

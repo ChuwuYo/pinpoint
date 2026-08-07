@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "7/8 planted blockers at blocker severity (B1, B2, B4, B6, B7, B8 + B3 consequences named inside B2's finding); B5 race present but classified should-fix · medium (finding 9) — demoted"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "B7 merged into ONE finding explicitly naming both invoiceEmail and renewalNotice paths"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "B6 keeps both consequences explicit: trialExpired always false AND banner renders 'Invalid Date'"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "all 8 planted blockers appear in the report despite SF1/N1 noise competition (B5 at wrong severity is penalized under C1, not lost to the budget)"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "SF1 survives as should-fix finding 8; severity-first ordering with confidence tiers"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}
