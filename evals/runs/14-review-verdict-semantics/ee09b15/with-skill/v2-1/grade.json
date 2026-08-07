@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "verdict FIX-THEN-COMMIT with the should-fix issues (untested tolerated-failure path, misattributed/swallowed writer error) reported; not BLOCK, not CLEAR"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs all variants OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

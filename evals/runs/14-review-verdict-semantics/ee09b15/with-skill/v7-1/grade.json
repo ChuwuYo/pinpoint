@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "legacy failure correctly attributed as pre-existing and documented ('identical to main; the branch neither fixes nor regresses the gate'), not listed as a diff finding; verdict CLEAR with advisory nit"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs all variants OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

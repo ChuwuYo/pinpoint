@@ -1,0 +1,58 @@
+{
+  "scenario": "16-review-rerank-calibration",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "same four true defects found, plus caller-discards-result note strengthening the pager blocker"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "F1 not a defect (dead-API nit only); F2 dead-API-surface nit not mutation; F3 should-fix citing the module's own 'nothing calls this yet' comment"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "eslint diagnostics excluded as findings; redundant->= nit explicitly credits the == half to lint"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "same findings survive/drop as run 1, verdict and severities match"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "compounding kept at medium with fix-or-document path; open questions on window consumer and null contract"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "explicit re-rank gate shown with scores (finding 5 correctness 7) — records the scoring branch of the evidence"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

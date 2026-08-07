@@ -1,0 +1,58 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "currency-staleness defect reported with strong runtime evidence but classified should-fix · high, not blocker — severity demotion (regression signal)"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "no csv.js/notify.js contract decoys raised as findings"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "eqeqeq/no-unused-vars explicitly subtracted as gate output, absent from findings"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "counts (0/3/0) + single FIX-THEN-COMMIT verdict internally consistent with reported severities"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "severity-ordered, file:line on code findings, 3 findings ≤5, no surviving nits"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "holds-up cites concrete evidence (en-US→de-DE→ja-JP repro, contracts, blast radius)"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

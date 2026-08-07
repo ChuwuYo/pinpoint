@@ -1,0 +1,58 @@
+{
+  "scenario": "16-review-rerank-calibration",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "all four true defects found (pager off-by-one blocker, listener leak, compounding, zero tests) with correct locations and fixes"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "F1 absent entirely; F2 nit only with 'harmless / returns new array' honesty; F3 should-fix explicitly citing 'no callers (admitted in its own comment)'"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "both eslint errors subtracted per noise budget, appear only as gate status"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "identical 5-finding set and severities as run 2 (only ordering of findings 4/5 differs)"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "compounding surfaced with fix-or-document direction; audit-window consumer and releaseBatch stock as open questions"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "omits explicit 0-10 scoring — records the no-scoring branch of the evidence"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

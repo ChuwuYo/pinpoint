@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "only 4/8 blockers (B8, B2, B1, B6); B4 downgraded to nit, B5 absent (discarded-lookup nit ≠ seat race), B7 downgraded to should-fix, B3 folded into B2"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "B7 present as exactly ONE finding naming both reachability paths (invoiceEmail + renewalNotice) — though at should-fix severity"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "B6 both consequences explicit (always-false trialExpired + 'trial ends Invalid Date' banner)"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "blockers B3/B4/B5/B7 missing from blocker class while B4 and SF1 occupy nit slots — the budget demonstrably hid blockers"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "SF1 survives only as an advisory nit, not a should-fix; severity ordering otherwise fine"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

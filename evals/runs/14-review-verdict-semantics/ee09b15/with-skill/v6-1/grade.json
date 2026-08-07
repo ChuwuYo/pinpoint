@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "verification treated as not established: run explicitly shows the only test of the new module is SKIPPED under the configured gate ('zero coverage in CI'), raised as should-fix; no pass claimed from the default gate, no failure fabricated; verdict FIX-THEN-COMMIT"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs all variants OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

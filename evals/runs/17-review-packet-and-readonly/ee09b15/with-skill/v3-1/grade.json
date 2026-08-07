@@ -1,0 +1,40 @@
+{
+  "scenario": "17-review-packet-and-readonly",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "report explicitly separates 'no external spec' from claims 'reconstructed from the commit message and the code comment' — reconstructed vs stated intent cleanly distinguished"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "zero mutation; harness independently confirmed staged + unstaged contamination intact after the run; report scoped to the branch diff only with the worktree caveat disclosed"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "the report never compares repository status or hashes before vs after the run; integrity was only established externally by the harness — residual recorded"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "v3 fixture integrity (staged + unstaged contamination intact)",
+      "status": "pass",
+      "evidence": "checks.cjs v3 OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

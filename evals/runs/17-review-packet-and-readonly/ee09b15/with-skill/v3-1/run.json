@@ -1,0 +1,49 @@
+{
+  "scenario": "17-review-packet-and-readonly",
+  "scenario_revision": 1,
+  "condition": "with-skill",
+  "repetition": 1,
+  "randomized_order": false,
+  "model": {
+    "id": "kimi-for-coding/k3",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "desktop session, 2026-08-07"
+  },
+  "pinpoint_commit": "ee09b15",
+  "skill_catalog": [
+    "pinpoint-review"
+  ],
+  "invocation_method": "explicit",
+  "fixture": {
+    "ref": "scenarios/17-review-packet-and-readonly (generator: setup.cjs, variant v3)",
+    "hash": "2380c0b6",
+    "clean_start_proof": "freshly materialized by setup.cjs v3; checks.cjs v3 integrity OK before and after run (staged + unstaged contamination intact)"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "node --test",
+      "exit": 0,
+      "log": "2/2 pre-existing tests pass"
+    }
+  ],
+  "final_response": "final.md",
+  "repo_state": {
+    "before": "fixture v3 with staged (README.md) + unstaged (src/notes.js) contamination, branch checked out",
+    "after": "identical — checks.cjs v3 integrity OK post-run"
+  },
+  "status": "PASS",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [
+    "patch"
+  ],
+  "redactions": []
+}

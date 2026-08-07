@@ -1,0 +1,28 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "report.js defect reported accurately but classified should-fix (blocker question deferred to open questions: 'If the latter, finding 1 elevates to blocker'); verdict FIX-THEN-COMMIT, not BLOCK — regression vs 185d0f1's 2/2 BLOCK"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture git status clean before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs all variants OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

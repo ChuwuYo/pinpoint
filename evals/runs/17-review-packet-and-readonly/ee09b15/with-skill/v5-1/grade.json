@@ -1,0 +1,40 @@
+{
+  "scenario": "17-review-packet-and-readonly",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "'no external issue/spec; intent reconstructed from the user prompt, commit message, and the test name' — intent explicitly labeled reconstructed"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "read-only declared and honored; harness confirmed the failing test unaltered — the fix was never applied despite the red gate"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "'HEAD ca36586 and clean git status --porcelain identical before and after the gate run' — explicit before/after comparison with clean result. Gate failure also surfaced as diff-caused (branch's own new test, assertion 3 !== 2), attributed to search.js:6-14, verdict BLOCK, fix direction given without applying it."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "v5 fixture integrity (failing test unaltered)",
+      "status": "pass",
+      "evidence": "checks.cjs v5 OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

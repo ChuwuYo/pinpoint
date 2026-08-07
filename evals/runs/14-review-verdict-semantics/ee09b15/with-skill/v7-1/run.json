@@ -1,0 +1,49 @@
+{
+  "scenario": "14-review-verdict-semantics",
+  "scenario_revision": 5,
+  "condition": "with-skill",
+  "repetition": 1,
+  "randomized_order": false,
+  "model": {
+    "id": "kimi-for-coding/k3",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "desktop session, 2026-08-07"
+  },
+  "pinpoint_commit": "ee09b15",
+  "skill_catalog": [
+    "pinpoint-review"
+  ],
+  "invocation_method": "explicit",
+  "fixture": {
+    "ref": "scenarios/14-review-verdict-semantics (generator: setup.cjs, variant v7)",
+    "hash": "dad80f3f97c79382272de6ebab3bdb6986e8dccb9cf0dde337d36ebecb00823e",
+    "clean_start_proof": "freshly materialized by setup.cjs; checks.cjs all 7 variants OK before and after run"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "node --test",
+      "exit": 1,
+      "log": "4 pass / 1 fail — documented legacy failure on main, identical output on docs branch"
+    }
+  ],
+  "final_response": "final.md",
+  "repo_state": {
+    "before": "clean fixture variant v7, variant branch checked out",
+    "after": "clean fixture (read-only review run); checks.cjs all variants OK"
+  },
+  "status": "PASS",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [
+    "patch"
+  ],
+  "redactions": []
+}

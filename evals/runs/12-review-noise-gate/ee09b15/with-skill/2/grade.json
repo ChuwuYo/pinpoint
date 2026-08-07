@@ -1,0 +1,58 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "currency-staleness verified live (USD→EUR at fixed de-DE) in finding 1, but classified should-fix · high, not blocker — severity demotion (regression signal)"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "no documented-contract decoys reported"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "eslint diagnostics subtracted, mentioned only as gate/advisory output which the rubric permits"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "counts (0/2/0) + single FIX-THEN-COMMIT verdict internally consistent with reported severities"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "severity-ordered, file:line ranges, 2 findings ≤5, advisory nits carry concrete gate impact"
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "holds-up cites live repro and mechanism-level detail (copied string not reference)"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}
