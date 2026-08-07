@@ -1501,8 +1501,8 @@ zero-mutation, S14 all-variant verdicts correct). Residuals recorded: S15 B5
 race severity flakiness (~3/12 lifetime), B3 folded-not-standalone, S15
 run-level demotion variance, S17 v3 snapshot omission, S12 pre-existing
 over-promotion watch item. Next: PR 6 — trigger dataset and routing baselines
-(do not edit descriptions yet). CI remains `disabled_manually` (GitHub Actions
-incident); zombie run 31123730279 deletion still pending retry; local gate is
+(do not edit descriptions yet). CI re-enabled 2026-08-07 (GitHub Actions
+incident resolved; zombie run 31123730279 gone); local gate remains
 `node scripts/eval-validate.mjs`.
 
 1. ✅ **PR 1 — Suite consistency** (`b7ecc8a`)
