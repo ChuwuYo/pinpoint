@@ -54,11 +54,17 @@ lines.push('');
 lines.push(`Runs: ${all.length} total, ${scored.length} scored, ${invalid.length} INVALID (excluded).`);
 lines.push('');
 
-for (const condition of ['automatic', 'explicit']) {
-  const batch = scored.filter(({ record }) => record.condition === condition);
-  if (batch.length === 0) continue;
+const groups = new Map();
+for (const entry of scored) {
+  const model = entry.record.model?.id ?? 'unknown';
+  const key = `${entry.record.condition} | ${model}`;
+  if (!groups.has(key)) groups.set(key, []);
+  groups.get(key).push(entry);
+}
 
-  lines.push(`## ${condition} condition (${batch.length} runs)`);
+for (const [groupKey, batch] of [...groups.entries()].sort()) {
+  const [condition, model] = groupKey.split(' | ');
+  lines.push(`## ${condition} condition — ${model} (${batch.length} runs)`);
   lines.push('');
 
   const labels = [...SKILLS, 'none'];

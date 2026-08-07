@@ -1492,20 +1492,20 @@ decision explicitly changes them:
 Keep changes reviewable and preserve a clean evidence trail. The preferred
 sequence is:
 
-**Current position (2026-08-08):** PRs 1–6 delivered. PR 6 closed with the
-trigger dataset (`65e5329`: 22 bilingual near-miss cases across 10 required
-hard-negative families, controlled catalog, schema + validator), the routing
-contract and isolated harness (`44a633a`: `evals/trigger/ROUTING.md`,
-trigger-run schema with outcome-coherence validation,
-`eval-trigger-report.mjs`), and the baseline sweep: 22 cases × 2 shuffled
-repetitions via the documented subagent adapter (no scriptable harness CLI
-available) — **44/44 correct, zero Pinpoint misroutes**, precision/recall 1.00
-for all five Skills; refactor-no-defect cases consistently attracted
-non-Pinpoint competitors (review-and-simplify-changes, karpathy-guidelines),
-confirming the Phase 7 no-route boundary; adapter limitations (decision-point
-selection, authorization execution unmeasured, explicit condition not run)
-recorded in `evals/baselines/44a633a/trigger.md`. Next: PR 7 — description and
-routing isolation. Local gate remains `node scripts/eval-validate.mjs`.
+**Current position (2026-08-08, evening):** PRs 1–6 delivered. PR 6 closed
+with the trigger dataset (36 bilingual near-miss cases, 12 hard-negative
+families), routing contract (`evals/trigger/ROUTING.md`), isolated harness
+contract + subagent adapter, and a **hardened cross-model baseline**: k3-256k
+64/72 (89%) vs kimi-for-coding-highspeed 40/72 (56%) on identical prompts and
+catalog (`evals/baselines/c90c917/trigger.md`). Cross-model stable failures
+localize PR 7 targets: pinpoint-help description (meta questions invoke the
+named workflow Skill, recall 0.50 k3 / 0.13 HS), merge-adjacent routing
+(VA-014 fails 4/4 across models in different modes). HighSpeed-only
+no-selection pattern (21 runs, mutating routes) recorded as likely
+wrapper-amplified adapter artifact — watch item, not a description-fix target.
+No description edits yet. Next: PR 7 — description and routing isolation,
+backed by the named failures above. Local gate remains
+`node scripts/eval-validate.mjs`.
 
 1. ✅ **PR 1 — Suite consistency** (`b7ecc8a`)
    - fix `INSTALL.md`;
