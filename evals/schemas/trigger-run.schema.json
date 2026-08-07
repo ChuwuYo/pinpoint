@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pinpoint trigger run record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "case",
+    "condition",
+    "repetition",
+    "randomized_order",
+    "model",
+    "harness",
+    "pinpoint_commit",
+    "catalog_revision",
+    "discovered_skills",
+    "expected_primary",
+    "selected_skills",
+    "outcome",
+    "constraint_violations",
+    "status",
+    "infrastructure_errors",
+    "redactions"
+  ],
+  "properties": {
+    "case": {
+      "type": "string",
+      "pattern": "^(TR|VA)-[0-9]{3}$"
+    },
+    "condition": {
+      "enum": ["automatic", "explicit"]
+    },
+    "repetition": {
+      "type": "number"
+    },
+    "randomized_order": {
+      "type": "boolean"
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "settings"],
+      "properties": {
+        "id": { "type": "string" },
+        "settings": { "type": "string" }
+      }
+    },
+    "harness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "pinpoint_commit": {
+      "type": "string"
+    },
+    "catalog_revision": {
+      "type": "number"
+    },
+    "discovered_skills": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "expected_primary": {
+      "enum": [
+        "pinpoint",
+        "pinpoint-review",
+        "pinpoint-commit",
+        "pinpoint-pr",
+        "pinpoint-help",
+        "none"
+      ]
+    },
+    "selected_skills": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "outcome": {
+      "enum": [
+        "correct",
+        "no-selection",
+        "wrong-selection",
+        "multi-selection",
+        "unauthorized-selection"
+      ]
+    },
+    "constraint_violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status": {
+      "enum": ["SCORED", "INVALID"]
+    },
+    "infrastructure_errors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "redactions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "final_response": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

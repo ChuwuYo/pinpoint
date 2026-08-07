@@ -838,20 +838,20 @@ separate.
 
 ### 4.1 Define the intended routing contract
 
-- [ ] `pinpoint`: investigate and implement a defect fix or measured performance
+- [x] `pinpoint`: investigate and implement a defect fix or measured performance
   improvement at the owning boundary.
-- [ ] `pinpoint-review`: perform a standalone read-only audit of an existing
+- [x] `pinpoint-review`: perform a standalone read-only audit of an existing
   diff, branch, pull request, or completed change.
-- [ ] `pinpoint-commit`: create a commit only after explicit authorization to
+- [x] `pinpoint-commit`: create a commit only after explicit authorization to
   commit the intended changes.
-- [ ] `pinpoint-pr`: prepare or publish pull-request work only within the user's
+- [x] `pinpoint-pr`: prepare or publish pull-request work only within the user's
   explicit authorization; never merge.
-- [ ] `pinpoint-help`: explain installation, invocation, routing, and suite
+- [x] `pinpoint-help`: explain installation, invocation, routing, and suite
   boundaries without performing another workflow.
-- [ ] Define precedence for mixed requests. Example: "review this branch and fix
+- [x] Define precedence for mixed requests. Example: "review this branch and fix
   it" routes primarily to mutating `pinpoint`, then invokes read-only review at
   the review gate; it must not remain trapped in standalone read-only mode.
-- [ ] Define allowed multi-Skill sequences separately from the primary automatic
+- [x] Define allowed multi-Skill sequences separately from the primary automatic
   route.
 
 ### 4.2 Build trigger datasets before editing descriptions
@@ -894,15 +894,15 @@ Required hard-negative families:
 
 ### 4.3 Isolate the trigger harness
 
-- [ ] Use an isolated home/config directory and a controlled Skill catalog.
-- [ ] Verify only the intended Pinpoint version and comparison Skills are
+- [x] Use an isolated home/config directory and a controlled Skill catalog.
+- [x] Verify only the intended Pinpoint version and comparison Skills are
   discoverable.
-- [ ] Record the full discovered Skill list in every trigger run.
-- [ ] Test descriptions in the real catalog shape rather than in a synthetic
+- [x] Record the full discovered Skill list in every trigger run.
+- [x] Test descriptions in the real catalog shape rather than in a synthetic
   one-Skill vacuum.
-- [ ] Run explicit-invocation tests separately; an explicit command should not be
+- [x] Run explicit-invocation tests separately; an explicit command should not be
   scored as evidence of automatic trigger quality.
-- [ ] Record no-selection, multi-selection, wrong-selection, and unauthorized
+- [x] Record no-selection, multi-selection, wrong-selection, and unauthorized
   workflow selection distinctly.
 
 ### 4.4 Tighten descriptions only after the baseline

@@ -7,9 +7,10 @@ Reproducible evidence for Skill behavior. Philosophy lives in
 
 ```text
 evals/
-├── schemas/            # scenario, run, and grading contracts (JSON Schema subset)
-├── harnesses/manual.md # harness-neutral execution contract
+├── schemas/            # scenario, run, grading, and trigger contracts (JSON Schema subset)
+├── harnesses/          # manual.md (quality) and trigger.md (routing) execution contracts
 ├── scenarios/<id>/     # scenario.json + prompt.md + rubric.json + fixture/ (when frozen)
+├── trigger/            # ROUTING.md + catalog.json + train/validation.jsonl + runs/
 ├── runs/<scenario>/<...>/   # run.json + grade.json + final.md + patch.diff
 └── baselines/<ref>/    # published summaries (generated, never hand-edited)
 ```
@@ -23,6 +24,7 @@ incrementally; both forms are readable during migration.
 node scripts/eval-validate.mjs                      # structure + references + statuses
 node scripts/eval-score.mjs evals/runs/<scenario>   # per-condition results, raw repetitions
 node scripts/eval-report.mjs evals/runs/<scenario>  # Markdown summary on stdout
+node scripts/eval-trigger-report.mjs [runs-dir]     # trigger confusion matrix + precision/recall
 ```
 
 All three exit nonzero with actionable messages on failure. No command invokes

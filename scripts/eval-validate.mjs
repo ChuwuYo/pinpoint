@@ -71,7 +71,7 @@ function loadJson(path) {
 }
 
 const schemas = {};
-for (const name of ['scenario', 'run', 'grading', 'trigger-case']) {
+for (const name of ['scenario', 'run', 'grading', 'trigger-case', 'trigger-run']) {
   const schemaPath = join(evalsDir, 'schemas', `${name}.schema.json`);
   if (!existsSync(schemaPath)) {
     fail(`missing schema: evals/schemas/${name}.schema.json`);
@@ -198,6 +198,8 @@ function validateGrade(path) {
 }
 
 const triggerDir = join(evalsDir, 'trigger');
+const triggerCases = new Map();
+let catalogNames = new Set();
 const REQUIRED_TRIGGER_FAMILIES = [
   'impl-not-review',
   'review-not-impl',
@@ -239,6 +241,7 @@ if (existsSync(triggerDir)) {
         }
         if (triggerIds.has(record.id)) fail(`${label}: duplicate case id ${record.id}`);
         triggerIds.add(record.id);
+        triggerCases.set(record.id, record);
       }
       if (typeof record.family === 'string') familiesBySplit[split].add(record.family);
       if (record.forbidden_skills?.includes(record.expected_primary)) {
@@ -277,8 +280,84 @@ if (existsSync(triggerDir)) {
         if (typeof entry.name !== 'string' || typeof entry.source !== 'string' || typeof entry.description !== 'string') {
           fail(`trigger/catalog.json: skills[${index}] needs name, source, description`);
         }
+        if (typeof entry.name === 'string') catalogNames.add(entry.name);
       }
     }
+  }
+
+  const triggerRunsDir = join(triggerDir, 'runs');
+  if (existsSync(triggerRunsDir)) {
+    const walk = (dir) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const path = join(dir, entry.name);
+        if (entry.isDirectory()) walk(path);
+        else if (entry.name.endsWith('.run.json')) validateTriggerRun(path);
+      }
+    };
+    walk(triggerRunsDir);
+  }
+}
+
+function validateTriggerRun(path) {
+  const run = loadJson(path);
+  if (!run) return;
+  const label = path.replace(`${root}/`, '');
+  if (schemas['trigger-run']) validateAgainst(run, schemas['trigger-run'], label);
+  const caseRecord = triggerCases.get(run.case);
+  if (!caseRecord) {
+    fail(`${label}: unknown trigger case '${run.case}'`);
+    return;
+  }
+  if (run.expected_primary !== caseRecord.expected_primary) {
+    fail(`${label}: expected_primary '${run.expected_primary}' does not match dataset '${caseRecord.expected_primary}'`);
+  }
+  if (catalogNames.size > 0) {
+    const discovered = [...(run.discovered_skills ?? [])].sort();
+    const expected = [...catalogNames].sort();
+    if (JSON.stringify(discovered) !== JSON.stringify(expected)) {
+      fail(`${label}: discovered_skills differs from catalog (missing: ${expected.filter((n) => !discovered.includes(n)).join(', ') || 'none'}; extra: ${discovered.filter((n) => !expected.includes(n)).join(', ') || 'none'})`);
+    }
+  }
+  for (const selected of run.selected_skills ?? []) {
+    if (catalogNames.size > 0 && !catalogNames.has(selected)) {
+      fail(`${label}: selected skill '${selected}' not in catalog`);
+    }
+  }
+  if (run.status === 'INVALID') {
+    if ((run.infrastructure_errors ?? []).length === 0) {
+      fail(`${label}: status INVALID requires at least one infrastructure error`);
+    }
+    return;
+  }
+  const selected = new Set(run.selected_skills ?? []);
+  const forbidden = new Set(caseRecord.forbidden_skills ?? []);
+  const hasForbidden = [...selected].some((name) => forbidden.has(name));
+  const expected = caseRecord.expected_primary;
+  const hasExpected = expected === 'none' ? selected.size === 0 : selected.has(expected);
+  switch (run.outcome) {
+    case 'correct':
+      if (!hasExpected || hasForbidden) {
+        fail(`${label}: outcome 'correct' inconsistent with selection [${[...selected].join(', ')}] for case expecting '${expected}'`);
+      }
+      break;
+    case 'no-selection':
+      if (selected.size !== 0) fail(`${label}: outcome 'no-selection' but selection is non-empty`);
+      break;
+    case 'wrong-selection':
+      if (selected.size === 0 || hasExpected) {
+        fail(`${label}: outcome 'wrong-selection' inconsistent with selection [${[...selected].join(', ')}]`);
+      }
+      break;
+    case 'multi-selection':
+      if (selected.size < 2 || !selected.has(expected)) {
+        fail(`${label}: outcome 'multi-selection' requires 2+ selections including expected_primary`);
+      }
+      break;
+    case 'unauthorized-selection':
+      if (!hasForbidden && (run.constraint_violations ?? []).length === 0) {
+        fail(`${label}: outcome 'unauthorized-selection' requires a forbidden selection or a constraint violation`);
+      }
+      break;
   }
 }
 
