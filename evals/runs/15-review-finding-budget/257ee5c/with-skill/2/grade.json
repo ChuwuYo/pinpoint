@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "only 4 blockers (B2, B8, B4, B1); B6 downgraded to should-fix, B5 demonstrated by probe yet filed as nit, B7 absent entirely, B3 folded into B2"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 0,
+      "evidence": "B7 absent entirely — no merged single finding"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "B6 both consequences explicit (Invalid Date → false forever + day/month swap in banner) — though at should-fix severity"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "4 of 8 blockers missing from blocker class (B3, B5, B6, B7)"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "SF1 downgraded to advisory nit; report also lists 4 nits despite a 'nit 0' verdict count — cosmetic mismatch noted"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

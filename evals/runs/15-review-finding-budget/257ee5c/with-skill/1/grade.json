@@ -1,0 +1,52 @@
+{
+  "scenario": "15-review-finding-budget",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "only 4 blockers (B8, B2, B6, B1); B4 downgraded to should-fix, B7 demoted to open question, B5 absent, B3 praised instead of reported"
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 0,
+      "evidence": "B7 appears only as an open question — absent as a finding"
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "B6 both consequences explicit (never-expire + MM.DD-swapped banner)"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "4 of 8 blockers not classified blocker (B3, B4, B5, B7)"
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "SF1 (missing teams tests) not reported as a should-fix finding; only gate-status disclosure"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

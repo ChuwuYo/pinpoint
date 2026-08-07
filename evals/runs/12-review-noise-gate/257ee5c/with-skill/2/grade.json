@@ -1,0 +1,34 @@
+{
+  "scenario": "12-review-noise-gate",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "currency-staleness defect reported with 'the same root cause as the reported bug... only partially fixed' but classified should-fix · high — demotion persists"
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "verdict-inconsistent: body states the eslint gate fails on the diff's own added lines (mandating BLOCK under the gate rule) yet the verdict is FIX-THEN-COMMIT — recorded as watch item"
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "fixture integrity before and after run",
+      "status": "pass",
+      "evidence": "checks.cjs OK post-run (harness)"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}
