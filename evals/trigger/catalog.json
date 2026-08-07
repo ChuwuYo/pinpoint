@@ -1,31 +1,31 @@
 {
-  "revision": 1,
-  "note": "Controlled catalog for trigger runs (4.3): the 5 Pinpoint skills under test plus 5 comparison skills that are realistic selector near-misses. Pinpoint descriptions are verbatim from skills/*/SKILL.md frontmatter at the recorded commit; comparison descriptions are verbatim from the harness's installed catalog. Never edit Pinpoint descriptions to improve trigger scores outside PR 7.",
+  "revision": 2,
+  "note": "Controlled catalog for trigger runs (4.3): the 5 Pinpoint skills under test plus 5 comparison skills that are realistic selector near-misses. Pinpoint descriptions are verbatim from skills/*/SKILL.md frontmatter at the recorded commit; comparison descriptions are verbatim from the harness's installed catalog. Revision 2: PR 7 description tightening (help meta-question claim, pinpoint narrowed, negative boundaries, merge/history exclusions). Never edit Pinpoint descriptions to improve trigger scores outside PR 7.",
   "skills": [
     {
       "name": "pinpoint",
       "source": "repo:skills/pinpoint/SKILL.md",
-      "description": "Trace ambiguous or high-risk software defects and performance problems to the owning runtime boundary, implement the smallest complete fix, validate the real mechanism, and run evidence-based adversarial review. Use for bug fixes, performance optimization, issue triage, architecture or regression review, cross-platform behavior, browser or native integration, accessibility, internationalization, external protocols, sync, persistence, UI geometry, or anything reported as broken or slow where blast radius and proof matter."
+      "description": "Trace ambiguous or high-risk software defects and performance problems to the owning runtime boundary, implement the smallest complete fix, validate the real mechanism, and run evidence-based adversarial review. Use for bug fixes, measured performance work, issue triage, cross-platform behavior, browser or native integration, accessibility, internationalization, external protocols, sync, persistence, UI geometry, or anything reported as broken or slow where blast radius and proof matter. Do not use for read-only audits of an existing change when no fix is requested — that is pinpoint-review."
     },
     {
       "name": "pinpoint-review",
       "source": "repo:skills/pinpoint-review/SKILL.md",
-      "description": "Run evidence-based adversarial review of a diff, branch, or pull request using parallel concern-axis reviewers, a scored re-rank gate, and a strict noise budget. Use when reviewing code changes, auditing a fix or optimization before delivery, checking a diff for regressions, verifying claims against evidence, or when the pinpoint skill reaches its review stage. Read-only — never edits files."
+      "description": "Run evidence-based adversarial review of a diff, branch, or pull request using parallel concern-axis reviewers, a scored re-rank gate, and a strict noise budget. Use when reviewing code changes, auditing a fix or optimization before delivery, checking a diff for regressions, verifying claims against evidence, or when the pinpoint skill reaches its review stage. Read-only — never edits files. Do not use for questions about this skill or the Pinpoint suite itself — pinpoint-help answers those."
     },
     {
       "name": "pinpoint-commit",
       "source": "repo:skills/pinpoint-commit/SKILL.md",
-      "description": "Inspect repository state, prepare repository-aligned commit messages, stage exact files, and create commits without touching unrelated work. Use when the user asks for a commit, commit message, staging review, commit splitting, conventional commit, or verification of what a commit contains."
+      "description": "Inspect repository state, prepare repository-aligned commit messages, stage exact files, and create commits without touching unrelated work. Use when the user asks for a commit, commit message, staging review, commit splitting, conventional commit, or verification of what a commit contains. Do not use for history-rewriting operations (squash, rebase, or amend of existing commits), and do not use for questions about this skill — pinpoint-help answers those."
     },
     {
       "name": "pinpoint-pr",
       "source": "repo:skills/pinpoint-pr/SKILL.md",
-      "description": "Inspect branch and remote topology, prepare evidence-backed pull request titles and bodies, and push or create pull requests only when authorized. Use when the user asks for a PR title, PR description, fork synchronization, branch publication, pull request creation, reviewer response, or final PR scope review."
+      "description": "Inspect branch and remote topology, prepare evidence-backed pull request titles and bodies, and push or create pull requests only when authorized. Use when the user asks for a PR title, PR description, fork synchronization, branch publication, pull request creation, reviewer response, or final PR scope review. Merging is never in scope, even on request."
     },
     {
       "name": "pinpoint-help",
       "source": "repo:skills/pinpoint-help/SKILL.md",
-      "description": "Explain the Pinpoint Skill suite, choose the correct workflow, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use Pinpoint, Pinpoint help, available Pinpoint workflows, or the difference between pinpoint, pinpoint-review, pinpoint-commit, and pinpoint-pr."
+      "description": "Explain the Pinpoint Skill suite, its workflows, and their authorization boundaries, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use or install Pinpoint, available Pinpoint workflows, the difference between pinpoint, pinpoint-review, pinpoint-commit, and pinpoint-pr, or asks about a specific skill's behavior or permissions — for example whether pinpoint-commit pushes or what pinpoint-review catches. Answering such questions is this skill's job: naming a skill in a question is not a request to run that skill's workflow."
     },
     {
       "name": "code-review",

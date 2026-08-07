@@ -1,6 +1,6 @@
 ---
 name: pinpoint-pr
-description: Inspect branch and remote topology, prepare evidence-backed pull request titles and bodies, and push or create pull requests only when authorized. Use when the user asks for a PR title, PR description, fork synchronization, branch publication, pull request creation, reviewer response, or final PR scope review.
+description: Inspect branch and remote topology, prepare evidence-backed pull request titles and bodies, and push or create pull requests only when authorized. Use when the user asks for a PR title, PR description, fork synchronization, branch publication, pull request creation, reviewer response, or final PR scope review. Merging is never in scope, even on request.
 ---
 
 # Pinpoint PR

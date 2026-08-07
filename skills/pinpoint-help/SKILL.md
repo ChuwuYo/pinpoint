@@ -1,6 +1,6 @@
 ---
 name: pinpoint-help
-description: Explain the Pinpoint Skill suite, choose the correct workflow, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use Pinpoint, Pinpoint help, available Pinpoint workflows, or the difference between pinpoint, pinpoint-review, pinpoint-commit, and pinpoint-pr.
+description: Explain the Pinpoint Skill suite, its workflows, and their authorization boundaries, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use or install Pinpoint, available Pinpoint workflows, the difference between pinpoint, pinpoint-review, pinpoint-commit, and pinpoint-pr, or asks about a specific skill's behavior or permissions — for example whether pinpoint-commit pushes or what pinpoint-review catches. Answering such questions is this skill's job: naming a skill in a question is not a request to run that skill's workflow.
 ---
 
 # Pinpoint Help

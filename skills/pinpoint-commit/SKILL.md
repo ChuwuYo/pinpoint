@@ -1,6 +1,6 @@
 ---
 name: pinpoint-commit
-description: Inspect repository state, prepare repository-aligned commit messages, stage exact files, and create commits without touching unrelated work. Use when the user asks for a commit, commit message, staging review, commit splitting, conventional commit, or verification of what a commit contains.
+description: Inspect repository state, prepare repository-aligned commit messages, stage exact files, and create commits without touching unrelated work. Use when the user asks for a commit, commit message, staging review, commit splitting, conventional commit, or verification of what a commit contains. Do not use for history-rewriting operations (squash, rebase, or amend of existing commits), and do not use for questions about this skill — pinpoint-help answers those.
 ---
 
 # Pinpoint Commit

@@ -1,6 +1,6 @@
 ---
 name: pinpoint
-description: Trace ambiguous or high-risk software defects and performance problems to the owning runtime boundary, implement the smallest complete fix, validate the real mechanism, and run evidence-based adversarial review. Use for bug fixes, performance optimization, issue triage, architecture or regression review, cross-platform behavior, browser or native integration, accessibility, internationalization, external protocols, sync, persistence, UI geometry, or anything reported as broken or slow where blast radius and proof matter.
+description: Trace ambiguous or high-risk software defects and performance problems to the owning runtime boundary, implement the smallest complete fix, validate the real mechanism, and run evidence-based adversarial review. Use for bug fixes, measured performance work, issue triage, cross-platform behavior, browser or native integration, accessibility, internationalization, external protocols, sync, persistence, UI geometry, or anything reported as broken or slow where blast radius and proof matter. Do not use for read-only audits of an existing change when no fix is requested — that is pinpoint-review.
 ---
 
 # Pinpoint
