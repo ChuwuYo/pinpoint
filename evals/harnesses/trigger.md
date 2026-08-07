@@ -98,3 +98,15 @@ limitations:
 Any subagent that mutates the repository despite the wrapper invalidates its
 own run (`INVALID`, `infrastructure_errors: wrapper violation`) and the sweep
 stops for operator review.
+
+### Cross-model sweeps
+
+Subagents inherit the parent session's model unless the project config pins
+them. `.opencode/opencode.json` may carry an `agent.general.model` override
+for the duration of a sweep (opencode loads config once at startup — the app
+must be restarted after editing it). Verify the override took effect (the
+sweep's first run should be confirmed against the harness's session records
+before proceeding), record the pinned model in `model.id`, and remove or
+revert the override after the sweep so ordinary subagent work is unaffected.
+Keep the built-in `general` agent's prompt and tools untouched — overriding
+only the model preserves comparability with the parent-model baseline.

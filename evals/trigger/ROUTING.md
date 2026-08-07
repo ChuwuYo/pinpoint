@@ -39,6 +39,11 @@ toward this contract, never the contract toward measured behavior.
   route (owned by the Scenario 11 decision gate, Phase 7).
 - Generic architecture advice, code explanation, and discussion trigger no
   Pinpoint Skill.
+- History-rewriting git operations (squash, rebase) have no Pinpoint route;
+  `pinpoint-commit` only creates commits from authorized changes.
+- Plain implementation work with no defect or performance claim has no
+  Pinpoint route.
+- Merge requests have no Pinpoint route under any phrasing.
 
 ## Precedence for mixed requests
 
@@ -79,3 +84,5 @@ Any other chaining requires the user to request each step explicitly.
 | `generic-advice` | non-routes |
 | `sequence-no-merge` | precedence 3 |
 | `review-and-merge` | precedence 2 |
+| `commit-out-of-scope` | non-routes |
+| `nondefect-implementation` | non-routes |
