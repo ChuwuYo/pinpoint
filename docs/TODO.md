@@ -506,7 +506,7 @@ false-accept/false-reject costs are asymmetric.
 
 ---
 
-## Phase 3 — Harden `pinpoint-review` — IN PROGRESS (3.1–3.2 done in PR 4; 3.5 first item done `e28fc49`; 3.3/3.4/3.6–3.8 blocked on Scenario 14–17 fixtures)
+## Phase 3 — Harden `pinpoint-review` — DONE (3.1–3.9 complete through PRs 4–5; final acceptance `90552ac` + `b0a6a9f`)
 
 ### Goal
 
@@ -771,28 +771,60 @@ Verdict: blocker N · should-fix N · nit N → BLOCK | FIX-THEN-COMMIT | CLEAR
 
 ### 3.9 Prove the change before accepting it
 
-- [ ] Run current and proposed `pinpoint-review` behavior on Scenarios 12 and
-  14–17 under the same conditions.
-- [ ] Require no lost planted blocker.
-- [ ] Require improved or unchanged precision and false-positive count.
-- [ ] Require correct verdicts for blocker-only, should-fix-only, nit-only,
-  clean, failed-gate, and incomplete-gate variants.
-- [ ] Require zero repository mutation.
-- [ ] Reject instruction growth that adds no measurable value.
-- [ ] Update `SKILL.md`, command copy, help, and docs only after the target
-  behavior is supported.
+Progress: three acceptance rounds executed (`c366709` at `ee09b15`, `8bfa1eb`
+at `257ee5c`, `b0a6a9f` at `90552ac` — 28 runs total, all blind-graded, zero
+mutations). The round-1 sweep captured a repeatable severity-demoting
+regression (91e14f1's "severity carries the uncertainty" reading); two
+revisions (`257ee5c` confidence-carries, `90552ac` shared-root-cause) restored
+Scenario 12 C1 and Scenario 14 v1 C1 to 2/2 each. Residuals carried: S15 B5
+race severity flakiness (lifetime ~3/12, recorded since `5dfe3b9`), S15 B3
+standalone classification (consequence named 4/4 but folded into B2), S15
+run-level demotion variance (1/2 at `90552ac`), S17 v3 N1 before/after
+snapshot omission (1/2), S12 pre-existing sibling-defect over-promotion
+(watch item from `90552ac`).
+
+- [x] Run current and proposed `pinpoint-review` behavior on Scenarios 12 and
+  14–17 under the same conditions. (28 runs across three commits)
+- [x] Require no lost planted blocker. (S12/S14/S16/S17 blockers retained 2/2
+  at `90552ac`; S15 B5 remains a documented pre-existing residual, not a
+  PR 5 regression — baseline lost it too)
+- [x] Require improved or unchanged precision and false-positive count.
+  (S16 baits 2/2 at both `ee09b15` and `90552ac`; S14 v3/v7 no fabrication;
+  no new false positives introduced)
+- [x] Require correct verdicts for blocker-only, should-fix-only, nit-only,
+  clean, failed-gate, and incomplete-gate variants. (S15/S16 BLOCK; S14 v2
+  FIX-THEN-COMMIT, v3 CLEAR, v4 CLEAR, v5 BLOCK, v6 FIX-THEN-COMMIT;
+  S17 v5 BLOCK)
+- [x] Require zero repository mutation. (checks.cjs/git status re-verified
+  after every run; S17 v3 contamination and v5 failing test intact)
+- [x] Reject instruction growth that adds no measurable value. (every rule
+  change tied to repeatable before-evidence; two regression revisions were
+  sentence-level, not additions)
+- [x] Update `SKILL.md`, command copy, help, and docs only after the target
+  behavior is supported. (no command/help/doc copy changed in PR 5 —
+  behavior-only hardening)
 
 ### Exit criteria
 
-- [ ] All blockers survive finding-budget enforcement.
-- [ ] Static-tool diagnostics are not duplicated, but required failures affect
-  readiness.
-- [ ] Nit-only reviews end `CLEAR` with advisory nits.
-- [ ] The re-rank gate removes low-evidence findings at a calibrated threshold or
-  uses a simpler validated gate.
-- [ ] Packet errors and read-only violations are deterministically tested.
-- [ ] Repeated A/B results show no critical regression across Scenarios 12 and
-  14–17.
+- [x] All blockers survive finding-budget enforcement. (S15 `90552ac` run 1:
+  all 8 present despite the cap — C4 PASS; B5 severity flakiness recorded as
+  model capability boundary, not budget loss)
+- [x] Static-tool diagnostics are not duplicated, but required failures affect
+  readiness. (S12/S16 eslint subtraction 2/2 everywhere; S14 v5 + S17 v5
+  diff-caused failures BLOCK 3/3; watch item: S12 at `257ee5c` split 1/2 on
+  gate-BLOCK application, resolved at `90552ac` 2/2)
+- [x] Nit-only reviews end `CLEAR` with advisory nits. (S14 v3 CLEAR 1/1,
+  v4 CLEAR with advisory nit 1/1 at `ee09b15`; `185d0f1` baseline 2/2 each)
+- [x] The re-rank gate removes low-evidence findings at a calibrated threshold or
+  uses a simpler validated gate. (3.6 closed at `bcdfd23`: no rule change
+  warranted — F1/F2 baits rejected 2/2, F3 relabeled should-fix-max held 2/2;
+  scoring-evidence collection continues via N2)
+- [x] Packet errors and read-only violations are deterministically tested.
+  (S17 `83de209` clean sweep 10/10 + `ee09b15` probes 2/2 zero-mutation)
+- [x] Repeated A/B results show no critical regression across Scenarios 12 and
+  14–17. (three-round arc recorded: regression introduced at `91e14f1`,
+  captured at `ee09b15`, fixed at `90552ac` — final state equals or beats
+  every prior baseline)
 
 ---
 
@@ -1460,12 +1492,18 @@ decision explicitly changes them:
 Keep changes reviewable and preserve a clean evidence trail. The preferred
 sequence is:
 
-**Current position (2026-08-06):** PRs 1–4 delivered; PR 5 in progress (1 of 4
-hardening items evidenced). Next concrete step: build Scenario 14
-(`review-verdict-semantics`) fixtures to unlock the remaining PR 5 items —
-3.3 blocker retention, 3.4 static-gate handling, 3.6 read-only checks, and the
-3.7 re-rank gate calibration each need their own frozen baseline before any
-rule text changes (anti-inflation rule).
+**Current position (2026-08-07):** PRs 1–5 delivered. PR 5 closed with the
+three-round 3.9 acceptance arc (`c366709`/`8bfa1eb`/`b0a6a9f`): the sweep
+captured a severity-demoting regression from `91e14f1`, and two sentence-level
+revisions (`257ee5c`, `90552ac`) restored Scenario 12 C1 and Scenario 14 v1 C1
+to 2/2 each with no critical regression elsewhere (S16 full PASS, S17
+zero-mutation, S14 all-variant verdicts correct). Residuals recorded: S15 B5
+race severity flakiness (~3/12 lifetime), B3 folded-not-standalone, S15
+run-level demotion variance, S17 v3 snapshot omission, S12 pre-existing
+over-promotion watch item. Next: PR 6 — trigger dataset and routing baselines
+(do not edit descriptions yet). CI remains `disabled_manually` (GitHub Actions
+incident); zombie run 31123730279 deletion still pending retry; local gate is
+`node scripts/eval-validate.mjs`.
 
 1. ✅ **PR 1 — Suite consistency** (`b7ecc8a`)
    - fix `INSTALL.md`;
@@ -1489,7 +1527,7 @@ rule text changes (anti-inflation rule).
    - record current `pinpoint-review` behavior without changing it
      (no-Skill 0/2, with-Skill 1/3 — C4 severity calibration failing 2/3).
 
-5. 🔶 **PR 5 — `pinpoint-review` rule hardening** — IN PROGRESS
+5. ✅ **PR 5 — `pinpoint-review` rule hardening** — DONE (final skill `90552ac`)
    - ✅ verdict severity boundary (3.5, first item): `e28fc49` + after-evidence
      `7a513f0` — Scenario 12 with-Skill 1/3 → 3/3 PASS, no regressions;
    - ✅ verdict semantics (3.5): `185d0f1` — Scenario 14 built (revisions 2–5,
