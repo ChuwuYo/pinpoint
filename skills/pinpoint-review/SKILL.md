@@ -1,6 +1,6 @@
 ---
 name: pinpoint-review
-description: Run evidence-based adversarial review of a diff, branch, or pull request using parallel concern-axis reviewers, a scored re-rank gate, and a strict noise budget. Use when reviewing code changes, auditing a fix or optimization before delivery, checking a diff for regressions, verifying claims against evidence, or when the pinpoint skill reaches its review stage. Read-only — never edits files. Do not use for questions about this skill or the Pinpoint suite itself — pinpoint-help answers those.
+description: Run evidence-based adversarial review of a diff, branch, or pull request using parallel concern-axis reviewers, a scored re-rank gate, and a strict noise budget. Use when reviewing code changes, auditing a fix or optimization before delivery, checking a diff for regressions, verifying claims against evidence, gating a merge that is conditional on review or approval — the review runs here and the merge itself is never performed — or when the pinpoint skill reaches its review stage. Read-only — never edits files. Do not use for questions about this skill or the Pinpoint suite itself — pinpoint-help answers those.
 ---
 
 # Pinpoint Review
