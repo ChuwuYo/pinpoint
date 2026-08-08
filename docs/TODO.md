@@ -1502,8 +1502,14 @@ tightening those baselines localized (`d2e499e`: pinpoint-help claims meta
 questions, pinpoint narrowed, merge/history negative boundaries) plus the
 HighSpeed after-sweep (`evals/baselines/d2e499e/trigger.md`): **40/72 -> 49/72
 (56% -> 68%)**, critical failures 12 -> 9, TR-012 and VA-012 fixed 0/2 -> 2/2,
-VA-011/TR-011/VA-010 improved; TR-014, VA-014, VA-004, VA-006, TR-013 remain
-stable failures; pinpoint-commit recall 0.25 -> 0.44 with the no-selection
+VA-011/TR-011/VA-010 improved; a follow-up increment (`3595744`, catalog rev 3:
+pinpoint claims review+fix primary, review gates merges, help claims
+named-skill walk-throughs) held 49/72 while fixing the last cross-model stable
+help failure — TR-014 0/2 -> 2/2, unauthorized-selections 2 -> 0, help recall
+0.38 -> 0.75 (`evals/baselines/3595744/trigger.md`); TR-013 improved 0/2 ->
+1/2, VA-010 1/2 -> 2/2, VA-014 merge phrasing remains the sole cross-model
+stable failure, VA-013 regressed 2/2 -> 0/2 (draft feasibility conflation,
+adapter-amplified); pinpoint-commit recall 0.25 -> 0.44 with the no-selection
 pattern (17 runs) recorded as wrapper-amplified adapter artifact, not a
 description-fix target. Next: PR 8 — installer and package matrix. Local gate
 remains `node scripts/eval-validate.mjs`.
@@ -1568,14 +1574,23 @@ remains `node scripts/eval-validate.mjs`.
      misroutes, P/R 1.00 all Skills (subagent adapter, limitations documented);
    - no description edits.
 
-7. ✅ **PR 7 — Description and routing isolation** (`d2e499e`)
+7. ✅ **PR 7 — Description and routing isolation** (`d2e499e`, `3595744`)
    - narrow overlapping descriptions (pinpoint-help claims meta questions,
      pinpoint narrowed, merge/history negative boundaries);
    - HighSpeed after-sweep published: 40/72 -> 49/72, critical failures
      12 -> 9 (`evals/baselines/d2e499e/trigger.md`, 72 run records under
      `evals/trigger/runs/2026-08-08-highspeed-subagent-pr7/`);
-   - behavior regression results: no pinpoint suite regression — TR-014,
-     VA-014, VA-004, VA-006, TR-013 remain stable failures (recorded);
+   - increment from after-sweep evidence (`3595744`, catalog rev 3):
+     pinpoint claims review+fix primary, pinpoint-review gates
+     review-conditional merges, pinpoint-help claims named-skill
+     walk-throughs; sweep held 49/72 with TR-014 fixed 0/2 -> 2/2 (last
+     cross-model stable help failure), unauthorized-selections 2 -> 0
+     (`evals/baselines/3595744/trigger.md`, 72 run records under
+     `evals/trigger/runs/2026-08-08-highspeed-subagent-rev3/`);
+   - behavior regression results: no pinpoint suite regression — VA-014
+     merge phrasing remains the sole cross-model stable failure; VA-013,
+     VA-004, VA-006 no-selections recorded as wrapper-amplified adapter
+     artifacts (retest after wrapper change, do not tune descriptions);
      commands/READMEs unchanged (no trigger wording there).
 
 8. ⬜ **PR 8 — Installer and package matrix** — pending
