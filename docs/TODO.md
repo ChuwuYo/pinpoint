@@ -1492,20 +1492,21 @@ decision explicitly changes them:
 Keep changes reviewable and preserve a clean evidence trail. The preferred
 sequence is:
 
-**Current position (2026-08-08, evening):** PRs 1–6 delivered. PR 6 closed
+**Current position (2026-08-08, evening):** PRs 1–7 delivered. PR 6 closed
 with the trigger dataset (36 bilingual near-miss cases, 12 hard-negative
 families), routing contract (`evals/trigger/ROUTING.md`), isolated harness
 contract + subagent adapter, and a **hardened cross-model baseline**: k3-256k
 64/72 (89%) vs kimi-for-coding-highspeed 40/72 (56%) on identical prompts and
-catalog (`evals/baselines/c90c917/trigger.md`). Cross-model stable failures
-localize PR 7 targets: pinpoint-help description (meta questions invoke the
-named workflow Skill, recall 0.50 k3 / 0.13 HS), merge-adjacent routing
-(VA-014 fails 4/4 across models in different modes). HighSpeed-only
-no-selection pattern (21 runs, mutating routes) recorded as likely
-wrapper-amplified adapter artifact — watch item, not a description-fix target.
-No description edits yet. Next: PR 7 — description and routing isolation,
-backed by the named failures above. Local gate remains
-`node scripts/eval-validate.mjs`.
+catalog (`evals/baselines/c90c917/trigger.md`). PR 7 shipped the description
+tightening those baselines localized (`d2e499e`: pinpoint-help claims meta
+questions, pinpoint narrowed, merge/history negative boundaries) plus the
+HighSpeed after-sweep (`evals/baselines/d2e499e/trigger.md`): **40/72 -> 49/72
+(56% -> 68%)**, critical failures 12 -> 9, TR-012 and VA-012 fixed 0/2 -> 2/2,
+VA-011/TR-011/VA-010 improved; TR-014, VA-014, VA-004, VA-006, TR-013 remain
+stable failures; pinpoint-commit recall 0.25 -> 0.44 with the no-selection
+pattern (17 runs) recorded as wrapper-amplified adapter artifact, not a
+description-fix target. Next: PR 8 — installer and package matrix. Local gate
+remains `node scripts/eval-validate.mjs`.
 
 1. ✅ **PR 1 — Suite consistency** (`b7ecc8a`)
    - fix `INSTALL.md`;
@@ -1567,10 +1568,15 @@ backed by the named failures above. Local gate remains
      misroutes, P/R 1.00 all Skills (subagent adapter, limitations documented);
    - no description edits.
 
-7. ⬜ **PR 7 — Description and routing isolation** — pending (PR 6 first)
-   - narrow overlapping descriptions;
-   - update commands, help, and both READMEs together;
-   - publish post-change trigger results and behavior regression results.
+7. ✅ **PR 7 — Description and routing isolation** (`d2e499e`)
+   - narrow overlapping descriptions (pinpoint-help claims meta questions,
+     pinpoint narrowed, merge/history negative boundaries);
+   - HighSpeed after-sweep published: 40/72 -> 49/72, critical failures
+     12 -> 9 (`evals/baselines/d2e499e/trigger.md`, 72 run records under
+     `evals/trigger/runs/2026-08-08-highspeed-subagent-pr7/`);
+   - behavior regression results: no pinpoint suite regression — TR-014,
+     VA-014, VA-004, VA-006, TR-013 remain stable failures (recorded);
+     commands/READMEs unchanged (no trigger wording there).
 
 8. ⬜ **PR 8 — Installer and package matrix** — pending
    - add global isolation, all-harness/all-Skill assertions, conflict atomicity,
