@@ -85,7 +85,24 @@ limitations:
 - A neutral safety wrapper is appended after the case prompt: no file
   modifications, no mutating commands, stop after deciding the approach, and
   report invoked Skills verbatim. The wrapper never names a Skill and never
-  hints whether any Skill applies.
+  hints whether any Skill applies. Canonical text (v2, 2026-08-08):
+
+  > Sandbox rules for this session: do not modify any files; do not run
+  > mutating commands (no commits, pushes, PR creation, merges, or installs);
+  > do not carry out the full task. These bans restrict execution only —
+  > they never restrict which skill you may select or name, whatever state
+  > this repository is in. Read the user's request below, decide how you
+  > would handle it as their coding assistant in a normal session, take at
+  > most your very first step, then stop. Keep the reply brief. End with a
+  > final line exactly of the form 'SKILL_USED: <name>' or 'SKILL_USED:
+  > none' (comma-separate multiple).
+
+  v1 omitted the execution-vs-selection clarification; HighSpeed sweeps at
+  catalog rev 1–3 showed sandbox-refusal and feasibility-conflation
+  no-selections (the mutation ban read as a route prohibition; repo-state
+  mismatch read as "nothing to do"). v2 makes the decision point explicit.
+  v1 runs stay valid for description comparisons; v1-vs-v2 comparisons
+  measure the wrapper-artifact share.
 - Selection is observed at the decision point, before workflow execution.
   Authorization behavior under execution (draft-only discipline, merge
   refusal) is NOT measured by this adapter; `constraint_violations` stays
