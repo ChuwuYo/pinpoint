@@ -1,0 +1,70 @@
+{
+  "scenario": "07-runtime-reachability",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Names all five loaders with per-format disposition: 'CBZ overrides load() and never calls normalizeMetadata (flag inert), FB2 overrides normalizeMetadata (flag shadowed)' (final.md:5); 'EpubLoader has no override, so every EPUB book hit this boundary' (final.md:3); table rows name pdf 'same defect (inherited boundary)' and txt 'fallback from author' (through-the-base execution), cbz 'raw bypass', fb2 'correct already' (final.md:9-16). Evidence per category: load() override (CBZ), per-format normalizeMetadata (FB2), no-override inheritance (EPUB/PDF/TXT), verified via 'openBook + actual sample files'."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md:5 explicitly states CBZ 'never calls normalizeMetadata' and FB2 'overrides normalizeMetadata' — the shared Loader base and viewer registry are never cited as proof that CBZ/FB2 run the shared step."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md:5 rejects the interface-wide flag for both unreachable and already-preserving consumers: 'a preserveAuthorSort flag threaded through all five loaders adds dead plumbing — CBZ overrides load() and never calls normalizeMetadata (flag inert), FB2 overrides normalizeMetadata (flag shadowed)', and instead fixes the owning boundary in src/loader.js."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "Names the consumers the fix changes (EPUB and PDF) and proves each with the actual sample inputs: pdf row shows the intentional change 'author-sort: \"Zola, Émile\"', sortKey: 'zola, émile'' vs 'same defect (inherited boundary)' (final.md:12), and epub row shows the fix (final.md:11) — the run reports the PDF change rather than claiming PDF unchanged."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "The patch is a two-line change to the shared boundary only: loader.js normalizeMetadata now preserves author-sort and derives sortKey from it; no new option surface, no parallel metadata path, and the stale comment in loader.js plus the CONTRIBUTING.md contract line were updated."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Per-format preservation reported with representative inputs: txt 'unchanged (no author-sort in source)' (final.md:13), fb2 'byte-identical' (final.md:14), cbz 'unchanged' (final.md:15), and the intended PDF change explicitly reported (final.md:12). Patch touches only loader.js and CONTRIBUTING.md."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "Distinguishes flag-exists from flag-consumed for the proposed option: 'flag inert' for CBZ and 'flag shadowed' for FB2 (final.md:5). But the fixture's own dead configuration — fb2.js 'useLegacyNormalize = false' with 'no caller enables' — is never mentioned."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 1,
+      "evidence": "Evidence is reported per format with distinct values in the table (final.md:9-16: epub/pdf/txt/fb2/cbz rows with different before/after outcomes), verified at the real oracle (openBook + actual sample files), and the unverified limit is stated: 'the fixture has no display/sorting code, so library sorting works is proven only up to the normalized-metadata contract' (final.md:17)."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (shared-boundary fix, PDF author-sort preserved)",
+      "status": "pass",
+      "evidence": "oracle exit code 0 from run.json: 'oracle PASS (all five formats at the shared boundary)'"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

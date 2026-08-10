@@ -1,0 +1,51 @@
+{
+  "no-skill": [
+    {
+      "repetition": 1,
+      "status": "FAIL",
+      "critical": "2/4",
+      "overall": "4/8",
+      "fraction": 0.5,
+      "regularsLost": [
+        "N1",
+        "N2",
+        "N3",
+        "N4"
+      ]
+    },
+    {
+      "repetition": 2,
+      "status": "FAIL",
+      "critical": "1/4",
+      "overall": "2/8",
+      "fraction": 0.25,
+      "regularsLost": [
+        "N1",
+        "N2",
+        "N4"
+      ]
+    }
+  ],
+  "with-skill": [
+    {
+      "repetition": 1,
+      "status": "PASS",
+      "critical": "4/4",
+      "overall": "7.5/8",
+      "fraction": 0.9375,
+      "regularsLost": [
+        "N3"
+      ]
+    },
+    {
+      "repetition": 2,
+      "status": "PASS",
+      "critical": "4/4",
+      "overall": "7.5/8",
+      "fraction": 0.9375,
+      "regularsLost": [
+        "N3"
+      ]
+    }
+  ]
+}

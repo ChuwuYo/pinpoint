@@ -1,0 +1,70 @@
+{
+  "scenario": "07-runtime-reachability",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md line 9: 'Reachability traced through viewer.js:9-15 dispatch — all five formats exercised on real samples'; line 14: 'cbz: never reaches normalizeMetadata (load() override)'; line 13 'fb2: already correct' (own normalizeMetadata in src/loaders/fb2.js); lines 10-12 name epub/pdf/txt as executing the base step (bare `extends Loader` in src/loaders/pdf.js, epub.js, txt.js)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md line 5: 'threads through CBZ which never calls normalizeMetadata at runtime' — base class/registry not treated as proof of execution for CBZ; FB2 treated as having its own path: 'reuses the pattern FB2 already established'."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md line 5: 'rejected the proposed preserveAuthorSort flag. It leaves the buggy delete as the default... and threads through CBZ which never calls normalizeMetadata at runtime'; line 7: 'The owning boundary fix' — option rejected in favor of fixing the boundary that owns the loss."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md line 11: 'pdf: author-sort: Zola, Émile, sortKey: zola, émile — intended change, reported explicitly' (PDF sample's author-sort differs from author, so output intentionally changes — noticed and reported, not claimed unchanged); each format proven with its sample: epub (line 10), txt (12), fb2 (13), cbz (14)."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "patch.diff touches only src/loader.js normalizeMetadata (keeps author-sort, prefers it for sortKey, falls back to author) plus comments/CONTRIBUTING — no parallel metadata path, no new option surface; fix reuses existing per-format pipeline and FB2's established pattern (final.md line 5)."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "final.md line 12: 'txt: no author-sort in source, fallback from author, byte-identical'; lines 13-14: fb2 and cbz byte-identical; line 11: PDF intended change 'reported explicitly'."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "Partial: distinguishes flag-exists from flag-consumed for the proposal (final.md line 5: flag 'threads through CBZ which never calls normalizeMetadata at runtime') and asserts 'no other consumers in-repo' (line 15), but never names or checks the FB2 legacy flag path useLegacyNormalize (src/loaders/fb2.js, no caller enables it) that the criterion calls out — assertion without demonstrated check."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 1,
+      "evidence": "final.md lines 10-15 report each format separately with its own evidence (epub/pdf with concrete key:value outputs, txt fallback case, fb2/cbz byte-identical with reasons), and line 17 separates 'Unverified: external library sorting (outside fixture)' — no single-check-all-formats claim."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (shared-boundary fix, PDF author-sort preserved)",
+      "status": "pass",
+      "evidence": "run.json command 2: 'node evals/scenarios/07-runtime-reachability/checks.cjs --oracle /tmp/s07-runs/run4' exit 0, log 'oracle PASS (all five formats at the shared boundary)'; overall status PASS."
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

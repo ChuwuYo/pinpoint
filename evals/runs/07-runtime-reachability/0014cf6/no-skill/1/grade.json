@@ -1,0 +1,70 @@
+{
+  "scenario": "07-runtime-reachability",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "final.md:5 names CBZ with evidence ('CbzLoader overrides load() and never calls normalizeMetadata() (the option would be dead)') and FB2 ('Fb2Loader already preserves author-sort via its own override'); EPUB covered via inheritance. But PDF is never named as executing the base step at runtime — it appears only in the lumped claim 'pdf, txt, cbz, fb2: byte-for-byte identical output' (final.md:13); TXT is named only as having 'no author-sort to preserve' without stating it executes the shared step."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md:5 explicitly distinguishes runtime behavior from inheritance: 'CbzLoader overrides load() and never calls normalizeMetadata()' and 'Fb2Loader already preserves author-sort via its own override' — registry dispatch in viewer.js is never cited as proof CBZ or FB2 run the shared step."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md:5 rejects the interface-wide threading for the proven-unreachable and already-preserving consumers: threading 'through *all five* loaders is unnecessary churn' because for CBZ 'the option would be dead' and 'Fb2Loader already preserves author-sort via its own override'. patch.diff only wires the option into EpubLoader."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "final.md:13 claims 'pdf, txt, cbz, fb2: byte-for-byte identical output to before (no behavior changes outside EPUB)' and line 5 asserts 'Only EPUB is affected'. The PDF sample carries author-sort 'Zola, Émile' distinct from author 'Émile Zola', so a shared-boundary fix must change PDF output; the run never reports this and the oracle (run.json exit 1) rejects exactly that claim."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "The fix lands at the shared boundary (patch rewrites Loader.normalizeMetadata) and reuses the existing pipeline. But it adds precisely the prohibited 'new option surface': a preserveAuthorSort constructor option gated so only EPUB enables it, instead of fixing the boundary to preserve author-sort by default."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "TXT is shown unaffected with a representative input (final.md:13, samples/book.txt has no author-sort). But the intended PDF change is not reported — final.md:13 instead asserts PDF unchanged ('no behavior changes outside EPUB'), contradicting the oracle."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "Distinguishes flag existence from consumption for the proposed option in CBZ ('the option would be dead', final.md:5). But never checks the FB2 legacy flag path that no caller enables (fixture fb2.js 'useLegacyNormalize' is never mentioned in final.md or patch.diff)."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "EPUB gets its own concrete evidence (final.md:12), but pdf/txt/cbz/fb2 are lumped into a single 'byte-for-byte identical output' claim from one viewer.openBook check (final.md:11-13) — the per-format separation the rubric demands is absent for four of five formats."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (shared-boundary fix, PDF author-sort preserved)",
+      "status": "fail",
+      "evidence": "run.json command 2 exited 1: 'oracle FAILED: PDF must preserve author-sort after a shared-boundary fix; PDF sort key must come from the preserved author-sort (2 cases)'"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

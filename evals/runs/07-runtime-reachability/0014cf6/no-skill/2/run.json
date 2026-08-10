@@ -1,0 +1,51 @@
+{
+  "scenario": "07-runtime-reachability",
+  "scenario_revision": 1,
+  "condition": "no-skill",
+  "repetition": 2,
+  "randomized_order": true,
+  "model": {
+    "id": "opencode/deepseek-v4-flash-free",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "task subagent (general), session ses_0142f70a0ffeLrUtCqLhe1h7av, 2026-08-10"
+  },
+  "pinpoint_commit": "0014cf6",
+  "skill_catalog": [],
+  "invocation_method": "none",
+  "fixture": {
+    "ref": "scenarios/07-runtime-reachability/fixture",
+    "hash": "c8cdae530cd3ab6a50f91b8163a98ca2768208bf84efb25a8c4e287dc9f5cb8f",
+    "clean_start_proof": "fresh copy of frozen fixture, git baseline commit 591876f, hash = sha256(sorted path+content) over 15 fixture files"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "node evals/scenarios/07-runtime-reachability/checks.cjs",
+      "exit": 0,
+      "log": "fixture integrity self-check PASS"
+    },
+    {
+      "cmd": "node evals/scenarios/07-runtime-reachability/checks.cjs --oracle /tmp/s07-runs/run3",
+      "exit": 1,
+      "log": "oracle FAILED: PDF must preserve author-sort after a shared-boundary fix; PDF sort key must come from the preserved author-sort (2 cases)"
+    }
+  ],
+  "final_response": "final.md",
+  "patch": "patch.diff",
+  "repo_state": {
+    "before": "clean git baseline of frozen fixture (591876f)",
+    "after": "working tree with candidate changes; patch.diff captured"
+  },
+  "status": "FAIL",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [],
+  "redactions": []
+}

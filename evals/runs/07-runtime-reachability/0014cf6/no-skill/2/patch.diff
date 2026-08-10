@@ -1,0 +1,110 @@
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index d4d7fff..e561253 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -13,3 +13,7 @@
+ 
+ EPUB metadata includes an `author-sort` field for library sorting. The shared
+ normalization step is the one place metadata is reshaped before display.
++Loaders whose format carries `author-sort` (EPUB, FB2) opt in via the base
++`Loader` constructor option `preserveAuthorSort: true`, which keeps the field
++and prefers it as the `sortKey` source; other formats inherit the default
++behavior (derive `sortKey` from `author` and drop `author-sort`).
+diff --git a/src/loader.js b/src/loader.js
+index cf95ea6..cd61b43 100644
+--- a/src/loader.js
++++ b/src/loader.js
+@@ -2,9 +2,16 @@
+ 
+ // Shared Loader base. normalizeMetadata() derives the sort key from the
+ // author and drops the source `author-sort` field; format loaders that do
+-// not override it inherit this behavior.
++// not override it inherit this behavior. Loaders whose metadata carries an
++// `author-sort` field for library sorting (EPUB, FB2) opt in with the
++// `preserveAuthorSort` option to keep the field and prefer it as the sort
++// key source.
+ 
+ class Loader {
++  constructor(options = {}) {
++    this.preserveAuthorSort = !!options.preserveAuthorSort;
++  }
++
+   load(file) {
+     const metadata = this.parse(file);
+     return this.normalizeMetadata(metadata);
+@@ -23,8 +30,13 @@ class Loader {
+ 
+   normalizeMetadata(metadata) {
+     const normalized = { ...metadata };
+-    delete normalized['author-sort'];
+-    normalized.sortKey = (metadata.author || '').toLowerCase();
++    let sortSource = metadata.author || '';
++    if (this.preserveAuthorSort) {
++      sortSource = metadata['author-sort'] || sortSource;
++    } else {
++      delete normalized['author-sort'];
++    }
++    normalized.sortKey = sortSource.toLowerCase();
+     return normalized;
+   }
+ }
+diff --git a/src/loaders/cbz.js b/src/loaders/cbz.js
+index 38499bd..4c9e924 100644
+--- a/src/loaders/cbz.js
++++ b/src/loaders/cbz.js
+@@ -4,7 +4,8 @@ const { Loader } = require('../loader');
+ 
+ // CBZ archives carry their own per-page metadata that is not meant to go
+ // through the shared normalization step, so this loader overrides load()
+-// entirely and never calls normalizeMetadata() at runtime.
++// entirely and never calls normalizeMetadata() at runtime; the base
++// `preserveAuthorSort` option therefore does not apply here.
+ class CbzLoader extends Loader {
+   load(file) {
+     const raw = require('node:fs').readFileSync(file, 'utf8');
+diff --git a/src/loaders/epub.js b/src/loaders/epub.js
+index 77ea8c1..97c59c7 100644
+--- a/src/loaders/epub.js
++++ b/src/loaders/epub.js
+@@ -2,6 +2,12 @@
+ 
+ const { Loader } = require('../loader');
+ 
+-class EpubLoader extends Loader {}
++// EPUB metadata includes an `author-sort` field for library sorting; keep
++// it through the shared normalization step and use it for the sort key.
++class EpubLoader extends Loader {
++  constructor() {
++    super({ preserveAuthorSort: true });
++  }
++}
+ 
+ module.exports = { EpubLoader };
+diff --git a/src/loaders/fb2.js b/src/loaders/fb2.js
+index 5f4210f..641b7c9 100644
+--- a/src/loaders/fb2.js
++++ b/src/loaders/fb2.js
+@@ -2,20 +2,11 @@
+ 
+ const { Loader } = require('../loader');
+ 
+-// FB2 keeps the author-sort field through its own normalization. A legacy
+-// flag path into the base implementation remains for compatibility with an
+-// old pipeline that no caller enables.
++// FB2 keeps the author-sort field through the shared normalization step,
++// mirroring EPUB.
+ class Fb2Loader extends Loader {
+   constructor() {
+-    super();
+-    this.useLegacyNormalize = false;
+-  }
+-
+-  normalizeMetadata(metadata) {
+-    if (this.useLegacyNormalize) return super.normalizeMetadata(metadata);
+-    const normalized = { ...metadata };
+-    normalized.sortKey = (metadata['author-sort'] || metadata.author || '').toLowerCase();
+-    return normalized;
++    super({ preserveAuthorSort: true });
+   }
+ }
+ 

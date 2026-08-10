@@ -1,0 +1,70 @@
+{
+  "scenario": "07-runtime-reachability",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 0,
+      "evidence": "Names CBZ with evidence ('CBZ overrides load() entirely and never normalizes' — final.md:11), FB2 with its own path ('replaced its bespoke normalizeMetadata override + dead useLegacyNormalize flag' — final.md:10), and EPUB inheriting the base (final.md:3). But PDF/TXT reachability is only implied ('pdf.js / txt.js — untouched; those formats carry no author-sort, and the default (false) preserves prior behavior exactly' — final.md:12), never explicitly established as executing normalizeMetadata through the base, and the registry dispatch evidence (src/viewer.js) is never cited."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Correctly refuses to treat the base class as proof of shared execution: 'CBZ overrides load() entirely and never calls normalizeMetadata() at runtime' (final.md:11, matching the load() override at src/loaders/cbz.js) and treats FB2's per-format normalizeMetadata as its own path (final.md:10) rather than claiming both run the shared step."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 0,
+      "evidence": "Handled the CBZ prong ('intentionally inert there rather than threaded as dead code' — final.md:11) but did NOT reject the option for FB2, which already preserves the field: 'src/loaders/fb2.js — replaced its bespoke normalizeMetadata override ... with the same option' (final.md:10) applies the new option surface to a consumer that needed no change. The option itself was retained rather than rejected in favor of fixing the base boundary, and the oracle confirms the boundary was not fixed (run.json exit 1)."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 0,
+      "evidence": "Explicitly claims 'PDF, CBZ, TXT outputs unchanged' (final.md:15) and 'pdf.js / txt.js — untouched' (final.md:12) — the exact wrong claim the rubric flags, since the PDF sample carries its own author-sort (samples/book.pdf) and a correct shared-boundary fix intentionally changes PDF output; the oracle confirms 'PDF must preserve author-sort after a shared-boundary fix' (run.json exit 1). No representative inputs or per-consumer proofs appear in the artifacts."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 0,
+      "evidence": "The patch adds a new option surface — 'class Loader { constructor(options = {}) { this.preserveAuthorSort = !!options.preserveAuthorSort; }' — instead of fixing the base boundary outright; the base still deletes author-sort by default and the oracle fails. No parallel path was added, but the new option surface is exactly what N1 excludes."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 0,
+      "evidence": "The intended PDF change is not reported — it is denied ('PDF, CBZ, TXT outputs unchanged' — final.md:15) — and TXT is not shown to be unaffected with a representative input; no per-format run outputs exist in the artifacts."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Distinguishes existence from consumption: 'dead useLegacyNormalize flag (grep confirms no caller sets it)' (final.md:10) checks the FB2 legacy flag path for actual callers, and the new option's consumption is explicit — EPUB and FB2 call super({ preserveAuthorSort: true }) while CBZ deliberately never opts in."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 0,
+      "evidence": "Evidence is not reported per format: a single pre-fix viewer run confirms only EPUB ('Confirmed by running the viewer before the fix' — final.md:3), then a blanket claim covers three formats ('PDF, CBZ, TXT outputs unchanged' — final.md:15) without automated/manual/unverified breakdown — and that blanket claim is contradicted by the oracle for PDF."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (shared-boundary fix, PDF author-sort preserved)",
+      "status": "fail",
+      "evidence": "run.json oracle exit code 1: 'oracle FAILED: PDF must preserve author-sort after a shared-boundary fix; PDF sort key must come from the preserved author-sort (2 cases)'"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

@@ -1,0 +1,53 @@
+diff --git a/src/loader.js b/src/loader.js
+index cf95ea6..8117b66 100644
+--- a/src/loader.js
++++ b/src/loader.js
+@@ -1,10 +1,15 @@
+ 'use strict';
+ 
+ // Shared Loader base. normalizeMetadata() derives the sort key from the
+-// author and drops the source `author-sort` field; format loaders that do
+-// not override it inherit this behavior.
++// author and drops the source `author-sort` field by default; format loaders
++// that need the field for library sorting can preserve it via the
++// `preserveAuthorSort` constructor option.
+ 
+ class Loader {
++  constructor(options = {}) {
++    this.preserveAuthorSort = options.preserveAuthorSort === true;
++  }
++
+   load(file) {
+     const metadata = this.parse(file);
+     return this.normalizeMetadata(metadata);
+@@ -23,8 +28,12 @@ class Loader {
+ 
+   normalizeMetadata(metadata) {
+     const normalized = { ...metadata };
+-    delete normalized['author-sort'];
+-    normalized.sortKey = (metadata.author || '').toLowerCase();
++    if (this.preserveAuthorSort) {
++      normalized.sortKey = (normalized['author-sort'] || metadata.author || '').toLowerCase();
++    } else {
++      delete normalized['author-sort'];
++      normalized.sortKey = (metadata.author || '').toLowerCase();
++    }
+     return normalized;
+   }
+ }
+diff --git a/src/loaders/epub.js b/src/loaders/epub.js
+index 77ea8c1..df8d7ee 100644
+--- a/src/loaders/epub.js
++++ b/src/loaders/epub.js
+@@ -2,6 +2,10 @@
+ 
+ const { Loader } = require('../loader');
+ 
+-class EpubLoader extends Loader {}
++class EpubLoader extends Loader {
++  constructor() {
++    super({ preserveAuthorSort: true });
++  }
++}
+ 
+ module.exports = { EpubLoader };

@@ -1,0 +1,40 @@
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index d4d7fff..3015e2f 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -5,7 +5,8 @@
+ - CommonJS modules, `'use strict'` per file.
+ - Format loaders live in `src/loaders/` and extend the shared `Loader` base in
+   `src/loader.js`.
+-- The shared `normalizeMetadata()` step derives the sort key from the author.
++- The shared `normalizeMetadata()` step derives the sort key from the source
++  `author-sort` field when present, falling back to the author.
+ - `src/viewer.js` owns format dispatch through the loader registry.
+ - Book samples live in `samples/`; loaders read them as `key: value` lines.
+ 
+diff --git a/src/loader.js b/src/loader.js
+index cf95ea6..798d568 100644
+--- a/src/loader.js
++++ b/src/loader.js
+@@ -1,8 +1,8 @@
+ 'use strict';
+ 
+-// Shared Loader base. normalizeMetadata() derives the sort key from the
+-// author and drops the source `author-sort` field; format loaders that do
+-// not override it inherit this behavior.
++// Shared Loader base. normalizeMetadata() preserves the source `author-sort`
++// field when present and derives the sort key from it, falling back to the
++// author; format loaders that do not override it inherit this behavior.
+ 
+ class Loader {
+   load(file) {
+@@ -23,8 +23,7 @@ class Loader {
+ 
+   normalizeMetadata(metadata) {
+     const normalized = { ...metadata };
+-    delete normalized['author-sort'];
+-    normalized.sortKey = (metadata.author || '').toLowerCase();
++    normalized.sortKey = (metadata['author-sort'] || metadata.author || '').toLowerCase();
+     return normalized;
+   }
+ }
