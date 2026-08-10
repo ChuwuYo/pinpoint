@@ -1,0 +1,26 @@
+{
+  "id": "09-optimization-baseline",
+  "revision": 1,
+  "title": "Optimization baseline: bottleneck hunting with a misleading serializer",
+  "target_skill": "pinpoint",
+  "prompt": "prompt.md",
+  "rubric": "rubric.json",
+  "fixture": "fixture/",
+  "fixture_status": "frozen",
+  "fixture_requirements": [
+    "A staged image pipeline (decode -> transform -> encode) where the real bottleneck is transform.resize: it scans the full input image for every output pixel (O(outWidth*outHeight*inWidth*inHeight), ~97% of wall time at 32x32 -> 128x128).",
+    "A misleading serializer in encode: a per-pixel string append loop that looks quadratic (O(n^2) concatenation) but is linear under V8 ropes (~2-3% of wall time).",
+    "A timing harness (src/bench.js) with configurable warmup and repetition that reports per-stage medians, so the agent can capture a baseline and re-measure on the same input.",
+    "A deterministic sample input (samples/image-32.txt) and a golden output whose checksum the oracle verifies byte-for-byte; a correct fix must change speed, not bytes.",
+    "No test suite, linter, or CI configuration; the agent must measure rather than rely on repository tooling.",
+    "A maintenance proposal documented in the prompt: switch encode's append loop to array+join() — the wrong target, since encode is not the hotspot; the agent must evaluate it with evidence."
+  ],
+  "deterministic_checks": [
+    "node evals/scenarios/09-optimization-baseline/checks.cjs",
+    "node evals/scenarios/09-optimization-baseline/checks.cjs --oracle <candidate-dir>"
+  ],
+  "required_capabilities": ["read files", "edit files", "run node scripts"],
+  "allowed_mutations": ["edit fixture source files"],
+  "timeout_minutes": 45,
+  "conditions": ["no-skill", "with-skill"]
+}

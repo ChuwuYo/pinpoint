@@ -1,0 +1,6 @@
+{
+  "name": "image-pipeline",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Staged image processing pipeline fixture"
+}

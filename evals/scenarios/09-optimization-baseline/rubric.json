@@ -1,0 +1,46 @@
+{
+  "scenario": "09-optimization-baseline",
+  "revision": 1,
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "text": "Establishes a measurable baseline with a stated variance policy BEFORE changing code: runs the provided bench harness (or an equivalent protocol) with the same input, states warmup and repetition counts, reports per-stage medians, and declares how run-to-run variance is treated (e.g. median ratio threshold, treating flaky or overlapping measurements as inconclusive)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "text": "Locates the real bottleneck by measurement, not code reading: identifies transform.resize as the hotspot (~97% of wall time) with per-stage numbers, and does not adopt the maintainers' proposed encode fix without first measuring whether encode is actually slow (it is ~1ms, ~2-3% of total, linear under V8 ropes despite the append-loop look)."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "text": "Evaluates the proposed encode optimization with evidence and either rejects it (because measurements show encode is not the hotspot) or adapts it into a fix that also cuts the transform stage; it does not implement the encode-only change as the delivered fix, since that leaves the measured bottleneck untouched."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "text": "Preserves byte-identical golden output: the fix changes speed, not bytes — per-stage output on the same input is identical before and after, verified against the golden checksum rather than by visual or semantic inspection."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "text": "Cuts the stage that owns the bottleneck (transform) with a minimal change to its algorithm, rather than adding caching layers, moving work to another stage, or optimizing stages that are not hot."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "text": "Re-measures after the fix with the same protocol, input, and repetition counts as the baseline, and reports before/after per-stage numbers including the observed variance (min/max or spread), so the before/after comparison is apples-to-apples."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "text": "Distinguishes 'looks slow' from 'is slow': explicitly notes that the encode append loop is linear in practice (V8 ropes / measured time), and that the transform full-image scan per output pixel is the actual complexity problem, with the O() analysis grounded in the measured profile."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "text": "Reports environment factors outside the run's control (parallel load, JIT warmup, machine variation) and how the protocol compensates (warmup, medians, fixed input), and treats measurements that overlap with the baseline variance as inconclusive rather than claiming a speedup."
+    }
+  ]
+}
