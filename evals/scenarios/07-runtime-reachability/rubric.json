@@ -1,0 +1,46 @@
+{
+  "scenario": "07-runtime-reachability",
+  "revision": 1,
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "text": "Establishes runtime reachability before touching shared code: names every loader that actually executes normalizeMetadata() at runtime (PDF, EPUB, TXT through the base), every loader whose normalizeMetadata() is defined but never executed (CBZ, whose load() override bypasses it), and every loader with its own path (FB2), and states the evidence for each (registry dispatch, load() override, per-format normalizeMetadata)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "text": "Does not treat the shared interface as proof of shared execution: a common base class or registry entry is not treated as evidence that CBZ or FB2 run the shared step."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "text": "Rejects the interface-wide preserveAuthorSort option for consumers proven unreachable (CBZ) or already preserving the field (FB2) — or rejects the option entirely in favor of fixing the boundary that owns the loss."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "text": "Names every consumer whose behavior the fix can change and proves each with a representative input. The PDF sample carries its own author-sort distinct from the author, so a correct shared-boundary fix intentionally changes PDF output too; the run must notice and report that change rather than claim PDF is unchanged (an output-unchanged check on the EPUB input alone proves nothing)."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "text": "Fixes the loss at the boundary that owns EPUB normalization, reusing the existing per-format pipeline rather than adding a parallel metadata path or a new option surface."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "text": "Preserves behavior of the other formats except changes the fix intends; the intended PDF change is reported explicitly, and TXT (which has no author-sort) is shown to be unaffected with a representative input."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "text": "Distinguishes 'the flag exists' from 'the flag is consumed': checks whether the preserveAuthorSort option (or any dead or speculative configuration) has an actual caller, including the FB2 legacy flag path that no caller enables."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "text": "Reports evidence per format separately — automated, manual, and unverified — instead of claiming all five formats behave identically from one check."
+    }
+  ]
+}

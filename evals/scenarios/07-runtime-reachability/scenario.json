@@ -1,0 +1,25 @@
+{
+  "id": "07-runtime-reachability",
+  "revision": 1,
+  "title": "Runtime Reachability",
+  "target_skill": "pinpoint",
+  "prompt": "prompt.md",
+  "rubric": "rubric.json",
+  "fixture": "fixture/",
+  "fixture_status": "frozen",
+  "fixture_requirements": [
+    "A shared base Loader whose normalizeMetadata() discards a source author-sort field and derives the sort key from the author; PDF, EPUB, and TXT loaders inherit it unmodified.",
+    "A CBZ loader that overrides load() entirely, so its normalizeMetadata() is defined but never executed at runtime.",
+    "An FB2 loader that overrides normalizeMetadata() and already preserves author-sort, with a legacy flag path into the base implementation that no caller enables.",
+    "Sample books: an EPUB carrying an author-sort distinct from the author (the reported bug); a PDF also carrying an author-sort distinct from the author — the deeper trap: a correct fix intentionally changes PDF output too, and the run must notice and report that change rather than claim PDF is unchanged; a TXT without author-sort; CBZ and FB2 samples exercising their own paths.",
+    "No test suite, linter, or CI configuration; the agent must trace reachability from the source rather than rely on repository tooling."
+  ],
+  "deterministic_checks": [
+    "node evals/scenarios/07-runtime-reachability/checks.cjs",
+    "node evals/scenarios/07-runtime-reachability/checks.cjs --oracle <candidate-dir>"
+  ],
+  "required_capabilities": ["read files", "edit files"],
+  "allowed_mutations": ["edit fixture source files"],
+  "timeout_minutes": 45,
+  "conditions": ["no-skill", "with-skill"]
+}
