@@ -21,7 +21,11 @@ function ok(message) {
 }
 
 function pack() {
-  const result = spawnSync(npm, ['pack', '--json'], { cwd: root, encoding: 'utf8' });
+  const result = spawnSync(npm, ['pack', '--json'], {
+    cwd: root,
+    encoding: 'utf8',
+    shell: process.platform === 'win32',
+  });
   if (result.status !== 0) {
     throw new Error(`npm pack failed: ${result.stdout}${result.stderr}`);
   }
@@ -32,7 +36,10 @@ function pack() {
 }
 
 function tarballEntries(tarball) {
-  const result = spawnSync(tar, ['-tzf', tarball], { encoding: 'utf8' });
+  const result = spawnSync(tar, ['-tzf', tarball], {
+    encoding: 'utf8',
+    shell: process.platform === 'win32',
+  });
   if (result.status !== 0) {
     throw new Error(`tar -tzf failed: ${result.stdout}${result.stderr}`);
   }
