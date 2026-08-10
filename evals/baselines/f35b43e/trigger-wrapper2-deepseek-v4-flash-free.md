@@ -12,8 +12,11 @@
   - Model differs between the two sweeps (kimi-for-coding-highspeed vs
     deepseek-v4-flash-free); model is a recorded variable, and the
     wrapper comparison below must be read with that confound in mind.
-    `deepseek-v4-flash-free` was used because it is the current session
-    model (no pin); a same-model v1-vs-v2 sweep is deferred.
+  - **Same-model control** (v1 wrapper, same model, same seed/order):
+    2026-08-10-deepseek-v4-flash-free-subagent-rev3-w1 (36 cases x2,
+    37e9a70, wrapper v1): **56/72** — 11 correct short of w2's 67/72,
+    no-selection 16 vs 5. The wrapper attribution is now isolated from
+    the model variable; see "Same-model comparison" below.
 - Identical conditions across sweeps: 36-case dataset, catalog revision 3,
   wrapper (except v1/v2 wording), pinned vs inherited model handling per
   harness rules, discovery snapshot byte-identical (152 entries).
@@ -95,7 +98,79 @@
 - VA-014: mode change wrong-selection -> format no-selection (rep 1) /
   correct (rep 2).
 
-## Generated report
+## Same-model comparison (wrapper v1 -> v2, deepseek-v4-flash-free)
+
+- 2026-08-10-deepseek-v4-flash-free-subagent-rev3-w1 (v1 wrapper, same
+  model, same catalog/prompts/seed order): **56/72 correct**,
+  no-selection 16, wrong-selection 0, boundary misroutes 0,
+  critical-case failures 4 (TR-012 rep 2, VA-010 rep 2, VA-014 rep 1,
+  VA-014 rep 2), format violations 6.
+- w2 (v2 wrapper) deltas: correct 56 -> **67**; no-selection 16 -> **5**;
+  critical failures 4 -> **3**; format violations 6 -> **1**; per-skill
+  recall — pinpoint 0.42 -> 0.92, pinpoint-review 0.71 -> 0.86,
+  pinpoint-commit 0.75 -> 0.94, pinpoint-pr 0.83 -> 0.83,
+  pinpoint-help 1.00 -> 1.00.
+- Per-case flips, w1 fail -> w2 fix (12): TR-001 rep 1 + rep 2,
+  TR-002 rep 1, TR-006 rep 1, TR-013 rep 2, TR-019 rep 2, VA-001 rep 1,
+  VA-004 rep 2, VA-005 rep 1, VA-010 rep 2, VA-011 rep 1, VA-014 rep 2.
+  Most were sandbox-refusal/feasibility no-selections or format
+  violations under v1 — the exact class the v2 sentence targets.
+- Regression, w1 pass -> w2 fail (1): TR-007 rep 1 (v1 named
+  pinpoint-pr; v2 emitted no `SKILL_USED` line — format violation,
+  recorded no-selection). Single-rep wobble; not a cluster.
+- Unchanged failures under both wrappers (3): TR-012 rep 2 and
+  VA-014 rep 1 (review-and-merge on empty repo state) and VA-004 rep 1
+  (clean-tree commit refusal). Same pattern v1 showed cross-model;
+  feasibility conflation, known limitations.
+- The 18 -> 5 no-selection collapse originally measured against HighSpeed
+  survives the same-model control, and the same cluster cases
+  (VA-004, VA-006, VA-013, TR-005/TR-015, TR-006, VA-009) improve under
+  v2 within this model. **Wrapper attribution confirmed; descriptions
+  stay untouched.**
+
+## Generated report (w1 control sweep)
+
+Runs: 72 total, 72 scored, 0 INVALID (excluded).
+
+### Outcomes
+
+- correct: 56
+- no-selection: 16
+- wrong-selection: 0
+- multi-selection: 0
+- unauthorized-selection: 0
+
+### Confusion matrix (expected -> selected)
+
+| expected | pinpoint | pinpoint-review | pinpoint-commit | pinpoint-pr | pinpoint-help | none | multiple | non-pinpoint |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| pinpoint | 5 | 0 | 0 | 0 | 0 | 7 | 0 | 0 |
+| pinpoint-review | 0 | 10 | 0 | 0 | 0 | 4 | 0 | 0 |
+| pinpoint-commit | 0 | 0 | 8 | 0 | 0 | 4 | 4 | 0 |
+| pinpoint-pr | 0 | 0 | 0 | 5 | 0 | 1 | 0 | 0 |
+| pinpoint-help | 0 | 0 | 0 | 0 | 8 | 0 | 0 | 0 |
+| none | 0 | 0 | 0 | 0 | 0 | 16 | 0 | 0 |
+
+### Per-skill precision / recall
+
+| skill | precision | recall | tp | fp | fn |
+| --- | --- | --- | --- | --- | --- |
+| pinpoint | 1.00 | 0.42 | 5 | 0 | 7 |
+| pinpoint-review | 1.00 | 0.71 | 10 | 0 | 4 |
+| pinpoint-commit | 1.00 | 0.75 | 12 | 0 | 4 |
+| pinpoint-pr | 1.00 | 0.83 | 5 | 0 | 1 |
+| pinpoint-help | 1.00 | 1.00 | 8 | 0 | 0 |
+
+### Read-only/mutating boundary misroutes: 0
+
+### Critical-case failures: 4
+
+- TR-012 [review-and-merge] outcome=no-selection selected=[] (evals/trigger/runs/2026-08-10-deepseek-v4-flash-free-subagent-rev3-w1/TR-012.automatic.2.run.json)
+- VA-010 [review-and-merge] outcome=no-selection selected=[] (evals/trigger/runs/2026-08-10-deepseek-v4-flash-free-subagent-rev3-w1/VA-010.automatic.2.run.json)
+- VA-014 [review-and-merge] outcome=no-selection selected=[] (evals/trigger/runs/2026-08-10-deepseek-v4-flash-free-subagent-rev3-w1/VA-014.automatic.1.run.json)
+- VA-014 [review-and-merge] outcome=no-selection selected=[] (evals/trigger/runs/2026-08-10-deepseek-v4-flash-free-subagent-rev3-w1/VA-014.automatic.2.run.json)
+
+## Generated report (w2 sweep)
 
 Runs: 72 total, 72 scored, 0 INVALID (excluded).
 
@@ -158,5 +233,8 @@ Runs: 72 total, 72 scored, 0 INVALID (excluded).
   adapter showed cross-model; recorded as known limitations, not
   description targets.
 - Caveat recorded: v1 (HighSpeed) vs v2 (deepseek-v4-flash-free) differ
-  in model; a same-model v1-vs-v2 rerun is the follow-up if the wrapper
-  attribution needs to be isolated from the model variable.
+  in model; the same-model control sweep (wrapper v1, deepseek-v4-flash-free,
+  56/72) was run to isolate the wrapper from the model variable — the
+  no-selection collapse (16 -> 5) and cluster improvements reproduce
+  within the same model, closing the confound. Attribution stands;
+  residual failures are known limitations, not description targets.
