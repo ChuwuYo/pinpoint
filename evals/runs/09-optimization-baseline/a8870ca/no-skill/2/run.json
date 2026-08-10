@@ -1,0 +1,32 @@
+{
+  "scenario": "09-optimization-baseline",
+  "scenario_revision": 1,
+  "condition": "no-skill",
+  "repetition": 2,
+  "randomized_order": true,
+  "model": { "id": "opencode/deepseek-v4-flash-free", "settings": "opencode defaults" },
+  "harness": { "name": "opencode", "version": "task subagent (general), session ses_013b6d964ffeoftA5TGAeKokxP, 2026-08-11" },
+  "pinpoint_commit": "a8870ca",
+  "skill_catalog": [],
+  "invocation_method": "none",
+  "fixture": {
+    "ref": "scenarios/09-optimization-baseline/fixture",
+    "hash": "6778844e198689241f9bbf04bfd6ceb1c61ddc4643ac3f6fa47b6afa4aeff910",
+    "clean_start_proof": "fresh copy of frozen fixture, git baseline commit c4b0418, hash = sha256(sorted path+content) over 13 fixture files"
+  },
+  "environment": { "os": "darwin", "runtimes": ["node v26.5.0"] },
+  "commands": [
+    { "cmd": "node evals/scenarios/09-optimization-baseline/checks.cjs", "exit": 0, "log": "fixture integrity self-check PASS" },
+    { "cmd": "node evals/scenarios/09-optimization-baseline/checks.cjs --oracle <candidate-dir>", "exit": 0, "log": "oracle PASS (golden checksum identical; transform and total medians < 1/4 of pristine)" }
+  ],
+  "final_response": "final.md",
+  "patch": "patch.diff",
+  "repo_state": {
+    "before": "clean git baseline of frozen fixture (c4b0418)",
+    "after": "working tree with candidate changes; patch.diff captured"
+  },
+  "status": "PASS",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [],
+  "redactions": []
+}

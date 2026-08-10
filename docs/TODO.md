@@ -1112,14 +1112,17 @@ in Phase 3.
 
 #### 6.3 Scenario 09 — Optimization baseline
 
-- [ ] Build the staged generator, misleading serializer, real bottleneck, timing
+- [x] Build the staged generator, misleading serializer, real bottleneck, timing
   harness, and golden output/checksum.
-- [ ] Control warmup, input, environment, and repetition count.
-- [ ] Define a variance policy before scoring speedup claims.
-- [ ] Score baseline capture, stage measurement, owner-boundary optimization,
+- [x] Control warmup, input, environment, and repetition count.
+- [x] Define a variance policy before scoring speedup claims.
+- [x] Score baseline capture, stage measurement, owner-boundary optimization,
   before/after comparability, and output equivalence.
-- [ ] Treat flaky or overlapping measurements as inconclusive rather than as a
+- [x] Treat flaky or overlapping measurements as inconclusive rather than as a
   claimed speedup.
+- [x] Baseline (a8870ca): no-skill 2/2 PASS 8/8 vs with-skill 2/2 PASS 8/8 —
+  weak discrimination (prompt already requires stage measurement; bottleneck
+  is unambiguous once measured).
 
 #### 6.4 Scenario 10 — Value provenance
 

@@ -1,0 +1,70 @@
+{
+  "scenario": "09-optimization-baseline",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Baseline protocol (warmup 5, runs 15, 3 repeats, medians, min/max) and variance policy stated before any code change, with per-stage medians 0.21/355.9/14.9/371.8ms."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Bottleneck located by measurement \u2014 transform = 96% of total, scaling 27.9/356/1514ms across 4x output steps; encode measured linear under V8 ropes."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Encode proposal evaluated with evidence \u2014 join rewrite statistically indistinguishable (9.8-11.2 vs 9.5-12.8ms) and byte-identical, so rejected; fix targets transform."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "Output equivalence verified by byte comparison of full UTF-8 strings against golden at 128/512/1024, matching harness byte counts."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Minimal algorithm change in transform.js (compute global mean once, replicate), O(out\u00b7in) to O(in+out)."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "After-fix re-measurement uses same protocol/input/repeats with per-stage before/after min/max (transform 355.9\u21922.68ms, total 371.8\u219217.2ms)."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Distinguishes looks-slow from is-slow \u2014 encode near-linear under ropes; transform full-input scan per output pixel is the real complexity problem."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 1,
+      "evidence": "Reports uncontrollable factors (parallel load, JIT/GC, 9.2s spikes) and compensation; overlapping measurements treated as inconclusive while transform gap (~100x) outside noise band."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "oracle: golden checksum identical + transform/total medians < 1/4 of pristine",
+      "status": "pass",
+      "evidence": "node checks.cjs --oracle <candidate-dir> exit 0"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "n/a"
+  }
+}

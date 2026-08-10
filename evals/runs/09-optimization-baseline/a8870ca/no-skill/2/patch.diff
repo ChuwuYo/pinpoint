@@ -1,0 +1,48 @@
+diff --git a/src/stages/transform.js b/src/stages/transform.js
+index 06d8bb3..c0c65a5 100644
+--- a/src/stages/transform.js
++++ b/src/stages/transform.js
+@@ -1,27 +1,25 @@
+ 'use strict';
+ 
+ // Resizes a decoded image by averaging every input pixel over each output
+-// pixel. For each output pixel this scans the entire input image.
++// pixel. The average over the whole input is the same for every output
++// pixel, so the channel totals are computed once and the result is reused.
+ function resize(image, outWidth, outHeight) {
+   const { width, height, pixels } = image;
++  let r = 0;
++  let g = 0;
++  let b = 0;
++  for (const [pr, pg, pb] of pixels) {
++    r += pr;
++    g += pg;
++    b += pb;
++  }
++  const count = width * height;
++  const pr = Math.round(r / count);
++  const pg = Math.round(g / count);
++  const pb = Math.round(b / count);
+   const out = [];
+-  for (let oy = 0; oy < outHeight; oy++) {
+-    for (let ox = 0; ox < outWidth; ox++) {
+-      let r = 0;
+-      let g = 0;
+-      let b = 0;
+-      let count = 0;
+-      for (let iy = 0; iy < height; iy++) {
+-        for (let ix = 0; ix < width; ix++) {
+-          const [pr, pg, pb] = pixels[iy * width + ix];
+-          r += pr;
+-          g += pg;
+-          b += pb;
+-          count += 1;
+-        }
+-      }
+-      out.push([Math.round(r / count), Math.round(g / count), Math.round(b / count)]);
+-    }
++  for (let i = 0; i < outWidth * outHeight; i++) {
++    out.push([pr, pg, pb]);
+   }
+   return { width: outWidth, height: outHeight, pixels: out };
+ }

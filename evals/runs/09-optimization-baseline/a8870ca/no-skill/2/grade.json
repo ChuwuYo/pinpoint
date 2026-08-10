@@ -1,0 +1,70 @@
+{
+  "scenario": "09-optimization-baseline",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Baseline table + protocol (warmup 3/runs 7), 3-invocation median policy, overlapping=inconclusive before fix."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "transform ~89.6/93ms (~96%) with per-stage numbers; encode measured not hot."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Rejects encode array+join with evidence (slower 3.30\u20133.57 vs 2.02\u20132.61ms); only transform fixed."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "Byte-identical golden via === and multi-size diffs; patch is equivalent full-image average once."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Minimal transform.js O(in+out) rewrite only."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Same protocol/input after table with min/max."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "V8 ropes/sub-quadratic encode vs O(out\u00b7in) transform grounded in timings."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 1,
+      "evidence": "Uncontrolled load/GC/JIT/machine stated; comparison validity + inconclusive-on-overlap policy."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "oracle: golden checksum identical + transform/total medians < 1/4 of pristine",
+      "status": "pass",
+      "evidence": "node checks.cjs --oracle <candidate-dir> exit 0"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "n/a"
+  }
+}

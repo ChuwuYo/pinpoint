@@ -1,0 +1,70 @@
+{
+  "scenario": "09-optimization-baseline",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Baseline before any code change (warmup 5/runs 15, 5 reps at 128x128, 3 at 256x256), per-stage medians/min/max, explicit variance policy (non-overlapping spreads meaningful, overlapping inconclusive)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Measurement identifies transform as hotspot (94-98%: 26.2/27.0ms at 128x128); encode measured ~0.7-2.1ms, not assumed slow."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Encode join proposal applied and re-measured; distributions overlap completely (0.57-0.71 vs 0.50-0.76ms), rejected on evidence; fix targets transform."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "Byte-identical via sha256 fixed vs baseline (git show HEAD) at 64x64/128x128/256x256/7x3, matching byte counts and harness bytes."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Hoists whole-image averaging out of per-output-pixel loops in transform.js only \u2014 minimal change at owning stage."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Same protocol/input/reps after fix with per-stage medians and min-max; before/after spreads non-overlapping for transform/total."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Distinguishes looks-slow from is-slow: encode linear (0.09\u21922.15ms while bytes grow 16x, V8 ropes), transform O(outW\u00d7outH\u00d7inW\u00d7inH) grounded in measured scaling."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 1,
+      "evidence": "Environment factors reported (shared laptop, background load, CPU scaling, JIT/GC) with compensation; overlapping encode measurements treated as inconclusive."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "oracle: golden checksum identical + transform/total medians < 1/4 of pristine",
+      "status": "pass",
+      "evidence": "node checks.cjs --oracle <candidate-dir> exit 0"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "n/a"
+  }
+}

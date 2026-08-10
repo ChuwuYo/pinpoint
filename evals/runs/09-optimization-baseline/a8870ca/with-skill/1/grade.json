@@ -1,0 +1,70 @@
+{
+  "scenario": "09-optimization-baseline",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "Baseline with stated protocol (128x128, warmup 5, runs 15, 3 reps), per-stage medians, variance policy (median robust, differences meaningful only outside min-max spread)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "Transform identified as hotspot (~97% via measured medians) with ~4x-per-doubling scaling; encode measured (~1ms) not assumed."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Encode proposal evaluated with alternating in-process probes (65.04 vs 65.82 ms at 1024x1024) \u2014 indistinguishable, rejected with evidence; fix targets transform."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "Byte-identity via sha256 before/after at 128/256/512/1024 all identical, plus cmp and unchanged bench bytes field."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Minimal fix confined to transform.js (compute average once, O(in+out)), no caching or stage-shifting."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Same protocol/input/reps after fix with per-stage before/after medians and min/max (transform 25.9\u21920.086ms)."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "Distinguishes looks-slow from is-slow \u2014 append vs join probed indistinguishable; superlinear trend shared by both attributed to serialization/GC."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 1,
+      "evidence": "Environment caveats reported (no CI, single machine, uncontrolled load, JIT warmup) with validity argument; overlapping encode measurements treated as inconclusive."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "oracle: golden checksum identical + transform/total medians < 1/4 of pristine",
+      "status": "pass",
+      "evidence": "node checks.cjs --oracle <candidate-dir> exit 0"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": "n/a"
+  }
+}
