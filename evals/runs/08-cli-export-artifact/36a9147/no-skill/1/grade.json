@@ -1,0 +1,70 @@
+{
+  "scenario": "08-cli-export-artifact",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md:4-5 traces producer→consumer: writeRow 'silently dropped everything that didn't fit' (fixture exporter.js:27-35); 'export() unconditionally returned { ok: true } in both the success and catch paths' (fixture exporter.js:46-49, cli.js:10-12 prints 'Exported 300 books', exit 0); 'The importer then correctly threw TruncatedArtifactError on the 1024-byte artifact (cut off mid-row, missing trailing newline)' (fixture importer.js:9-11)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md:5: 'the CLI printed Exported 300 books and exited 0 even when only ~100 of 300 rows reached the file' names the divergence between reported count and readable count; final.md:12 contrasts '1024-byte CSV + false success + import crash' before vs 'Exported 300 books, Imported 300 books, exit 0' after — validation happens at the importer boundary."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md:7: 'it only moves the cliff: any catalog whose CSV exceeds 8 MiB (or any write failure) would still silently truncate while claiming success', verified with a 200k-book export the 8 MiB budget would not fit; fix at the owning boundary (patch.diff:21-44): buffer/budget removed, writeRow writes each row to the fd, catch path returns { ok: false, error } — rows are written or refused, not dropped."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "All three consumers proven with representative inputs: small catalog '5-book export: unchanged, still round-trips' (final.md:13); large catalog '300 books: before → 1024-byte CSV + false success + import crash; after → 12,097-byte CSV, Exported 300 books, Imported 300 books, exit 0' (final.md:12); unwritable destination 'Write failure (e.g. EISDIR): now reports Export failed: ..., exit 1 (previously claimed success, exit 0)' (final.md:15)."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Fix confined to the exporter's write path: patch.diff touches only src/exporter.js; export() keeps its signature, writeRow writes to the existing fd, cli.js/importer.js/samples untouched (final.md:19). No new export path, option surface, or size-limited CLI workaround."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Small-catalog happy path preserved (final.md:13); artifact format stays import-compatible — header 'title,author' and trailing newline per row preserved, importer reads all rows back (oracle importer strictness PASS); intended behavior change explicitly reported: 'Write failure (e.g. EISDIR): now reports Export failed: ..., exit 1' (final.md:15)."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "final.md:9 distinguishes existence from consumption: 'Removed the unused buffer-dependent flush() and the now-unneeded OUTPUT_BUDGET export (nothing else referenced them)' — the dead durability path was checked for callers; error propagation verified end to end via the CLI: write failure now yields ok:false surfaced as 'Export failed: ...' exit 1 (final.md:15), confirmed by oracle error-propagation check."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "Failure modes reported separately: truncation verified with 300-book (final.md:12) and 200k-book (final.md:14) inputs, error propagation verified with EISDIR (final.md:15). But slow-disk/full-disk/interruption modes are never explicitly named as not simulated."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (round-trip at all sizes + error propagation + importer strictness)",
+      "status": "pass",
+      "evidence": "run.json: oracle command exited 0 with 'oracle PASS (small round-trip, 300-book round-trip, 200k synthesized round-trip, error propagation, importer strictness)'"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

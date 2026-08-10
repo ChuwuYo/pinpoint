@@ -1,0 +1,70 @@
+{
+  "scenario": "08-cli-export-artifact",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md: 'writeRow silently discarded the overflow mid-row, yet export() returned { ok: true, exported: books.length } — and the catch block returned ok: true too. The 300-book artifact was cut at 1024 bytes without a trailing newline, so importer.js threw TruncatedArtifactError while the CLI claimed Exported 300 books (exit 0)' — each claim maps to fixture code: writeRow budget logic (exporter.js:24-35), ok:true return incl. catch (exporter.js:46-49), importer rejection (importer.js:9-11)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md names the divergence: 'the CLI claimed Exported 300 books (exit 0)' while 'importer.js threw TruncatedArtifactError'; the success signal is labeled 'dishonest ok: true', and validation is placed at the importer boundary with the count mismatch (exported 300, readable 0) explicitly stated."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md: 'the 8 MiB patch is wrong: it merely moves the cap. It keeps silent truncation and the dishonest ok: true, so any catalog over 8 MiB fails identically — I proved this by exporting a 300,000-book catalog (~13.9 MB, larger than the proposal)'. Fix removes truncation at the exporter write path: 'removed the fixed budget, buffer, and dead flush entirely; each row is now written straight to the file descriptor', failures return ok:false instead of silently dropping rows."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "All three consumers proven with distinct inputs: small happy path ('small (5 books) still round-trips'), large bug case ('300 books now produces a full 12,097-byte artifact and imports 300' plus a 13.9 MB catalog importing fully), and error propagation ('a bad destination path now exits 1 with an error instead of claiming success')."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Patch touches only src/exporter.js ('Files changed: src/exporter.js (only file)'); the loss is fixed in the exporter's write path by replacing the budgeted buffer with direct fs.writeSync per row — no parallel export path, no new option surface, no size-limited CLI workaround."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Unintended behavior preserved: small catalog still round-trips and the artifact format is unchanged (same header/trailing newline, verified by importer round-trips). Intended change reported explicitly: 'Failures now return { ok: false, exported: <rows actually written>, error }, which the unchanged cli.js reports as Export failed: ... with exit code 1'."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "final.md distinguishes dead boundary from consumed one: 'removed ... dead flush/OUTPUT_BUDGET entirely' (matching fixture comment 'currently no caller invokes it'), and verifies error propagation end to end: 'a failed write no longer yields ok:true' — observed via exit 1 on a bad destination path, confirmed by oracle error-propagation check."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "Truncation and error propagation reported separately with distinct inputs ('300 books ... 12,097-byte artifact and imports 300' vs 'a bad destination path now exits 1'), and no 'all modes identical' claim — but slow-disk/full-disk/interruption modes are never named as not simulated."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (round-trip at all sizes + error propagation + importer strictness)",
+      "status": "pass",
+      "evidence": "run.json: oracle command exited 0 with 'oracle PASS (small round-trip, 300-book round-trip, 200k synthesized round-trip, error propagation, importer strictness)'"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

@@ -1,0 +1,48 @@
+diff --git a/src/exporter.js b/src/exporter.js
+index e8828cb..92c0f9b 100644
+--- a/src/exporter.js
++++ b/src/exporter.js
+@@ -2,8 +2,8 @@
+ 
+ const fs = require('node:fs');
+ 
+-// Fixed output budget for exported artifacts. Bytes beyond this budget are
+-// silently discarded; callers are not told.
++// Initial buffer size; the buffer grows as needed so the artifact is never
++// silently truncated.
+ const OUTPUT_BUDGET = 1024;
+ 
+ class CatalogExporter {
+@@ -23,15 +23,14 @@ class CatalogExporter {
+ 
+   writeRow(text) {
+     const chunk = Buffer.from(text, 'utf8');
+-    const space = this.buffer.length - this.offset;
+-    if (chunk.length > space) {
+-      // write only what fits; silently drop the rest
+-      chunk.copy(this.buffer, this.offset, 0, space);
+-      this.offset = this.buffer.length;
+-    } else {
+-      chunk.copy(this.buffer, this.offset);
+-      this.offset += chunk.length;
++    const needed = this.offset + chunk.length;
++    if (needed > this.buffer.length) {
++      const grown = Buffer.alloc(Math.max(needed, this.buffer.length * 2));
++      this.buffer.copy(grown, 0, 0, this.offset);
++      this.buffer = grown;
+     }
++    chunk.copy(this.buffer, this.offset);
++    this.offset += chunk.length;
+   }
+ 
+   export(books, destPath) {
+@@ -45,8 +44,7 @@ class CatalogExporter {
+       fs.writeSync(fd, this.buffer, 0, this.offset);
+       return { ok: true, exported: books.length, bytesWritten: this.offset };
+     } catch (error) {
+-      // The exporter never fails; callers rely on ok.
+-      return { ok: true, exported: books.length, bytesWritten: 0, error: String(error) };
++      return { ok: false, exported: 0, bytesWritten: 0, error: String(error) };
+     } finally {
+       if (fd !== undefined) fs.closeSync(fd);
+     }

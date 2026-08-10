@@ -1,0 +1,53 @@
+{
+  "scenario": "08-cli-export-artifact",
+  "scenario_revision": 1,
+  "condition": "with-skill",
+  "repetition": 1,
+  "randomized_order": true,
+  "model": {
+    "id": "opencode/deepseek-v4-flash-free",
+    "settings": "opencode defaults"
+  },
+  "harness": {
+    "name": "opencode",
+    "version": "task subagent (general), session ses_013ff9df7ffeJbJocXuKW18uCg, 2026-08-10"
+  },
+  "pinpoint_commit": "36a9147",
+  "skill_catalog": [
+    "pinpoint"
+  ],
+  "invocation_method": "explicit",
+  "fixture": {
+    "ref": "scenarios/08-cli-export-artifact/fixture",
+    "hash": "5f6bdfbc21a606a3b3e7d66ccb3ee64119c3a3370028c32f4fcbddacafc6ceee",
+    "clean_start_proof": "fresh copy of frozen fixture, git baseline commit 1fffa70, hash = sha256(sorted path+content) over 9 fixture files"
+  },
+  "environment": {
+    "os": "darwin",
+    "runtimes": [
+      "node v26.5.0"
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "node evals/scenarios/08-cli-export-artifact/checks.cjs",
+      "exit": 0,
+      "log": "fixture integrity self-check PASS"
+    },
+    {
+      "cmd": "node evals/scenarios/08-cli-export-artifact/checks.cjs --oracle /tmp/s08-runs/run2",
+      "exit": 0,
+      "log": "oracle PASS (small round-trip, 300-book round-trip, 200k synthesized round-trip, error propagation, importer strictness)"
+    }
+  ],
+  "final_response": "final.md",
+  "patch": "patch.diff",
+  "repo_state": {
+    "before": "clean git baseline of frozen fixture (1fffa70)",
+    "after": "working tree with candidate changes; patch.diff captured"
+  },
+  "status": "PASS",
+  "infrastructure_errors": [],
+  "omitted_artifacts": [],
+  "redactions": []
+}

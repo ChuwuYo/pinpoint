@@ -1,0 +1,70 @@
+{
+  "scenario": "08-cli-export-artifact",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md traces producer→consumer with per-claim evidence: 'src/exporter.js:27-30 — writeRow writes only what fits into a fixed 1024-byte buffer and silently drops the overflow'; 'export() still returns { ok: true, exported: books.length } (line 41)'; importer rejection at 'TruncatedArtifactError: missing trailing newline'. Reproduction: '300-book export printed Exported 300 books with exit 0 but produced an artifact of exactly 1024 bytes' — matches fixture (exporter.js:7 OUTPUT_BUDGET=1024, exporter.js:46 ok:true, importer.js:9-10 trailing-newline check)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "The success signal is explicitly not trusted: 'printed Exported 300 books with exit 0 but produced an artifact of exactly 1024 bytes, and the importer rejected it' — reported count (300) vs readable count (importer failure) divergence named. Artifact validated at the consumer boundary, pre-fix via importer rejection and post-fix via 'Imported 300 books, exit 0'. The report states the importer 'is the consumer contract and was never wrong'."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "Budget patch rejected with mechanism reasoning: 'It moves the cliff to 8 MiB and leaves both false-success paths intact — any catalog ≥ 8 MiB silently truncates and still claims success. A budget constant is inherently the defect.' The fix removes truncation at the owning boundary instead of resizing: buffer 'grows on demand (doubling, exact-fit for large chunks) — no bytes are ever dropped, so truncation is structurally impossible' and the catch returns 'ok: false' (patch.diff:49)."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "Each affected consumer named and proven with a distinct representative input: small catalog happy path — '5-book round-trip still works (exit 0)'; large catalog fully readable — '300-book round-trip: Exported 300 books → Imported 300 books, exit 0; artifact 12,097 bytes, 301 lines, all 300 rows verified verbatim with trailing newline'; unwritable destination no longer succeeds — 'Export to nonexistent dir: Export failed, exit 1'. Blast radius names 'only consumer is cli.js:9'."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "Fix confined to the exporter's write path, reusing the existing pipeline: 'Files changed — src/exporter.js (only file modified; src/importer.js and src/cli.js untouched)'. No parallel export path, no new option surface, no size-limited workaround — OUTPUT_BUDGET removed entirely (patch.diff:9-11,56) rather than raised."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Intended change reported explicitly: 'Behavior change observed: the error path changed — an unwritable destination previously printed Exported N books with exit 0; now it prints Export failed with exit 1 (matches the repo contract). Success-path output is unchanged.' Format stays import-compatible ('301 lines, all 300 rows verified verbatim') and importer strictness preserved: 'samples/truncated.csv still rejected'."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "Error propagation verified end to end: failed write observed through the CLI — 'Export to nonexistent dir: Export failed, exit 1' — so ok:false reaches the consumer. But the flush() dead-durability-path check is only implicit: self-review says 'flush() kept functional' without evidence of a caller search for flush (unlike the explicit 'OUTPUT_BUDGET had zero external consumers per repo-wide grep')."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 1,
+      "evidence": "Failure modes reported with separate evidence, not one blanket claim: truncation with a large input ('300-book round-trip … artifact 12,097 bytes, 301 lines, all 300 rows verified'); error propagation with an unwritable destination ('Export to nonexistent dir: Export failed, exit 1'); non-simulated modes named: 'Unverified: partial fs.writeSync short-writes (regular local files write fully or throw)' — slow-disk/full-disk/interruption not claimed identical."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (round-trip at all sizes + error propagation + importer strictness)",
+      "status": "pass",
+      "evidence": "run.json: oracle command exited 0 with 'oracle PASS (small round-trip, 300-book round-trip, 200k synthesized round-trip, error propagation, importer strictness)'"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}

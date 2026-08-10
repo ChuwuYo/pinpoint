@@ -1,0 +1,70 @@
+{
+  "scenario": "08-cli-export-artifact",
+  "run": "run.json",
+  "evaluator": {
+    "id": "fresh general subagent, blinded to condition",
+    "type": "model",
+    "blinded": true
+  },
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md states the mechanism before the fix: 'src/exporter.js buffered the entire artifact in a fixed 1024-byte buffer; writeRow silently discarded any bytes beyond it, and export() returned ok: true unconditionally (including in the catch branch). The importer behaved correctly... its trailing-newline check is the consumer contract detecting the truncation (importer.js:10)'. Also explains why 5 books fit and 300 produce a 1024-byte artifact with '27 rows and a mid-row cut'."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md never takes the exporter's success signal at face value: the root cause is that 'export() returned ok: true unconditionally', and validation runs through the real consumer — '300 books: Exported 300 → Imported 300; artifact 12,097 bytes (was 1024)' with the importer rejecting the pre-fix artifact. Divergence between reported count and readable content named ('Exported 300' but a truncated artifact with 27 rows)."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md: 'Proposed 8 MiB patch — rejected as symptom masking', demonstrated by reproduction at the next boundary ('a 240,000-book catalog (14.9 MB, ≈1.8× the proposed budget) still truncates under the proposal'). Fix removes truncation at the owning boundary: patch.diff changes writeRow to grow the buffer ('the buffer grows as needed so the artifact is never silently truncated') and the catch branch to return ok:false — rows written or refused, not dropped."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "score": 1,
+      "evidence": "final.md lists each consumer with representative input: small '5 books: Exported 5 → Imported 5 (unchanged)', large '300 books: Exported 300 → Imported 300; artifact 12,097 bytes (was 1024)' plus '240,000 books: 14.9 MB artifact round-trips fully', and unwritable destination 'Export failed: ENOENT …, exit 1'. Importer strictness re-checked ('still rejects samples/truncated.csv'). These match the oracle checks (small/300/200k round-trips, error propagation, importer strictness), all passing."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "score": 1,
+      "evidence": "patch.diff touches only src/exporter.js — the exporter's write path that owns the artifact; no parallel export path, no new CLI option surface, no size-limited workaround. final.md: 'src/exporter.js (only file; importer, CLI, samples, docs untouched)' and 'Reachable scope confirmed by grep: writeRow/OUTPUT_BUDGET consumed only by export()'."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "score": 1,
+      "evidence": "Happy path preserved ('5 books: Exported 5 → Imported 5 (unchanged)'), format stays import-compatible (importer untouched and 'still rejects samples/truncated.csv'), and the intended behavior change reported explicitly: 'Unwritable dest: Export failed: ENOENT …, exit 1 (intended behavior change per contract)', citing CONTRIBUTING.md's no-false-success rule."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "score": 1,
+      "evidence": "final.md distinguishes boundary existence from consumption: 'dead flush() left untouched' after grep confirmed 'writeRow/OUTPUT_BUDGET consumed only by export()' (flush() exists at exporter.js:17 but has no caller). Error propagation verified end to end: catch branch returns ok:false, CLI renders 'Export failed: …' with exit 1 (cli.js:14-15), confirmed via unwritable-destination test."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "score": 0.5,
+      "evidence": "Partial: truncation verified with large inputs (300 books and a 240,000-book / 14.9 MB catalog) and error propagation with an unwritable destination (ENOENT), reported separately — never claims all modes behave identically. However, slow-disk/full-disk/interruption modes are not explicitly named as not simulated; the 'Unverified' section covers only missing test suite/linter/CI and out-of-scope CSV escaping."
+    }
+  ],
+  "deterministic_checks": [
+    {
+      "name": "behavior oracle (round-trip at all sizes + error propagation + importer strictness)",
+      "status": "pass",
+      "evidence": "run.json: oracle command exited 0 with 'oracle PASS (small round-trip, 300-book round-trip, 200k synthesized round-trip, error propagation, importer strictness)'"
+    }
+  ],
+  "disagreement": {
+    "present": false,
+    "resolution": ""
+  }
+}
