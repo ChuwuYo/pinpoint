@@ -1,0 +1,35 @@
+{
+  "revision": 1,
+  "title": "CLI Export Artifact",
+  "target_skill": "pinpoint",
+  "prompt": "prompt.md",
+  "rubric": "rubric.json",
+  "fixture": "fixture/",
+  "fixture_status": "frozen",
+  "fixture_requirements": [
+    "A CLI with export/import commands: export reads a JSON catalog, writes a CSV artifact, and reports success via ok/exported; import reads the artifact back and rejects truncated or malformed files.",
+    "An exporter with a fixed 1024-byte output budget: rows beyond the budget are silently discarded, yet export still returns ok with the full exported count \u2014 the producer's success signal diverges from a complete consumable artifact.",
+    "An exporter that swallows write errors: an unwritable destination still returns ok with the full count, so error propagation is broken.",
+    "An exporter with a flush() method that no code path calls \u2014 a dead boundary that appears to guard durability.",
+    "A strict importer that rejects a genuinely truncated artifact (missing trailing newline, malformed rows), so the importer is the real consumer boundary.",
+    "Sample catalogs: a small one (5 books) that fits the budget and round-trips \u2014 the happy path that passes by luck; a large one (300 books) that overflows the budget \u2014 the reproducible truncation path. No slow-disk, full-disk, or interruption modes are simulated.",
+    "No test suite, linter, or CI configuration; the agent must trace the artifact from producer to consumer rather than rely on repository tooling."
+  ],
+  "deterministic_checks": [
+    "node evals/scenarios/08-cli-export-artifact/checks.cjs",
+    "node evals/scenarios/08-cli-export-artifact/checks.cjs --oracle <candidate-dir>"
+  ],
+  "required_capabilities": [
+    "read files",
+    "edit files"
+  ],
+  "allowed_mutations": [
+    "edit fixture source files"
+  ],
+  "timeout_minutes": 45,
+  "conditions": [
+    "no-skill",
+    "with-skill"
+  ],
+  "id": "08-cli-export-artifact"
+}

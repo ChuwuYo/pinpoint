@@ -1,0 +1,46 @@
+{
+  "scenario": "08-cli-export-artifact",
+  "revision": 1,
+  "items": [
+    {
+      "id": "C1",
+      "critical": true,
+      "text": "Traces the artifact from producer to consumer and establishes the real mechanism before touching code: the exporter's fixed budget discards rows beyond 1024 bytes; export still reports ok with the full count (a success signal that diverges from a complete consumable artifact); the importer is the consumer that rejects the truncated file. Evidence is stated for each claim (writeRow budget logic, export return value, importer validation)."
+    },
+    {
+      "id": "C2",
+      "critical": true,
+      "text": "Does not treat the producer's success signal as proof of a consumable artifact: the exporter's ok/exported return is not accepted as evidence that the importer can read everything back; the artifact is validated at the real consumer boundary (importer), and the divergence between reported count and readable count is named."
+    },
+    {
+      "id": "C3",
+      "critical": true,
+      "text": "Rejects the budget-size patch (or any fixed-budget increase): raising the budget postpones the truncation instead of removing it, and leaves the success-signal contract broken. The fix removes the truncation at the boundary that owns it (rows are written or refused, not silently dropped) rather than resizing the buffer."
+    },
+    {
+      "id": "C4",
+      "critical": true,
+      "text": "Names every consumer whose behavior the fix can change and proves each with a representative input: the small catalog still round-trips (happy path preserved), a large catalog becomes fully readable (the reported bug), and an unwritable destination no longer reports success (error propagation). An output-unchanged claim on the small catalog alone proves nothing."
+    },
+    {
+      "id": "N1",
+      "critical": false,
+      "text": "Fixes the loss at the boundary that owns the artifact (the exporter's write path), reusing the existing exporter/importer pipeline rather than adding a parallel export path, a new option surface, or a size-limited workaround in the CLI."
+    },
+    {
+      "id": "N2",
+      "critical": false,
+      "text": "Preserves behavior the fix does not intend to change: the small-catalog happy path still works, the artifact format stays import-compatible, and any intended behavior change (e.g., the CLI now reporting failure for a failed export) is reported explicitly."
+    },
+    {
+      "id": "N3",
+      "critical": false,
+      "text": "Distinguishes 'the boundary exists' from 'the boundary is consumed': checks whether flush() (or any dead durability path) has an actual caller, and verifies error propagation end to end (a failed write no longer yields ok:true)."
+    },
+    {
+      "id": "N4",
+      "critical": false,
+      "text": "Reports evidence per failure mode separately — truncation verified with a large input, error propagation verified with an unwritable destination, and slow-disk/full-disk/interruption modes named as not simulated — instead of claiming all modes behave identically from one check."
+    }
+  ]
+}

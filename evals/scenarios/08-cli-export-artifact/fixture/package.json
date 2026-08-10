@@ -1,0 +1,6 @@
+{
+  "name": "catalog-cli",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Catalog export/import CLI fixture"
+}

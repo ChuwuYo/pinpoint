@@ -1,0 +1,24 @@
+{
+  "books": [
+    {
+      "title": "Small Book 1",
+      "author": "Author 1"
+    },
+    {
+      "title": "Small Book 2",
+      "author": "Author 2"
+    },
+    {
+      "title": "Small Book 3",
+      "author": "Author 3"
+    },
+    {
+      "title": "Small Book 4",
+      "author": "Author 4"
+    },
+    {
+      "title": "Small Book 5",
+      "author": "Author 5"
+    }
+  ]
+}
