@@ -121,9 +121,13 @@ stops for operator review.
 Subagents inherit the parent session's model unless the project config pins
 them. `.opencode/opencode.json` may carry an `agent.general.model` override
 for the duration of a sweep (opencode loads config once at startup — the app
-must be restarted after editing it). Verify the override took effect (the
+must be restarted after editing it). The override value is whatever model
+the operator designates for that sweep; the file is never committed and no
+sweep is hardcoded to a specific model — the model is a sweep parameter,
+recorded per run, not a constant. Verify the override took effect (the
 sweep's first run should be confirmed against the harness's session records
-before proceeding), record the pinned model in `model.id`, and remove or
-revert the override after the sweep so ordinary subagent work is unaffected.
-Keep the built-in `general` agent's prompt and tools untouched — overriding
-only the model preserves comparability with the parent-model baseline.
+before proceeding), record the observed model identity in `model.id`, and
+remove or revert the override after the sweep so ordinary subagent work is
+unaffected. Keep the built-in `general` agent's prompt and tools untouched —
+overriding only the model preserves comparability with the parent-model
+baseline.
