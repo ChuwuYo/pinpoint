@@ -951,7 +951,7 @@ Required hard-negative families:
 
 ---
 
-## Phase 5 — Harden installation, packaging, and CI
+## Phase 5 — Harden installation, packaging, and CI — DONE (5.1–5.4, 5.5 through the Node/OS matrix; package + installer smoke green on Node 26 locally, CI covers 22.20/24 across three OSes)
 
 ### Goal
 
@@ -965,108 +965,108 @@ Preserve the current ownership-marker and no-overwrite behavior.
 
 Test all supported harnesses:
 
-- [ ] Codex
-- [ ] Claude Code
-- [ ] Cursor
-- [ ] OpenCode
+- [x] Codex
+- [x] Claude Code
+- [x] Cursor
+- [x] OpenCode
 
 Test both scopes:
 
-- [ ] project
-- [ ] global
+- [x] project
+- [x] global
 
 For global tests:
 
-- [ ] isolate `HOME`, `XDG_CONFIG_HOME`, `APPDATA`, `LOCALAPPDATA`, and
+- [x] isolate `HOME`, `XDG_CONFIG_HOME`, `APPDATA`, `LOCALAPPDATA`, and
   `USERPROFILE` as appropriate for the operating system;
-- [ ] prove no test writes to the CI runner's real user configuration;
-- [ ] verify cleanup after both successful and failed runs.
+- [x] prove no test writes to the CI runner's real user configuration;
+- [x] verify cleanup after both successful and failed runs.
 
 For every applicable harness/scope combination:
 
-- [ ] install all five Skills;
-- [ ] verify all ownership markers;
-- [ ] verify all five OpenCode command files where commands are required;
-- [ ] run install twice to prove idempotence;
-- [ ] test update from an older owned fixture;
-- [ ] test `--dry-run` performs no writes;
-- [ ] test `--check`;
-- [ ] uninstall and prove only managed files are removed;
-- [ ] preserve unrelated files and unrelated user changes.
+- [x] install all five Skills;
+- [x] verify all ownership markers;
+- [x] verify all five OpenCode command files where commands are required;
+- [x] run install twice to prove idempotence;
+- [x] test update from an older owned fixture;
+- [x] test `--dry-run` performs no writes;
+- [x] test `--check`;
+- [x] uninstall and prove only managed files are removed;
+- [x] preserve unrelated files and unrelated user changes.
 
 ### 5.2 Test conflicts and failure atomicity
 
-- [ ] Reject an unowned Skill destination without changing it.
-- [ ] Reject an unowned command destination without changing it.
-- [ ] Reject malformed, missing, foreign-repository, or inconsistent ownership
+- [x] Reject an unowned Skill destination without changing it.
+- [x] Reject an unowned command destination without changing it.
+- [x] Reject malformed, missing, foreign-repository, or inconsistent ownership
   markers.
-- [ ] Test mixed states where some destinations are owned and another conflicts.
-- [ ] Preflight every destination before writing so one late conflict cannot
+- [x] Test mixed states where some destinations are owned and another conflicts.
+- [x] Preflight every destination before writing so one late conflict cannot
   leave a partial installation.
-- [ ] On any failure, verify the filesystem matches the pre-run state except for
+- [x] On any failure, verify the filesystem matches the pre-run state except for
   explicitly documented temporary files, which must be cleaned.
-- [ ] Test shared directories such as `.agents/skills` without deleting sibling
+- [x] Test shared directories such as `.agents/skills` without deleting sibling
   Skills.
-- [ ] Test an interrupted/partial prior install and define whether repair or
+- [x] Test an interrupted/partial prior install and define whether repair or
   refusal is the safe behavior.
-- [ ] Keep uninstall conservative: never infer ownership from a matching name
+- [x] Keep uninstall conservative: never infer ownership from a matching name
   alone.
 
 ### 5.3 Verify discoverability, not only file presence
 
-- [ ] Use the pinned `skills` CLI's list/inspection capability where available
+- [x] Use the pinned `skills` CLI's list/inspection capability where available
   to prove the installed Skills are discoverable.
-- [ ] Verify native harness directory layout against the installer's supported
+- [x] Verify native harness directory layout against the installer's supported
   contract.
-- [ ] Verify frontmatter names match invocation names after installation.
-- [ ] Verify a fresh-session discovery instruction is documented for harnesses
+- [x] Verify frontmatter names match invocation names after installation.
+- [x] Verify a fresh-session discovery instruction is documented for harnesses
   that cache capabilities.
-- [ ] Where a real harness binary cannot run in CI, state the boundary and use a
+- [x] Where a real harness binary cannot run in CI, state the boundary and use a
   deterministic directory/catalog contract rather than claiming full
   end-to-end discovery.
 
 ### 5.4 Test the actual published package shape
 
-- [ ] Add `tests/package-smoke.mjs`.
-- [ ] Run `npm pack` and inspect the tarball rather than testing only the source
+- [x] Add `tests/package-smoke.mjs`.
+- [x] Run `npm pack` and inspect the tarball rather than testing only the source
   checkout.
-- [ ] Verify the tarball contains every declared Skill, command, installer file,
+- [x] Verify the tarball contains every declared Skill, command, installer file,
   and required documentation file.
-- [ ] Verify it excludes fixtures, secrets, local run artifacts, and other
+- [x] Verify it excludes fixtures, secrets, local run artifacts, and other
   unintended files unless intentionally packaged.
-- [ ] Install from the generated tarball in smoke tests.
-- [ ] Verify the packaged entrypoint, version output, and `--check`.
-- [ ] Verify package version, release tag, and ownership-marker source are
+- [x] Install from the generated tarball in smoke tests.
+- [x] Verify the packaged entrypoint, version output, and `--check`.
+- [x] Verify package version, release tag, and ownership-marker source are
   consistent.
-- [ ] Test the declared minimum Node version and one newer supported runtime.
-- [ ] Document the process for intentionally updating the pinned `skills` CLI
+- [x] Test the declared minimum Node version and one newer supported runtime.
+- [x] Document the process for intentionally updating the pinned `skills` CLI
   dependency and rerunning compatibility tests.
 
 ### 5.5 Strengthen the CI matrix without making it noisy
 
-- [ ] Keep Ubuntu, macOS, and Windows installer smoke coverage.
-- [ ] Exercise every harness and both scopes inside the matrix using isolated
+- [x] Keep Ubuntu, macOS, and Windows installer smoke coverage.
+- [x] Exercise every harness and both scopes inside the matrix using isolated
   directories.
-- [ ] Run fast suite/eval schema checks once on Linux; run path-sensitive
+- [x] Run fast suite/eval schema checks once on Linux; run path-sensitive
   installer/package checks on all operating systems.
-- [ ] Ensure `docs/**`, `evals/**`, `scripts/**`, `README.zh-CN.md`, package
+- [x] Ensure `docs/**`, `evals/**`, `scripts/**`, `README.zh-CN.md`, package
   metadata, and tests trigger the relevant jobs.
-- [ ] Pin third-party actions and evaluation/installer dependencies.
-- [ ] Produce focused failure messages naming harness, scope, operation, and
+- [x] Pin third-party actions and evaluation/installer dependencies.
+- [x] Produce focused failure messages naming harness, scope, operation, and
   destination.
-- [ ] Do not put nondeterministic model calls in required pull-request CI.
+- [x] Do not put nondeterministic model calls in required pull-request CI.
 
 ### Exit criteria
 
-- [ ] All four supported harnesses pass project and isolated-global tests on the
+- [x] All four supported harnesses pass project and isolated-global tests on the
   supported OS matrix.
-- [ ] Every test verifies all five Skills; OpenCode tests verify all five
+- [x] Every test verifies all five Skills; OpenCode tests verify all five
   commands.
-- [ ] Dry-run, check, idempotent install, update, conflict, partial-state,
+- [x] Dry-run, check, idempotent install, update, conflict, partial-state,
   uninstall, and package-tarball paths are covered.
-- [ ] A failed install leaves no partial managed state.
-- [ ] At least one discovery-level assertion is used where supported.
-- [ ] The published tarball, not only the repository checkout, passes smoke tests.
+- [x] A failed install leaves no partial managed state.
+- [x] At least one discovery-level assertion is used where supported.
+- [x] The published tarball, not only the repository checkout, passes smoke tests.
 
 ---
 

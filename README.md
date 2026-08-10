@@ -243,6 +243,30 @@ Keep changes evidence-driven and narrowly scoped. For a behavior change:
 
 Avoid adding scripts, references, compatibility layers, or plugin packaging until they solve a demonstrated distribution or reliability need.
 
+### Updating the pinned `skills` CLI
+
+The installer and the installer smoke tests pin the `skills` CLI version in
+three places that must stay in sync:
+
+- `bin/pinpoint-install.mjs` — the `skillsPackage` constant the installer invokes;
+- `tests/installer-smoke.mjs` — the same version used for discovery assertions;
+- the CI matrix that runs the installer smoke tests on the minimum supported
+  Node version and one newer runtime.
+
+To upgrade intentionally:
+
+1. Bump the pinned version in `bin/pinpoint-install.mjs` and
+   `tests/installer-smoke.mjs` to the same value.
+2. Run `node tests/installer-smoke.mjs` locally — it exercises install,
+   idempotence, update, conflict, partial-state, and uninstall paths for every
+   harness and scope, plus discovery through the pinned CLI.
+3. Run `node tests/package-smoke.mjs` locally — it installs from a fresh
+   `npm pack` tarball rather than the source checkout.
+4. Push and let CI verify the full matrix (three operating systems, minimum and
+   newer Node runtimes) before merging.
+5. Note the upgraded version and the compatibility results in the pull request
+   so a later bump can tell at a glance whether this step is already covered.
+
 ## License
 
 MIT
