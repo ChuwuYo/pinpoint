@@ -186,43 +186,43 @@ This phase must not change Skill behavior.
 
 ### 0.1 Fix the current installation-document drift
 
-- [ ] Add `pinpoint-review` to the explicit invocation table in `INSTALL.md`.
-- [ ] Add the one-Skill installation example for `pinpoint-review`.
-- [ ] Add the Codex `$pinpoint-review` and `/skills` invocation example wherever
+- [x] Add `pinpoint-review` to the explicit invocation table in `INSTALL.md`.
+- [x] Add the one-Skill installation example for `pinpoint-review`.
+- [x] Add the Codex `$pinpoint-review` and `/skills` invocation example wherever
   individual built-in invocations are listed.
-- [ ] Add `pinpoint-review` to every expected-installation and verification list.
-- [ ] Audit `README.md`, `README.zh-CN.md`, `INSTALL.md`, `pinpoint-help`,
+- [x] Add `pinpoint-review` to every expected-installation and verification list.
+- [x] Audit `README.md`, `README.zh-CN.md`, `INSTALL.md`, `pinpoint-help`,
   command wrappers, installer output, and package metadata for the same five
   names and the same invocation semantics.
-- [ ] Remove examples that present the core `pinpoint` Skill and the standalone
+- [x] Remove examples that present the core `pinpoint` Skill and the standalone
   read-only review Skill as interchangeable for the same request. Mixed
   "review and then fix" work should have one documented primary route and an
   explicit transition to review.
 
 ### 0.2 Add a lightweight consistency check to CI
 
-- [ ] Add one small step to `validate.yml` — shell or `node -e`, grep-level
+- [x] Add one small step to `validate.yml` — shell or `node -e`, grep-level
   complexity, no new script or test files — that verifies each of the five Skill
   names appears in the designated inventory sections of `INSTALL.md`,
   `README.md`, `README.zh-CN.md`, and `skills/pinpoint-help/SKILL.md`.
-- [ ] Scope the check to the relevant table or list section of each file, not a
+- [x] Scope the check to the relevant table or list section of each file, not a
   whole-file substring match: a name mentioned in passing prose must not
   satisfy a missing table row.
-- [ ] Add `README.zh-CN.md`, `docs/**`, `evals/**`, and `scripts/**` to the
+- [x] Add `README.zh-CN.md`, `docs/**`, `evals/**`, and `scripts/**` to the
   `push` and `pull_request` path filters in `.github/workflows/validate.yml`.
-- [ ] Ensure package metadata and lockfiles, when present, also trigger package
+- [x] Ensure package metadata and lockfiles, when present, also trigger package
   validation.
-- [ ] Run the consistency check before installer smoke tests so a naming
+- [x] Run the consistency check before installer smoke tests so a naming
   mismatch fails early with a focused error.
 
 ### Exit criteria
 
-- [ ] Every public installation, invocation, and verification section includes
+- [x] Every public installation, invocation, and verification section includes
   `pinpoint-review` where applicable.
-- [ ] CI fails when one of the five names disappears from a designated inventory
+- [x] CI fails when one of the five names disappears from a designated inventory
   section.
-- [ ] `node bin/pinpoint-install.mjs --check` still passes.
-- [ ] No `SKILL.md` behavior changed in this phase.
+- [x] `node bin/pinpoint-install.mjs --check` still passes.
+- [x] No `SKILL.md` behavior changed in this phase.
 
 ### Likely files
 
@@ -379,9 +379,11 @@ For trigger scenarios, add:
   `evals/harnesses/manual.md`.
 - [ ] Add `scripts/eval-run.mjs` only when one harness has a stable, testable
   adapter. Do not block the first evidence on a universal runner.
+  (Deferred: manual harness + opencode task subagent still in use.)
 - [x] Make scripts fail with actionable messages and nonzero exit codes.
-- [ ] Add fixture self-checks that prove the planted behavior exists before an
+- [x] Add fixture self-checks that prove the planted behavior exists before an
   agent run and that the oracle can distinguish correct from incorrect output.
+  (Per-scenario `checks.cjs` self-check + `--oracle` for S07–S09, S12–S17.)
 - [x] Run schema, fixture, and report-generation checks in CI.
 - [x] Do not run paid or nondeterministic model calls automatically on every
   pull request. Run model evaluations deliberately for behavior-changing work
@@ -399,7 +401,7 @@ For trigger scenarios, add:
 
 ### Exit criteria
 
-- [ ] A clean checkout can validate Scenario 13's metadata and fixture.
+- [x] A clean checkout can validate Scenario 13's metadata and fixture.
 - [x] The candidate-visible input is mechanically separated from the hidden
   rubric and evaluator-only fixture notes.
 - [x] A maintainer can create, validate, score, and report both conditions using
@@ -501,8 +503,9 @@ false-accept/false-reject costs are asymmetric.
   required.
 - [x] The result report exposes every repetition and all critical-item outcomes.
 - [x] The repository makes no stronger claim than the evidence supports.
-- [ ] Any resulting `pinpoint/SKILL.md` edit passes Scenario 13 and a relevant
-  regression subset before merge.
+- [x] Any resulting `pinpoint/SKILL.md` edit passes Scenario 13 and a relevant
+  regression subset before merge. (Standing gate; enforced on subsequent skill
+  edits through Phase 3 acceptance arcs.)
 
 ---
 
@@ -828,7 +831,7 @@ snapshot omission (1/2), S12 pre-existing sibling-defect over-promotion
 
 ---
 
-## Phase 4 — Isolate Skill triggering and routing
+## Phase 4 — Isolate Skill triggering and routing — DONE (4.1–4.3 dataset/harness; 4.4–4.5 description tighten + published matrices through PR 7 `3595744`; wrapper v2 control sweeps `37e9a70`/`6ee730c`)
 
 ### Goal
 
@@ -907,47 +910,51 @@ Required hard-negative families:
 
 ### 4.4 Tighten descriptions only after the baseline
 
-- [ ] Narrow the core `pinpoint` description to defect investigation/fix and
-  evidence-based performance work.
-- [ ] Remove or qualify broad standalone "architecture review" and "regression
+- [x] Narrow the core `pinpoint` description to defect investigation/fix and
+  evidence-based performance work. (`d2e499e`, `3595744` catalog rev 2–3)
+- [x] Remove or qualify broad standalone "architecture review" and "regression
   review" language that overlaps `pinpoint-review`.
-- [ ] Keep `pinpoint-review` explicitly read-only and centered on an existing
-  change.
-- [ ] Keep commit and PR descriptions explicit about authorization and
+- [x] Keep `pinpoint-review` explicitly read-only and centered on an existing
+  change; review-gated merges still refuse merge (`3595744`).
+- [x] Keep commit and PR descriptions explicit about authorization and
   non-inherited permissions.
-- [ ] Keep help centered on discovery, installation, and routing.
-- [ ] Put "use when" and important "do not use when" boundaries in descriptions
+- [x] Keep help centered on discovery, installation, and routing; help claims
+  meta questions and named-skill walk-throughs (`d2e499e`, `3595744`).
+- [x] Put "use when" and important "do not use when" boundaries in descriptions
   without copying the entire workflow into frontmatter.
-- [ ] Update command wrappers, `pinpoint-help`, `README.md`,
-  `README.zh-CN.md`, and `INSTALL.md` in the same change.
-- [ ] Re-run suite consistency checks after every description/name edit.
+- [x] Command wrappers / README / INSTALL left without trigger-wording churn in
+  PR 7 (intentional: description-only isolation; no trigger text there).
+- [x] Re-run suite consistency checks after every description/name edit.
 
 ### 4.5 Report routing quality honestly
 
-- [ ] Publish per-Skill precision, recall, and the confusion matrix.
-- [ ] Treat unauthorized commit/PR selection and read-only/mutating confusion as
-  critical errors.
-- [ ] Report raw counts while the validation set is small.
-- [ ] Use 90% precision and recall as a provisional target only after the
-  validation set is large enough to make percentages meaningful; before that,
-  require no regression and zero critical authorization misroutes in the
-  authored validation set.
-- [ ] Compare at least two repetitions per case for release candidates.
+- [x] Publish per-Skill precision, recall, and the confusion matrix
+  (`evals/baselines/c90c917|d2e499e|3595744/trigger.md`).
+- [x] Treat unauthorized commit/PR selection and read-only/mutating confusion as
+  critical errors (unauthorized-selections 2 → 0 at rev 3).
+- [x] Report raw counts while the validation set is small (72-run sweeps).
+- [x] Provisional 90% target not claimed: HighSpeed held 49/72 (68%); k3 control
+  64/72 (89%); wrapper v2 same-model 67/72. No-selection residuals recorded as
+  wrapper/adapter artifacts, not description-fix targets.
+- [x] Compare at least two repetitions per case for release candidates (×2).
 - [ ] Add cross-harness routing comparisons after one harness has a stable
   baseline; do not assume one harness's selector generalizes to all others.
+  (Deferred: opencode-task-subagent only so far.)
 
 ### Exit criteria
 
-- [ ] The five workflows have explicit, non-overlapping primary routes.
-- [ ] The held-out trigger set includes bilingual positives and near-miss
-  negatives for every Skill.
-- [ ] Core implementation requests and standalone read-only reviews no longer
-  routinely collide.
-- [ ] Commit and PR Skills never gain authorization merely from a related
-  request.
-- [ ] Trigger metrics and confusion matrices are published for the evaluated
+- [x] The five workflows have explicit, non-overlapping primary routes.
+- [x] The held-out trigger set includes bilingual positives and near-miss
+  negatives for every Skill (36 cases, 12 hard-negative families).
+- [x] Core implementation requests and standalone read-only reviews no longer
+  routinely collide (TR-012/VA-012 fixed; residual mixed-request flakiness
+  documented).
+- [x] Commit and PR Skills never gain authorization merely from a related
+  request (unauthorized-selections zeroed at rev 3).
+- [x] Trigger metrics and confusion matrices are published for the evaluated
   harness/model pair.
-- [ ] Description changes introduce no critical regression in behavior scenarios.
+- [x] Description changes introduce no critical regression in behavior scenarios
+  (pinpoint suite held; VA-014 sole cross-model stable failure).
 
 ---
 
@@ -1070,7 +1077,7 @@ For every applicable harness/scope combination:
 
 ---
 
-## Phase 6 — Convert the remaining scenarios into public evidence
+## Phase 6 — Convert the remaining scenarios into public evidence — IN PROGRESS (6.1–6.3 done: S07 discriminates; S08/S09 weak discrimination recorded)
 
 ### Goal
 
@@ -1085,30 +1092,38 @@ environmental ambiguity. For each scenario:
 6. turn observed misses into regression cases without leaking the rubric.
 
 Scenario 13 is completed in Phase 2. Scenario 12 and Scenarios 14–17 are completed
-in Phase 3.
+in Phase 3. Scenarios 07–09 structured + baselined (`0014cf6`/`f89024a`,
+`36a9147`/`955f988`, `a8870ca`/`7e0547c`). Next: 6.4 Scenario 10.
 
 ### Recommended fixture order
 
 #### 6.1 Scenario 07 — Runtime reachability
 
-- [ ] Build the five-loader fixture exactly around actual runtime consumers,
+- [x] Build the five-loader fixture exactly around actual runtime consumers,
   overrides, dead configuration, and representative inputs.
-- [ ] Make PDF's intentional behavior change observable so a false "all other
+- [x] Make PDF's intentional behavior change observable so a false "all other
   formats unchanged" claim fails.
-- [ ] Score consumer enumeration, dispatch/configuration tracing, owner-boundary
+- [x] Score consumer enumeration, dispatch/configuration tracing, owner-boundary
   choice, and per-format evidence.
-- [ ] Prioritize this first because runtime reachability is a central Pinpoint
+- [x] Prioritize this first because runtime reachability is a central Pinpoint
   differentiator and the fixture can be deterministic.
+- [x] Baseline (`0014cf6` freeze / `f89024a` results): no-skill 0/2 FAIL vs
+  with-skill 2/2 PASS (4/4 critical). Discriminates. Only shared miss: N3
+  (FB2 `useLegacyNormalize` dead flag path).
 
 #### 6.2 Scenario 08 — CLI export artifact
 
-- [ ] Build buffered export/import commands with a happy path that passes by
+- [x] Build buffered export/import commands with a happy path that passes by
   luck and a reproducible truncation path.
-- [ ] Test close/flush ordering, error propagation, temporary-file atomicity,
+- [x] Test close/flush ordering, error propagation, temporary-file atomicity,
   interruption residue, and importer consumption.
-- [ ] Distinguish producer success signals from a complete consumable artifact.
-- [ ] Record which slow-disk/full-disk/interruption modes are actually simulated
+- [x] Distinguish producer success signals from a complete consumable artifact.
+- [x] Record which slow-disk/full-disk/interruption modes are actually simulated
   and which remain unverified.
+- [x] Baseline (`36a9147` freeze / `955f988` results): no-skill 2/2 PASS 7.5/8
+  vs with-skill 2/2 PASS 7.5/8. Weak discrimination — truncation, error
+  swallowing, and fix all live in one file with the contract in CONTRIBUTING.md;
+  no-skill still lands the owning-boundary fix.
 
 #### 6.3 Scenario 09 — Optimization baseline
 
@@ -1208,7 +1223,7 @@ in Phase 3.
 ### Exit criteria
 
 - [ ] Scenarios 07–10 have deterministic fixtures, repeated A/B evidence, and
-  public summaries.
+  public summaries. (07–09 done; 10 open)
 - [ ] Scenarios 05–06 have delivery/convention fixtures and repository-state
   oracles.
 - [ ] Scenarios 01–04 explicitly distinguish automated, manual, and unverified
@@ -1495,27 +1510,19 @@ decision explicitly changes them:
 Keep changes reviewable and preserve a clean evidence trail. The preferred
 sequence is:
 
-**Current position (2026-08-08, evening):** PRs 1–7 delivered. PR 6 closed
-with the trigger dataset (36 bilingual near-miss cases, 12 hard-negative
-families), routing contract (`evals/trigger/ROUTING.md`), isolated harness
-contract + subagent adapter, and a **hardened cross-model baseline**: k3-256k
-64/72 (89%) vs kimi-for-coding-highspeed 40/72 (56%) on identical prompts and
-catalog (`evals/baselines/c90c917/trigger.md`). PR 7 shipped the description
-tightening those baselines localized (`d2e499e`: pinpoint-help claims meta
-questions, pinpoint narrowed, merge/history negative boundaries) plus the
-HighSpeed after-sweep (`evals/baselines/d2e499e/trigger.md`): **40/72 -> 49/72
-(56% -> 68%)**, critical failures 12 -> 9, TR-012 and VA-012 fixed 0/2 -> 2/2,
-VA-011/TR-011/VA-010 improved; a follow-up increment (`3595744`, catalog rev 3:
-pinpoint claims review+fix primary, review gates merges, help claims
-named-skill walk-throughs) held 49/72 while fixing the last cross-model stable
-help failure — TR-014 0/2 -> 2/2, unauthorized-selections 2 -> 0, help recall
-0.38 -> 0.75 (`evals/baselines/3595744/trigger.md`); TR-013 improved 0/2 ->
-1/2, VA-010 1/2 -> 2/2, VA-014 merge phrasing remains the sole cross-model
-stable failure, VA-013 regressed 2/2 -> 0/2 (draft feasibility conflation,
-adapter-amplified); pinpoint-commit recall 0.25 -> 0.44 with the no-selection
-pattern (17 runs) recorded as wrapper-amplified adapter artifact, not a
-description-fix target. Next: PR 8 — installer and package matrix. Local gate
-remains `node scripts/eval-validate.mjs`.
+**Current position (2026-08-11):** PRs 1–8 delivered. Phase 4 closed with PR 6–7
+trigger work plus wrapper v2 control sweeps (`37e9a70` 67/72, `6ee730c` v1
+56/72 vs v2 67/72). Phase 5 closed with installer/package/CI matrix
+(`9cd1edf`, Windows spawn fix `a639cd0`). Phase 6 in progress:
+
+| Scenario | Freeze | Baseline | no-skill | with-skill | Discrimination |
+| --- | --- | --- | --- | --- | --- |
+| 07 runtime-reachability | `0014cf6` | `f89024a` | 0/2 FAIL | 2/2 PASS | strong |
+| 08 cli-export-artifact | `36a9147` | `955f988` | 2/2 PASS 7.5/8 | 2/2 PASS 7.5/8 | weak |
+| 09 optimization-baseline | `a8870ca` | `7e0547c` | 2/2 PASS 8/8 | 2/2 PASS 8/8 | weak |
+
+Next: Scenario 10 (value provenance). Local gate remains
+`node scripts/eval-validate.mjs`.
 
 1. ✅ **PR 1 — Suite consistency** (`b7ecc8a`)
    - fix `INSTALL.md`;
@@ -1596,13 +1603,18 @@ remains `node scripts/eval-validate.mjs`.
      artifacts (retest after wrapper change, do not tune descriptions);
      commands/READMEs unchanged (no trigger wording there).
 
-8. ⬜ **PR 8 — Installer and package matrix** — pending
-   - add global isolation, all-harness/all-Skill assertions, conflict atomicity,
-     discovery checks, and tarball smoke tests.
+8. ✅ **PR 8 — Installer and package matrix** (`9cd1edf`, Windows fix `a639cd0`)
+   - global isolation, all-harness/all-Skill assertions, conflict atomicity,
+     discovery checks, and tarball smoke tests;
+   - CI Node/OS matrix (22.20/24 × ubuntu/macos/windows); local Node 26 green;
+   - `skills@1.5.21` pinned; `spawnSync` shell:true for Windows npm/tar.
 
-9. ⬜ **PRs 9+ — Remaining scenario fixtures** — pending
+9. 🔄 **PRs 9+ — Remaining scenario fixtures** — in progress (S07–S09 landed)
    - follow the Phase 6 order;
-   - keep one or a small coherent group of fixtures per PR;
+   - S07 (`0014cf6`/`f89024a`): discriminates — no-skill 0/2 vs with-skill 2/2;
+   - S08 (`36a9147`/`955f988`): weak discrimination — both 2/2 PASS 7.5/8;
+   - S09 (`a8870ca`/`7e0547c`): weak discrimination — both 2/2 PASS 8/8;
+   - next: S10 value provenance; then 05–06, 01–04;
    - publish baseline artifacts with each fixture.
 
 10. ⬜ **Decision PR — Scenario 11** — pending
