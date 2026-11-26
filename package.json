@@ -1,11 +1,19 @@
 {
   "name": "pinpoint-skill-suite",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Evidence-driven Agent Skills for narrow software fixes, optimizations, and reviewable delivery",
   "license": "MIT",
   "type": "module",
   "bin": {
     "pinpoint-install": "bin/pinpoint-install.mjs"
+  },
+  "scripts": {
+    "check": "node bin/pinpoint-install.mjs --check",
+    "validate:evals": "node scripts/eval-validate.mjs",
+    "test:eval-tools": "node tests/eval-tools.mjs",
+    "test:installer": "node tests/installer-smoke.mjs",
+    "test:package": "node tests/package-smoke.mjs",
+    "test": "npm run check && npm run validate:evals && npm run test:eval-tools"
   },
   "engines": {
     "node": ">=22.20.0"

@@ -10,14 +10,24 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const packageJson = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 const repository = 'ChuwuYo/pinpoint';
 const skillsPackage = 'skills@1.5.21';
+const minNodeVersion = [22, 20, 0];
 const commandNames = ['pinpoint', 'pinpoint-commit', 'pinpoint-pr', 'pinpoint-review', 'pinpoint-help'];
 const knownAgents = new Set(['codex', 'claude-code', 'cursor', 'opencode']);
+const allowedFrontmatterKeys = new Set([
+  'name',
+  'description',
+  'license',
+  'compatibility',
+  'metadata',
+  'allowed-tools',
+]);
 const aliases = new Map([
   ['claude', 'claude-code'],
   ['open-code', 'opencode'],
 ]);
 const marker = '<!-- Managed by ChuwuYo/pinpoint. -->';
 const ownershipFile = '.pinpoint-source.json';
+const winLibuvExitCode = 3221226505; // 0xC0000409: known Windows Node.js/libuv UV_HANDLE_CLOSING teardown crash
 
 function usage() {
   console.log(`Pinpoint ${packageJson.version}
@@ -31,7 +41,7 @@ Options:
   --agent <id>  Target harness
   --project     Install in the current project instead of globally
   --uninstall   Remove Pinpoint from the selected harness and scope
-  --check       Validate packaged commands without installing
+  --check       Validate packaged Skills, references, scripts, and commands without installing
   --dry-run     Print intended operations without writing
   --version     Print the suite version
   --help        Show this help`);
@@ -83,6 +93,71 @@ function skillSource(name) {
   return join(root, 'skills', name, 'SKILL.md');
 }
 
+function isQuotedYamlScalar(value) {
+  return (
+    (value.startsWith('"') && value.endsWith('"') && value.length >= 2) ||
+    (value.startsWith("'") && value.endsWith("'") && value.length >= 2)
+  );
+}
+
+function validateSkillFile(name) {
+  const filePath = skillSource(name);
+  const raw = readFileSync(filePath, 'utf8').replace(/\r\n?/g, '\n');
+  const match = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!match) {
+    throw new Error(`Invalid or missing YAML frontmatter: skills/${name}/SKILL.md`);
+  }
+
+  const [, frontmatter, body] = match;
+  let parsedName = null;
+  let parsedDesc = null;
+
+  for (const line of frontmatter.split('\n')) {
+    if (!line.trim() || line.startsWith('  ') || line.startsWith('\t')) continue;
+    const keyMatch = line.match(/^([a-z0-9-]+):\s*(.*)$/);
+    if (!keyMatch) {
+      throw new Error(`Malformed frontmatter line in skills/${name}/SKILL.md: ${line}`);
+    }
+    const [, key, rawValue] = keyMatch;
+    if (!allowedFrontmatterKeys.has(key)) {
+      throw new Error(`Non-standard top-level frontmatter key '${key}' in skills/${name}/SKILL.md`);
+    }
+    const trimmed = rawValue.trim();
+    if (trimmed && !isQuotedYamlScalar(trimmed) && /:\s/.test(trimmed)) {
+      throw new Error(
+        `Unquoted ': ' in YAML scalar for '${key}' in skills/${name}/SKILL.md (quote the value or remove ': ')`,
+      );
+    }
+    if (key === 'name') parsedName = trimmed.replace(/^["']|["']$/g, '');
+    if (key === 'description') parsedDesc = trimmed.replace(/^["']|["']$/g, '');
+  }
+
+  if (parsedName !== name) {
+    throw new Error(`Frontmatter name '${parsedName}' does not match directory '${name}'`);
+  }
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(parsedName) || parsedName.length > 64) {
+    throw new Error(`Invalid Skill name format: ${parsedName}`);
+  }
+  if (!parsedDesc || parsedDesc.length > 1024) {
+    throw new Error(`Description missing or exceeds 1024 chars (${parsedDesc?.length ?? 0}) in skills/${name}/SKILL.md`);
+  }
+  if (!body.trim()) {
+    throw new Error(`Empty SKILL.md body: skills/${name}/SKILL.md`);
+  }
+
+  // Verify every bundled references/, scripts/, or assets/ path mentioned in SKILL.md exists on disk.
+  const skillDir = join(root, 'skills', name);
+  const assetRefs = new Set();
+  for (const refMatch of body.matchAll(/\b((?:references|scripts|assets)\/[A-Za-z0-9._/-]+)\b/g)) {
+    assetRefs.add(refMatch[1]);
+  }
+  for (const relPath of assetRefs) {
+    if (!existsSync(join(skillDir, relPath))) {
+      throw new Error(`Broken bundled resource reference '${relPath}' in skills/${name}/SKILL.md`);
+    }
+  }
+}
+
 function validatePackage() {
   if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(packageJson.version)) {
     throw new Error(`Invalid SemVer version: ${packageJson.version}`);
@@ -90,6 +165,8 @@ function validatePackage() {
 
   for (const name of commandNames) {
     if (!existsSync(skillSource(name))) throw new Error(`Missing Skill: skills/${name}/SKILL.md`);
+    validateSkillFile(name);
+
     const ownershipPath = join(root, 'skills', name, ownershipFile);
     if (!existsSync(ownershipPath)) throw new Error(`Missing Skill ownership marker: skills/${name}/${ownershipFile}`);
     const ownership = JSON.parse(readFileSync(ownershipPath, 'utf8'));
@@ -116,6 +193,19 @@ function validatePackage() {
   }
 
   console.log(`Validated Pinpoint ${packageJson.version}: ${commandNames.length} commands`);
+}
+
+function assertSupportedNode() {
+  const parts = process.versions.node.split('.').map((n) => Number.parseInt(n, 10));
+  for (let i = 0; i < minNodeVersion.length; i += 1) {
+    const cur = parts[i] ?? 0;
+    if (cur > minNodeVersion[i]) return;
+    if (cur < minNodeVersion[i]) {
+      throw new Error(
+        `Node.js >= ${minNodeVersion.join('.')} is required to run ${skillsPackage} (current: v${process.versions.node}).`,
+      );
+    }
+  }
 }
 
 function skillStorage(agent, project) {
@@ -173,6 +263,32 @@ function npxCommand() {
   return process.platform === 'win32' ? 'npx.cmd' : 'npx';
 }
 
+function quoteWinCmdArg(arg) {
+  if (!/[\s"&|<>^()]/.test(arg)) return arg;
+  return `"${arg.replace(/"/g, '\\"')}"`;
+}
+
+function spawnNpx(args) {
+  const env = {
+    ...process.env,
+    DISABLE_TELEMETRY: '1',
+    DO_NOT_TRACK: '1',
+  };
+  if (process.platform === 'win32') {
+    const comspec = process.env.ComSpec || 'cmd.exe';
+    const cmdLine = [npxCommand(), ...args].map(quoteWinCmdArg).join(' ');
+    return spawnSync(comspec, ['/d', '/s', '/c', cmdLine], {
+      encoding: 'utf8',
+      env,
+      windowsVerbatimArguments: true,
+    });
+  }
+  return spawnSync(npxCommand(), args, {
+    encoding: 'utf8',
+    env,
+  });
+}
+
 function runSkills(agent, project, uninstall, dryRun) {
   const command = ['--yes', '--package', skillsPackage, '--', 'skills'];
   const args = uninstall
@@ -183,12 +299,24 @@ function runSkills(agent, project, uninstall, dryRun) {
   console.log(`> ${npxCommand()} ${args.join(' ')}`);
   if (dryRun) return;
 
-  const result = spawnSync(npxCommand(), args, {
-    stdio: 'inherit',
-    shell: process.platform === 'win32',
-  });
+  assertSupportedNode();
+
+  const result = spawnNpx(args);
+  if (result.stdout) process.stdout.write(result.stdout);
+  if (result.stderr) process.stderr.write(result.stderr);
   if (result.error) throw result.error;
-  if (result.status !== 0) throw new Error(`skills installer exited with status ${result.status}`);
+
+  if (result.status !== 0) {
+    const combined = `${result.stdout ?? ''}\n${result.stderr ?? ''}`;
+    const isWinTeardownCrash =
+      process.platform === 'win32' &&
+      result.status === winLibuvExitCode &&
+      combined.includes('UV_HANDLE_CLOSING') &&
+      combined.includes('Done!');
+    if (!isWinTeardownCrash) {
+      throw new Error(`skills installer exited with status ${result.status}`);
+    }
+  }
 }
 
 function removeManagedSkills(agent, project, dryRun) {

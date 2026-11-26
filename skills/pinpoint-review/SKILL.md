@@ -1,131 +1,117 @@
 ---
 name: pinpoint-review
-description: Run evidence-based adversarial review of a diff, branch, or pull request using parallel concern-axis reviewers, a scored re-rank gate, and a strict noise budget. Use when reviewing code changes, auditing a fix or optimization before delivery, checking a diff for regressions, verifying claims against evidence, gating a merge that is conditional on review or approval — the review runs here and the merge itself is never performed — or when the pinpoint skill reaches its review stage. Read-only — never edits files. Do not use for questions about this skill or the Pinpoint suite itself — pinpoint-help answers those.
+description: Run read-only, evidence-based adversarial review of a diff, branch, or pull request using risk-based parallel concern-axis reviewers, a scored re-rank gate, and a strict noise budget. Use when the user asks for a code review, diff audit, regression check, pre-merge check, or verification of claims against evidence without editing code (including Chinese read-only requests such as 只读, 别动代码, 审一下这个 PR, 检查有没有破坏别的功能, or review-conditional merge requests like 评审通过了就合并 where review runs here and merging is always refused), or when pinpoint reaches its review gate. Strictly read-only, never edits files, and never merges. Do not use when the user asks to review and fix issues (use pinpoint), or asks questions about this skill or the Pinpoint suite (use pinpoint-help).
+license: MIT
+compatibility: Requires git CLI (and optional Node.js) for diff inspection and read-only state verification.
+metadata:
+  author: ChuwuYo
+  version: "0.5.0"
+  suite: pinpoint
 ---
 
 # Pinpoint Review
 
-Challenge a completed change the way a hostile reviewer would, then prove or discard each challenge with evidence. Review is read-only: never edit, stage, or clean anything. If the harness cannot guarantee read-only review, compare repository state before and after and report any mutation.
+Challenge a completed change the way a hostile reviewer would, then prove or discard each challenge with evidence.
 
-## Assemble the Review Packet
+> **Iron Law:** Review is strictly read-only. Never edit, stage, clean, reset, commit, push, or merge anything. Every finding must cite code actually read and survive the re-rank gate.
 
-Every reviewer works from the same packet:
+## 1. Preflight and Assemble the Review Packet
 
-- the stated intent, unedited — whatever form it takes: an issue, a user request, a spec excerpt, or the change's own description;
-- repository rules that constrain the change;
-- the diff against the authoritative base, with its scope stated exactly;
-- validation evidence for the claimed behavior — reproduction evidence when the change fixes a defect;
-- the intended-behavior claims: what the change asserts it does and preserves.
+Before spawning any reviewer, validate the review scope and snapshot repository state at the aggregating agent (fail once here, never inside parallel reviewers):
 
-Never include the intended verdict, a defense of the change, or hints about what to find. A reviewer primed with the author's conclusion confirms it.
+- Run `node scripts/snapshot-state.mjs --snapshot /tmp/pinpoint-review-before.json [--base <ref>]` (when Node.js is available) to confirm the base ref resolves, the diff is non-empty, and record pre-review worktree/index hashes.
+- If the harness cannot guarantee read-only execution, compare repository state before and after review (via `node scripts/snapshot-state.mjs --verify /tmp/pinpoint-review-before.json` or `git status --porcelain` + file hashes) and report any mutation.
 
-When invoked standalone, derive the packet: diff from the actual merge-base or requested range, the intent as stated by the user, and claims from the branch's commits and description. Choose the smallest correct diff command: `git diff` for unstaged work, `git diff --cached` for staged work, both for mixed work, the requested range for an explicit comparison. When no external statement of intent exists, reconstruct it from the change itself and say so. State any packet element you could not obtain.
+Assemble one neutral packet shared by every reviewer:
 
-Before spawning any reviewer, confirm the base ref resolves and the diff is non-empty. Fail here, at the aggregating agent — not inside parallel reviewers each discovering the same dead end.
+- **Stated intent (unedited):** issue, user request, spec excerpt, or change description.
+- **Repository rules:** paths or excerpts that constrain the change.
+- **Diff:** against the authoritative base, with exact scope stated (`git diff` for unstaged, `git diff --cached` for staged, both for mixed work, or the requested range).
+- **Validation evidence:** what was verified and how (including reproduction evidence for defect fixes).
+- **Intended-behavior claims:** what the change asserts it does and preserves.
 
-## Run Static Checks First
+Never include the intended verdict, a defense of the change, or hints about what to find. Priming a reviewer with the author's conclusion causes confirmation bias. When invoked standalone with no external intent statement, reconstruct intent from the branch commits and diff, and explicitly note that intent was reconstructed. State any packet element you could not obtain under `Packet gaps`.
 
-Run the repository's configured formatter check, linter, type checker, and build for the touched scope. Subtract their output: never report a finding that configured tooling already enforces. The review's budget belongs to what static analysis cannot decide. Record each required command with its scope, exit status, and attribution: `pass`, `diff-caused failure`, `pre-existing/unattributed failure`, `unavailable`, or `not applicable`. A diff-caused failure of a required gate blocks the merge on its own — report it in the gate status, not as an LLM finding. Never blame the diff for a pre-existing failure without evidence, and never claim gates pass when required evidence is unavailable or inconclusive.
+## 2. Run Static Checks First and Subtract
 
-## Review by Concern Axis
+Run the repository's configured formatter check, linter, type checker, and build for the touched scope.
 
-Challenge the change along each axis that the diff can reach; exclude an axis rather than inventing hypothetical relevance:
+- Subtract their output: never report an LLM finding for anything configured tooling already enforces.
+- Record every required command in `Gate status` with its scope, exit status, and exact attribution: `pass`, `diff-caused failure`, `pre-existing/unattributed failure`, `unavailable`, or `not applicable`.
+- A `diff-caused failure` of a required gate blocks the merge on its own. Report it in `Gate status`, not as a duplicate LLM finding.
+- Never blame the diff for a pre-existing failure without evidence, and never claim gates pass when required evidence is unavailable or inconclusive.
 
-1. **Intent and scope.** Does the diff actually address the stated intent? Quote the intent source — issue, request, spec, or change description — behind each gap. Flag behavior the intent never asked for as scope creep, and challenge scope-outs whose justification is an unverified feasibility claim. If the stated intent itself looks wrong — not merely unmet — say so explicitly.
-2. **Ownership and root cause.** A wrong ownership or root-cause assumption; a fix at a boundary that does not own the transition.
-3. **Blast radius.** A wider runtime blast radius than claimed — callers, dispatch, configuration gates, event buses, and concrete consumers not accounted for.
-4. **Architecture and platform.** Divergence from established architecture or platform handling without justification.
-5. **Reachable regressions.** Accessibility, language, platform, data, security, or persistence regressions the change can actually reach.
-6. **Test quality.** Tests that imitate the implementation instead of the claimed mechanism. For each new or changed test ask: would it fail if the code were broken?
-7. **Claims versus evidence.** Unsupported or overstated claims — completion, preservation, performance, or coverage the packet's evidence does not prove.
+## 3. Review by Reachable Concern Axis
 
-When the harness provides subagents and the diff is large enough that axes need independent deep reading, spawn one independent read-only reviewer per reachable axis, each on a fresh context. For a diff one pass can cover, review locally — parallel reviewers are a tool for depth, not a ritual.
+Challenge the change along each axis the diff can actually reach; exclude unreachable axes instead of inventing hypothetical relevance:
 
-Every axis reviewer gets the same brief, with only the axis differing:
+1. **Intent and scope:** does the diff satisfy the stated intent? Quote the intent source behind each gap. Flag unrequested behavior as scope creep and challenge scope-outs backed only by unverified feasibility claims. Say explicitly if the stated intent itself looks wrong.
+2. **Ownership and root cause:** wrong ownership or root-cause assumption; fixing at a boundary that does not own the transition.
+3. **Blast radius:** wider runtime blast radius than claimed (callers, dispatch, config gates, event buses, concrete consumers).
+4. **Architecture and platform:** unjustified divergence from established architecture or platform handling.
+5. **Reachable regressions:** accessibility, language, platform, data, security, or persistence regressions the change can reach.
+6. **Test quality:** tests imitating the implementation instead of the claimed mechanism (ask: would each new/changed test fail if the code were broken?).
+7. **Claims vs. evidence:** completion, preservation, performance, or coverage claims not proven by the packet's evidence.
 
-```text
-Review one axis of a change, read-only. Never edit, stage, or mutate anything.
+**Risk-based depth:** when the harness supports subagents and the diff touches high-risk boundaries (security, auth, persistence, destructive ops, external protocols) or spans multiple modules needing independent deep reading, spawn one fresh-context, read-only reviewer per reachable axis using the brief template in `references/reviewer-brief.md`. For bounded diffs one pass can cover, review locally in single-reviewer mode and disclose it. Never spawn reviewers for unreachable axes.
 
-Packet:
-- Stated intent: <unedited>
-- Repository rules: <paths or excerpts>
-- Diff: <diff command or full diff>
-- Validation evidence: <what was verified and how>
-- Claims: <what the change asserts it does and preserves>
+## 4. Aggregate, Score, and Enforce the Noise Budget
 
-Your axis: <axis name and its challenge questions>
+The aggregating agent (never an axis reviewer) merges all reports:
 
-Report only code you actually read — cite the hunk, never infer from filenames
-or hunk headers. For each finding give: file:line, what is wrong, why it
-matters, fix direction, and confidence (high, medium, low). Skip anything the
-static checks already enforce. If a concern may be real but the intent is
-unclear, return it as an open question, not a finding. But a defect you
-verified in code you read — reachable from the diff — is a finding even when
-its intent or blast radius is unsettled: put the defect in the finding and
-the unsettled part in an open question. Confidence carries the uncertainty —
-never lower a finding's severity to express doubt about its blast radius or
-the change's intended scope; severity follows the consequence definitions. If nothing on your axis
-is material, answer exactly: "no material findings on this axis".
-Send findings to the aggregating agent only.
-```
+- Deduplicate findings across axes, keeping the strongest formulation.
+- Drop speculative findings (no direct evidence, unreachable from the diff, or already enforced by static tooling).
+- Keep open questions as questions: never promote a question to a finding, and never demote a verified reachable defect to a question because its blast radius or intent is unsettled.
+- Never cross-rank axes during discovery: every independently supported blocker from every axis must survive.
 
-When subagents are unavailable, run the axes sequentially yourself and disclose that the review was single-reviewer.
+Assign severity strictly by consequence (read `references/severity-and-rerank.md` for edge-case calibration and worked examples):
 
-## Aggregate Deterministically
+- **blocker:** a reachable defect, data loss, security exposure, persisted-state inconsistency on mid-operation error (partial writes, orphaned/missing rows), or a claim contradicted by evidence (including the same root cause surviving on a sibling supported path).
+- **should-fix:** a real consequence with bounded blast radius outside the claimed contract (wrong failure handling, test gap on the claimed mechanism, unjustified architectural divergence).
+- **nit:** a bounded improvement with concrete impact. Omit anything without concrete impact.
 
-The aggregating agent — not a reviewer — merges axis reports:
+Confidence (`high`, `medium`, `low`) carries uncertainty; never lower a finding's severity to express doubt about blast radius or intent. Order surviving findings by severity, then confidence.
 
-- Dedupe findings reported by more than one axis; keep the strongest formulation.
-- Drop speculative findings: no evidence, not reachable from the diff, or already enforced by tooling.
-- Keep open questions as questions — never promote one to a finding to look decisive, and never demote a verified, reachable defect to a question because its blast radius is unclear. Reachability is judged against the code in the repo under review, never against hypothetical layers outside the diff.
-- Never cross-rank axes during discovery. Report every independently supported blocker from every axis — a strong axis cannot mask a weak one, and no axis's discovery budget caps another's.
+**Second-pass Re-rank Gate:** score every surviving finding on correctness (0 to 10: factually true of this diff?) and actionability (0 to 10: concrete fix direction, verification step, or explicit reason why exact patch is unknown?) with a one-line justification. Drop any finding scoring `0` on either axis and re-rank the rest.
 
-Assign severity by consequence, not by how the finding sounds:
+**Noise Budget:**
 
-- **blocker:** a reachable defect, data loss, security exposure, or a claim the evidence contradicts. A defect in the same class the change claims to fix, still reachable through a supported path, is a blocker — the claim is contradicted for that path, whatever its blast radius. Judge the class by shared root cause, not by the trigger the claim happens to name: if the change fixes a boundary, cache key, or predicate in one place and the same root cause survives on a sibling path, the survivor is a blocker, not a should-fix "outside the claimed contract". A failure that leaves persisted state inconsistent — partial writes, orphaned or missing rows, a half-applied multi-step mutation — is a blocker even when it needs a mid-operation error to trigger; do not praise the operation's ordering until you have checked what state survives that error.
-- **should-fix:** a real consequence with a bounded blast radius outside the change's claimed contract — wrong failure handling, a test gap on the claimed mechanism, unjustified divergence from established handling.
-- **nit:** a bounded improvement with concrete impact. Anything without concrete impact is not reported at all.
+- Report **every** blocker that survives the re-rank gate, even if total count exceeds five.
+- Cap `should-fix` and `nit` findings at **five combined**. When over the cap, drop nits first, then the lowest-confidence `should-fix`, never a blocker. Re-check candidates against the blocker definition before dropping.
+- Acknowledge what holds up before listing findings, using the same evidence standard (check partial completion, concurrency, and ordering before praising any mechanism).
+- Never pad the list. When no material findings survive, state "no material issues" plainly.
 
-Not everything is a blocker; severity inflation is how noise budgets die. Every surviving finding carries: severity, confidence (high, medium, low), evidence (file:line or artifact), a one-line rationale, and a fix direction — or an explicit note why the fix is unknown. Order by severity, then confidence.
+## 5. Report in Fixed Shape and Close with Verdict
 
-## Re-rank Gate
-
-Before publishing, score every surviving finding in a second pass: correctness (is the claim factually true of this diff?) and actionability (can the author act on it concretely?), each 0–10 with a one-line justification. Drop findings scoring zero on either axis and re-rank the rest. This gate exists because raw reviewer output over-reports; filtering is where review quality comes from.
-
-## Enforce the Noise Budget
-
-- Report every blocker that survives the re-rank gate. Cap only should-fix and nit findings at five combined; when over the cap, drop a nit first, then the lowest-confidence should-fix — never a blocker. Before dropping any candidate, re-check it against the blocker definition: a misclassified blocker may not leave the report as a budget cut. Prefer missing a nit over burying a blocker.
-- Ban nits without concrete impact on behavior, risk, or maintainability.
-- Never pad the list to look thorough. When no material findings survive, say "no material issues" plainly — a clear review is a success, not a lack of diligence.
-- Acknowledge what the change does correctly before listing findings, with the same evidence standard as findings. Before praising a mechanism, check the failure modes its contract implies — partial completion, concurrent access, ordering — and praise only what survives that check. Praise without evidence is noise too.
-
-## Report in a Fixed Shape
+Always emit this exact report structure so reviews stay comparable across runs:
 
 ```text
 ## Review report
 Scope: <base..head or exact worktree scope>
 Mode: <independent-axis | single-reviewer>
 Packet gaps: <none | what could not be obtained>
-Gate status: <each required command → pass | diff-caused failure | pre-existing/unattributed | unavailable | not applicable>
+Gate status: <each required command -> pass | diff-caused failure | pre-existing/unattributed | unavailable | not applicable>
 What holds up: <what the change does correctly, with evidence>
-Static checks: <what configured tooling already enforces — subtracted>
+Static checks: <what configured tooling already enforces, subtracted>
 Findings:
-  1. [blocker · high] file:line — what is wrong — why it matters — fix direction
+  1. [blocker | high] file:line - what is wrong - why it matters - fix direction
 Advisory nits: <bounded improvements with concrete impact; never commit-blocking by themselves>
-Open questions: <concerns the intent could not settle — never promoted to findings>
-Verdict: blocker N · should-fix N · nit N → BLOCK | FIX-THEN-COMMIT | CLEAR
+Open questions: <concerns the intent could not settle; never promoted to findings>
+Verdict: blocker N | should-fix N | nit N -> BLOCK | FIX-THEN-COMMIT | CLEAR
 ```
 
-Finding numbers are stable within one run — grading and follow-up refer to them. Every blocker appears in the findings list even when the report exceeds the normal noise budget; advisory nits never escalate the verdict on their own.
+Verdict rules (applies strictly to the reviewed scope and evidence):
 
-A fixed shape keeps reviews comparable across runs: the requester can tell at a glance whether this review is stricter than the last, and why.
-
-## Close with the Verdict
-
-End every review with severity counts (blocker, should-fix, nit) and one verdict:
-
-- **BLOCK** — a blocker finding stands, or a required deterministic gate fails because of the diff.
-- **FIX-THEN-COMMIT** — no blocker stands, but at least one should-fix stands, or required verification is missing or inconclusive.
-- **CLEAR** — no blocker or should-fix stands and required gates pass. Nits stay advisory: they never escalate the verdict on their own.
+- **BLOCK:** at least one `blocker` finding stands, or a required deterministic gate has a `diff-caused failure`.
+- **FIX-THEN-COMMIT:** no `blocker` stands, but at least one `should-fix` stands, or required verification is missing or inconclusive.
+- **CLEAR:** no `blocker` or `should-fix` stands and required gates pass. Advisory nits never escalate `CLEAR`.
 
 Findings are hypotheses, not proof. The requester must verify each finding independently, fix confirmed ones, and reject false positives with evidence.
+
+## Gotchas
+
+- **Escalating nits into FIX-THEN-COMMIT:** Advisory nits NEVER change a `CLEAR` verdict. Keep nits in `Advisory nits` and keep the verdict `CLEAR`.
+- **Downgrading sibling-path bugs:** If the diff fixes a root cause on path A and the exact same root cause survives on supported sibling path B, classify it as `blocker`, not `should-fix`.
+- **Praising partial-write ordering:** Never praise a multi-step persistence flow until you verify what state survives if step 2 fails mid-operation.
+- **Duplicating static gate failures:** Put diff-caused linter/test/build failures in `Gate status` (which triggers `BLOCK`) rather than repeating them as LLM findings.
+- **Executing merges or edits:** Even if the user says "review and merge if OK", run the review read-only and explicitly refuse the merge.
