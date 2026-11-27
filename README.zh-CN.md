@@ -29,7 +29,7 @@
 
 Pinpoint 是一套可移植的 Agent Skill 套件，用于以证据为依据、以刻意收敛的影响面来修复和优化软件。它的核心 Skill 会追踪真实的运行时路径，定位哪一层该为故障负责，保护相邻契约，并且只声明现有证据能够证明的结论。
 
-它不强推任何框架，不安装 hooks，也不取代仓库自身的规则，而是在既有规则之内提供一套严谨的调查、审查与交付流程。
+它不强推任何框架，也不取代仓库自身的规则，而是在既有规则之内提供一套严谨的调查、审查与交付流程。
 
 ## 快速开始
 
@@ -46,9 +46,7 @@ npx skills add ChuwuYo/pinpoint --skill '*' -g
 把下面这段提示词交给你的编码 Agent：
 
 ```text
-Install Pinpoint globally for the current agent from https://github.com/ChuwuYo/pinpoint.
-Read and follow INSTALL.md. Install all five Skills, then verify discovery and explicit
-invocation in a new session. Do not install hooks or modify project files.
+Install Pinpoint globally from https://github.com/ChuwuYo/pinpoint following INSTALL.md.
 ```
 
 安装验证、更新、卸载以及可选的 OpenCode 斜杠命令集成，请参阅 [`INSTALL.md`](INSTALL.md)。
@@ -102,19 +100,10 @@ Pinpoint 采用开放的 Agent Skills 格式：任何兼容该标准的 Agent �
 显式调用示例：
 
 ```text
-使用 pinpoint 以最小且可证明的影响面调查并修复这个问题。
-```
-
-```text
-使用 pinpoint-review 在合并前审计这个分支：质疑归属层、影响面、测试质量以及所有缺乏证据支撑的结论。
-```
-
-```text
-使用 pinpoint-commit 仅提交当前已暂存的修复，并用中文撰写提交信息。
-```
-
-```text
-使用 pinpoint-pr 准备 PR 标题和正文，但不要推送。
+使用 pinpoint 修复侧边栏滚动异常。
+使用 pinpoint-review 在合并前审查当前分支。
+使用 pinpoint-commit 用中文提交已暂存的修复。
+使用 pinpoint-pr 起草 PR 标题和正文。
 ```
 
 ## Pinpoint 保护什么

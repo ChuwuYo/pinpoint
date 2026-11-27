@@ -29,7 +29,7 @@
 
 Pinpoint is a portable Agent Skill suite for fixing and optimizing software with evidence and a deliberately small blast radius. Its core Skill traces the real runtime path, identifies which layer owns the failure, preserves adjacent contracts, and reports only what the available evidence proves.
 
-It does not prescribe a framework, install hooks, or replace a repository's own rules. It provides a disciplined way to investigate, review, and deliver changes inside them.
+It does not prescribe a framework or replace a repository's own rules. It provides a disciplined way to investigate, review, and deliver changes inside them.
 
 ## Quick Start
 
@@ -46,9 +46,7 @@ Omit `-g` for project scope, or pass `--skill pinpoint` to install only the core
 Give this prompt to your coding agent:
 
 ```text
-Install Pinpoint globally for the current agent from https://github.com/ChuwuYo/pinpoint.
-Read and follow INSTALL.md. Install all five Skills, then verify discovery and explicit
-invocation in a new session. Do not install hooks or modify project files.
+Install Pinpoint globally from https://github.com/ChuwuYo/pinpoint following INSTALL.md.
 ```
 
 See [`INSTALL.md`](INSTALL.md) for verification, updates, removal, and optional OpenCode slash commands.
@@ -102,20 +100,10 @@ The core [`pinpoint`](skills/pinpoint/SKILL.md) Skill guides an agent through se
 Example explicit requests:
 
 ```text
-Use pinpoint to investigate and fix this issue with the smallest proven impact.
-```
-
-```text
-Use pinpoint-review to audit this branch before merge: challenge ownership,
-blast radius, test quality, and every claim the evidence does not support.
-```
-
-```text
-Use pinpoint-commit to commit only the staged fix and write the message in Chinese.
-```
-
-```text
-Use pinpoint-pr to prepare the PR title and body, but do not push.
+Use pinpoint to fix the broken sidebar scroll.
+Use pinpoint-review to review this branch before merge.
+Use pinpoint-commit to commit the staged fix in Chinese.
+Use pinpoint-pr to draft the PR title and body.
 ```
 
 ## What Pinpoint Protects

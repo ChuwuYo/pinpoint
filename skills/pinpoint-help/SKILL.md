@@ -70,9 +70,7 @@ After installation, verify discovery:
 npx skills list -g
 ```
 
-Confirm all five Skill names, then start a new session and test explicit invocation by Skill name.
-
-If an installed Skill does not appear, start a new session or relaunch the agent. Never add hooks, edit `AGENTS.md`, or change project configuration merely to make Pinpoint available.
+Confirm all five Skill names, then start a new session (relaunch if needed) to use them. Never add hooks, edit `AGENTS.md`, or change project configuration merely to make Pinpoint available.
 
 ## Route Clearly
 

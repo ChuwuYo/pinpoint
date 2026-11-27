@@ -7,6 +7,5 @@ Load and follow the `pinpoint-help` Skill for this request:
 
 $ARGUMENTS
 
-If no arguments were supplied, show the four Pinpoint workflows, their explicit
-invocation forms for the current harness, and which actions require separate
-authorization.
+If no arguments were supplied, explain the five Pinpoint Skills, when to use each,
+and which actions require separate authorization.

@@ -1,6 +1,6 @@
 # Install Pinpoint
 
-Pinpoint uses the open Agent Skills format. It installs no hooks, no MCP servers, and no project files.
+Pinpoint uses the open Agent Skills format.
 
 ## Quick Install
 
@@ -12,16 +12,13 @@ npx skills add ChuwuYo/pinpoint --skill '*' -g
 
 - Omit `-g` to install only in the current project.
 - Replace `'*'` with a single Skill name (`pinpoint`, `pinpoint-review`, `pinpoint-commit`, `pinpoint-pr`, or `pinpoint-help`) to install one Skill.
-- Start a new session after installation so your coding agent refreshes its Skill list.
 
 ### With your agent
 
 Give this prompt to your coding agent:
 
 ```text
-Install Pinpoint globally for the current agent from https://github.com/ChuwuYo/pinpoint.
-Read and follow INSTALL.md. Install all five Skills, then verify discovery and explicit
-invocation in a new session. Do not install hooks or modify project files.
+Install Pinpoint globally from https://github.com/ChuwuYo/pinpoint following INSTALL.md.
 ```
 
 ## Verify
@@ -76,7 +73,6 @@ The suite installer refuses to overwrite or delete any existing Skill or command
 ## Installation Boundaries
 
 - Installation does not authorize repository edits, commits, pushes, PR creation, or deployment.
-- Pinpoint does not require a hook, MCP server, background service, account, or API key.
 - Do not install globally when the user requests project-only scope.
 - Do not install across unrelated agents unless the user requests that scope.
 - Do not replace an existing Skill or command with the same name when ownership is unclear.
