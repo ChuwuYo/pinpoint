@@ -158,6 +158,55 @@ function validateSkillFile(name) {
   }
 }
 
+function extractSection(content, heading) {
+  const lines = content.replace(/\r\n?/g, '\n').split('\n');
+  const start = lines.findIndex((line) => line.trim() === heading);
+  if (start === -1) return null;
+  const body = [];
+  for (let i = start + 1; i < lines.length; i += 1) {
+    if (lines[i].startsWith('## ')) break;
+    body.push(lines[i]);
+  }
+  return body.join('\n');
+}
+
+function validateDocInventory() {
+  const targets = [
+    { file: 'README.md', headings: ['## Skills'], required: true },
+    { file: 'README.zh-CN.md', headings: ['## Skills'], required: false },
+    { file: 'INSTALL.md', headings: ['## Verify'], required: true },
+    {
+      file: 'skills/pinpoint-help/SKILL.md',
+      headings: ['## Choose the Skill', '## Explain Invocation'],
+      required: true,
+    },
+  ];
+
+  for (const { file, headings, required } of targets) {
+    const filePath = join(root, file);
+    if (!existsSync(filePath)) {
+      if (required) throw new Error(`Missing required documentation: ${file}`);
+      continue;
+    }
+    const content = readFileSync(filePath, 'utf8');
+    if (/github:ChuwuYo\/pinpoint(?:#[^\s]+)?\s+--\s+--/.test(content)) {
+      throw new Error(`Invalid npx argument separator in ${file}`);
+    }
+    for (const heading of headings) {
+      const section = extractSection(content, heading);
+      if (section === null) {
+        throw new Error(`Missing section '${heading}' in ${file}`);
+      }
+      for (const name of commandNames) {
+        const pattern = new RegExp(`(?:^|[^a-z0-9-])${name}(?:[^a-z0-9-]|$)`);
+        if (!pattern.test(section)) {
+          throw new Error(`${name} missing from section '${heading}' in ${file}`);
+        }
+      }
+    }
+  }
+}
+
 function validatePackage() {
   if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(packageJson.version)) {
     throw new Error(`Invalid SemVer version: ${packageJson.version}`);
@@ -185,12 +234,7 @@ function validatePackage() {
     }
   }
 
-  for (const document of ['README.md', 'INSTALL.md', 'skills/pinpoint-help/SKILL.md']) {
-    const content = readFileSync(join(root, document), 'utf8');
-    if (/github:ChuwuYo\/pinpoint(?:#[^\s]+)?\s+--\s+--/.test(content)) {
-      throw new Error(`Invalid npx argument separator in ${document}`);
-    }
-  }
+  validateDocInventory();
 
   console.log(`Validated Pinpoint ${packageJson.version}: ${commandNames.length} commands`);
 }
@@ -371,7 +415,10 @@ function main() {
   if (options.version) return console.log(packageJson.version);
   if (options.check) return validatePackage();
   if (!options.agent || !knownAgents.has(options.agent)) {
-    throw new Error('Specify --agent codex, claude-code, cursor, or opencode.');
+    throw new Error(
+      'Specify --agent codex, claude-code, cursor, or opencode. ' +
+        'For any other harness, run: npx skills add ChuwuYo/pinpoint --skill \'*\' -g',
+    );
   }
 
   validatePackage();

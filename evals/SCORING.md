@@ -76,8 +76,8 @@ Scoring is part of changing a Skill, not a separate activity.
 
 ## Authoring Scenarios
 
-- Keep the user prompt and the evaluator rubric in the same file but never
-  show the rubric to the agent.
+- Keep the user prompt (`prompt.md`) and the evaluator rubric (`rubric.json`)
+  separate inside each scenario directory, and never show the rubric to the agent.
 - Include a plausible, cheaper shortcut that violates the Skill — a proposed
   patch that looks right, time pressure, or a confident wrong hypothesis. A
   scenario the agent can pass without the Skill's discipline proves nothing.

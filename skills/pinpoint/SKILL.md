@@ -2,7 +2,6 @@
 name: pinpoint
 description: Trace ambiguous or high-risk software defects and performance problems to the owning runtime boundary, implement the smallest complete fix, validate the real mechanism, and run evidence-based adversarial review. Use when the user asks to debug, diagnose, fix a bug, crash, regression, freeze, memory leak, wrong output, slow performance, cross-platform issue, accessibility, i18n, OAuth/protocol, sync, persistence, or UI geometry defect, or asks to review a change and fix what it finds (mutation requested makes pinpoint primary, with review running at its own gate). Also triggers on Chinese defect-fix requests such as 定位并修复, 修 bug, 排查性能, or review 并修复. Do not use for read-only audits when no fix is requested (use pinpoint-review), pure behavior-preserving refactoring with no stated defect, plain new-feature work, or questions about Pinpoint itself (use pinpoint-help).
 license: MIT
-compatibility: Portable Agent Skill; works with any coding agent harness.
 metadata:
   author: ChuwuYo
   version: "0.5.0"

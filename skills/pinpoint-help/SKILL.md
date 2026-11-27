@@ -2,7 +2,6 @@
 name: pinpoint-help
 description: Explain the Pinpoint Skill suite, its workflows, and their authorization boundaries, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use or install Pinpoint, available Pinpoint workflows, the difference between pinpoint, pinpoint-review, pinpoint-commit, and pinpoint-pr, or asks about a specific skill's behavior or permissions (including Chinese questions like Pinpoint 这几个技能有什么区别, 该用哪个, or walk-through questions naming a skill with "don't actually run it"). Answering meta questions about Pinpoint is this skill's sole job; naming a skill in a question is never a request to execute that skill's workflow.
 license: MIT
-compatibility: Portable Agent Skill; works with any coding agent harness.
 metadata:
   author: ChuwuYo
   version: "0.5.0"
@@ -53,43 +52,27 @@ pinpoint -> pinpoint-commit -> pinpoint-pr
 
 ## Explain Invocation
 
-Use the current harness's native explicit form:
-
-| Workflow | Claude Code, Cursor, OpenCode | Codex |
-| --- | --- | --- |
-| Fix and optimization workflow | `/pinpoint <request>` | `$pinpoint` or `/skills` |
-| Review workflow | `/pinpoint-review <request>` | `$pinpoint-review` or `/skills` |
-| Commit workflow | `/pinpoint-commit <request>` | `$pinpoint-commit` or `/skills` |
-| PR workflow | `/pinpoint-pr <request>` | `$pinpoint-pr` or `/skills` |
-| Help and routing | `/pinpoint-help` | `$pinpoint-help` or `/skills` |
-
-For another harness, use its native Skill picker, mention syntax, or a natural-language request naming the Skill. Never claim a slash command exists when the harness does not provide one.
+Every compatible agent reaches Pinpoint Skills by exact name (`pinpoint`, `pinpoint-review`, `pinpoint-commit`, `pinpoint-pr`, `pinpoint-help`) — automatically from each Skill's description, as a slash command or `$` mention, through a Skill picker, or via a natural-language request naming the Skill. Never claim a specific slash command exists when the current agent does not provide one.
 
 ## Explain Installation
 
-Install the complete suite and supported command entries for a primary harness:
-
-```bash
-npx -y github:ChuwuYo/pinpoint --agent opencode
-```
-
-Replace `opencode` with `codex`, `claude-code`, or `cursor`. Add `--project` for project scope.
-
-For another Agent Skills-compatible harness, or for Skills without separate command integration:
+Install the complete suite:
 
 ```bash
 npx skills add ChuwuYo/pinpoint --skill '*' -g
 ```
 
+Omit `-g` for project scope. (Optional: OpenCode users who also want `/` command files can run `npx -y github:ChuwuYo/pinpoint --agent opencode`.)
+
 After installation, verify discovery:
 
 ```bash
-npx skills list -g -a codex
+npx skills list -g
 ```
 
-Replace `codex` with the installer-documented target identifier. Confirm all five Skill names, then start a new session and test native explicit invocation. OpenCode should also list all five Pinpoint commands in its `/` menu.
+Confirm all five Skill names, then start a new session and test explicit invocation by Skill name.
 
-If an installed Skill does not appear, restart the current agent or start a new task. Never add hooks, edit `AGENTS.md`, or change project configuration merely to make Pinpoint available.
+If an installed Skill does not appear, start a new session or relaunch the agent. Never add hooks, edit `AGENTS.md`, or change project configuration merely to make Pinpoint available.
 
 ## Route Clearly
 

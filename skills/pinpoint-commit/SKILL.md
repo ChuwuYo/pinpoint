@@ -2,7 +2,6 @@
 name: pinpoint-commit
 description: Inspect repository state, draft repository-aligned commit messages, stage exact authorized paths, and create commits without touching unrelated work. Use when the user asks to draft or write a commit message, review staging, split commits, stage exact files, or create a commit (including Chinese requests such as 提交改动, 帮我提交, 拟一个提交信息, or conventional commit requests). Drafting stays draft-only unless committing is explicitly authorized in the current request. Do not use for history-rewriting operations (squash, rebase, or amend of existing commits), merging, or questions about this skill (use pinpoint-help).
 license: MIT
-compatibility: Requires git CLI (and optional Node.js) for repository inspection and commit creation.
 metadata:
   author: ChuwuYo
   version: "0.5.0"

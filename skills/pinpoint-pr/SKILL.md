@@ -2,7 +2,6 @@
 name: pinpoint-pr
 description: Inspect branch and remote topology, draft evidence-backed pull request titles and descriptions, respond to reviewer feedback, and push or open pull requests only when explicitly authorized. Use when the user asks for a PR title, PR description, PR body draft, fork synchronization check, branch publication, pull request creation, reviewer response, or final PR scope check (including Chinese requests such as 写 PR 描述, 起草 PR, 推送分支并提 PR, or 回复评审意见). Drafting stays draft-only unless push or PR creation is explicitly authorized. Merging is never in scope, even on request. Do not use for read-only code review (use pinpoint-review) or questions about Pinpoint (use pinpoint-help).
 license: MIT
-compatibility: Requires git CLI (and optional gh/glab CLI and Node.js) for branch topology and PR operations.
 metadata:
   author: ChuwuYo
   version: "0.5.0"

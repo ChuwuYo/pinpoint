@@ -27,7 +27,7 @@ node scripts/eval-report.mjs evals/runs/<scenario>  # Markdown summary on stdout
 node scripts/eval-trigger-report.mjs [runs-dir]     # trigger confusion matrix + precision/recall
 ```
 
-All three exit nonzero with actionable messages on failure. No command invokes
+All four exit nonzero with actionable messages on failure. No command invokes
 a model; model runs are deliberate, recorded events, not CI steps.
 
 ## Rules that keep results honest

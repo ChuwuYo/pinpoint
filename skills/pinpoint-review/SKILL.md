@@ -2,7 +2,6 @@
 name: pinpoint-review
 description: Run read-only, evidence-based adversarial review of a diff, branch, or pull request using risk-based parallel concern-axis reviewers, a scored re-rank gate, and a strict noise budget. Use when the user asks for a code review, diff audit, regression check, pre-merge check, or verification of claims against evidence without editing code (including Chinese read-only requests such as 只读, 别动代码, 审一下这个 PR, 检查有没有破坏别的功能, or review-conditional merge requests like 评审通过了就合并 where review runs here and merging is always refused), or when pinpoint reaches its review gate. Strictly read-only, never edits files, and never merges. Do not use when the user asks to review and fix issues (use pinpoint), or asks questions about this skill or the Pinpoint suite (use pinpoint-help).
 license: MIT
-compatibility: Requires git CLI (and optional Node.js) for diff inspection and read-only state verification.
 metadata:
   author: ChuwuYo
   version: "0.5.0"
