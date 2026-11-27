@@ -4,7 +4,7 @@ description: Explain the Pinpoint Skill suite, its workflows, and their authoriz
 license: MIT
 metadata:
   author: ChuwuYo
-  version: "0.5.0"
+  version: "0.5.1"
   suite: pinpoint
 ---
 

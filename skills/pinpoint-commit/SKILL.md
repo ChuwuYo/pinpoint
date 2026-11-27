@@ -4,7 +4,7 @@ description: Inspect repository state, draft repository-aligned commit messages,
 license: MIT
 metadata:
   author: ChuwuYo
-  version: "0.5.0"
+  version: "0.5.1"
   suite: pinpoint
 ---
 

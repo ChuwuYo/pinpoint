@@ -4,7 +4,7 @@ description: Inspect branch and remote topology, draft evidence-backed pull requ
 license: MIT
 metadata:
   author: ChuwuYo
-  version: "0.5.0"
+  version: "0.5.1"
   suite: pinpoint
 ---
 
