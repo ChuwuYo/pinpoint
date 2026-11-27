@@ -27,7 +27,7 @@ Prepare a pull request whose scope, history, target, and claims match the final 
 
 Run `node scripts/inspect-pr-topology.mjs` (when Node.js is available) or the equivalent `git` commands to verify branch and remote state:
 
-1. Read the repository contribution guide, PR template, current reviewer feedback, and any linked issue or discussion.
+1. Read the repository contribution guide, PR template, current reviewer feedback, and any linked issue or discussion. When CI or a bot validates the PR title or body, that validator's rules are the contract.
 2. Inspect status, staged/unstaged changes, untracked files, current branch, upstream tracking, remotes, worktrees, submodules, and nested repositories.
 3. Identify the authoritative base and contributor remote from actual git configuration rather than assumed names.
 4. Fetch current refs before comparing the branch with its intended base (when network access is available).

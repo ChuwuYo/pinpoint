@@ -27,7 +27,7 @@ Create one exact, reviewable commit from the changes the user authorized. Preser
 
 Run `node scripts/inspect-commit-state.mjs` (when Node.js is available) or the equivalent `git` commands to capture repository state cleanly:
 
-1. Read the nearest repository and contribution instructions governing commits.
+1. Establish the repository's commit contract before writing anything: when a tool or hook validates commit messages, its active configuration is the contract — read it first, and treat its rejection output as the source of truth instead of retrying variants or bypassing it. Otherwise derive the format from recent history. If a repository rule conflicts with this Skill, the rule wins and the conflict gets reported.
 2. Inspect status, staged and unstaged diffs, untracked files, branch, worktrees, submodules, and nested repositories.
 3. Read recent commits to determine message structure, language, capitalization, scopes, body style, issue references, and trailers.
 4. Separate changes belonging to the requested commit from unrelated, secret, generated, or ambiguous files.
