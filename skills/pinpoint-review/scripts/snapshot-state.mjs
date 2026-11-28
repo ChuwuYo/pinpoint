@@ -4,14 +4,25 @@
  * Deterministic read-only preflight and mutation detector for pinpoint-review.
  *
  * Usage:
- *   node scripts/snapshot-state.mjs --snapshot <file> [--base <ref>] [--range <range>]
- *   node scripts/snapshot-state.mjs --verify <file>
+ *   node scripts/snapshot-state.mjs --snapshot [file] [--base <ref>] [--range <range>]
+ *   node scripts/snapshot-state.mjs --verify [file]
  */
 
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
+
+const defaultSnapshotFile = join(tmpdir(), 'pinpoint-review-before.json');
+
+function usage() {
+  console.log(`Usage:
+  snapshot-state.mjs --snapshot [file] [--base <ref>] [--range <range>]
+  snapshot-state.mjs --verify [file]
+
+Defaults [file] to ${defaultSnapshotFile}.`);
+}
 
 function runGit(args) {
   const res = spawnSync('git', args, { encoding: 'utf8' });
@@ -23,8 +34,8 @@ function runGit(args) {
   };
 }
 
-function hashFile(filePath) {
-  const abs = resolve(filePath);
+function hashFile(repoRoot, filePath) {
+  const abs = resolve(repoRoot, filePath);
   if (!existsSync(abs)) return null;
   const st = statSync(abs);
   if (!st.isFile()) return `nonfile:${st.mode}`;
@@ -52,7 +63,7 @@ function captureState() {
     if (filePath.startsWith('"') && filePath.endsWith('"')) {
       filePath = filePath.slice(1, -1);
     }
-    files[filePath] = hashFile(filePath);
+    files[filePath] = hashFile(top.stdout, filePath);
   }
 
   return {
@@ -96,23 +107,46 @@ function preflightDiff(base, range) {
 }
 
 function parseArgs(argv) {
-  const opts = { snapshot: null, verify: null, base: null, range: null };
+  const opts = { snapshot: null, verify: null, base: null, range: null, help: false };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
-    if (arg === '--snapshot') opts.snapshot = argv[++i] ?? null;
-    else if (arg === '--verify') opts.verify = argv[++i] ?? null;
-    else if (arg === '--base') opts.base = argv[++i] ?? null;
-    else if (arg === '--range') opts.range = argv[++i] ?? null;
-    else throw new Error(`Unknown argument: ${arg}`);
+    if (arg === '--help' || arg === '-h') {
+      opts.help = true;
+    } else if (arg === '--snapshot') {
+      const next = argv[i + 1];
+      if (next && !next.startsWith('--')) {
+        opts.snapshot = next;
+        i += 1;
+      } else {
+        opts.snapshot = defaultSnapshotFile;
+      }
+    } else if (arg === '--verify') {
+      const next = argv[i + 1];
+      if (next && !next.startsWith('--')) {
+        opts.verify = next;
+        i += 1;
+      } else {
+        opts.verify = defaultSnapshotFile;
+      }
+    } else if (arg === '--base') {
+      opts.base = argv[++i] ?? null;
+    } else if (arg === '--range') {
+      opts.range = argv[++i] ?? null;
+    } else {
+      throw new Error(`Unknown argument: ${arg}`);
+    }
   }
   return opts;
 }
 
 try {
   const opts = parseArgs(process.argv.slice(2));
-  if (opts.snapshot) {
+  if (opts.help) {
+    usage();
+  } else if (opts.snapshot) {
     const state = captureState();
     const diff = preflightDiff(opts.base, opts.range);
+    mkdirSync(dirname(resolve(opts.snapshot)), { recursive: true });
     writeFileSync(opts.snapshot, JSON.stringify(state, null, 2), 'utf8');
     console.log(JSON.stringify({ mode: 'snapshot', snapshotFile: opts.snapshot, head: state.head, diff }, null, 2));
     if (!diff.ok) process.exitCode = 2;
@@ -134,7 +168,7 @@ try {
     console.log(JSON.stringify({ mode: 'verify', readOnlyVerified: clean, mutations }, null, 2));
     if (!clean) process.exitCode = 1;
   } else {
-    console.error('Usage: snapshot-state.mjs --snapshot <file> [--base <ref>] [--range <range>] | --verify <file>');
+    usage();
     process.exitCode = 1;
   }
 } catch (error) {
