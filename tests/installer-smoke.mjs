@@ -263,8 +263,8 @@ function testConflictAtomicity() {
       writeFileSync(join(dir, 'SKILL.md'), 'owned\n', 'utf8');
       writeFileSync(join(dir, '.pinpoint-source.json'), JSON.stringify({ source: repository }), 'utf8');
     }
-    mkdirSync(join(skillsDir, 'pinpoint-commit'), { recursive: true });
-    writeFileSync(join(skillsDir, 'pinpoint-commit', 'SKILL.md'), 'unowned\n', 'utf8');
+    mkdirSync(join(skillsDir, 'pinpoint-deliver'), { recursive: true });
+    writeFileSync(join(skillsDir, 'pinpoint-deliver', 'SKILL.md'), 'unowned\n', 'utf8');
     const before = JSON.stringify({
       skills: existsSync(skillsDir) ? readdirSync(skillsDir).sort() : [],
       commands: existsSync(commandsDir) ? readdirSync(commandsDir).sort() : [],
@@ -274,7 +274,7 @@ function testConflictAtomicity() {
     if (readFileSync(join(skillsDir, 'pinpoint', 'SKILL.md'), 'utf8') !== 'owned\n') {
       fail('owned Skill was modified by a failed install');
     }
-    if (readFileSync(join(skillsDir, 'pinpoint-commit', 'SKILL.md'), 'utf8') !== 'unowned\n') {
+    if (readFileSync(join(skillsDir, 'pinpoint-deliver', 'SKILL.md'), 'utf8') !== 'unowned\n') {
       fail('unowned Skill was modified by a failed install');
     }
     const after = JSON.stringify({
@@ -285,7 +285,7 @@ function testConflictAtomicity() {
     ok('mixed-state conflict rejected atomically; filesystem unchanged');
 
     // Partial prior install is repaired, not refused.
-    for (const name of ['pinpoint-review', 'pinpoint-commit']) {
+    for (const name of ['pinpoint-review', 'pinpoint-deliver']) {
       rmSync(join(skillsDir, name), { recursive: true, force: true });
     }
     result = runInstaller(fixture, ['--agent', 'opencode', '--project']);
