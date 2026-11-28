@@ -1479,6 +1479,15 @@ after a repeatable failure or usage pattern demonstrates its value.
 - [ ] Reconsider only through a separate explicit product decision with opt-in
   permission and dedicated safety evaluation.
 
+### 4-skill trigger re-baseline and `pinpoint-deliver` stage isolation (`0.6.x`)
+
+- [ ] When the next model evaluation pass runs, update `evals/trigger/catalog.json`
+  and `evals/trigger/{train,validation}.jsonl` for the 4-skill `0.6.x` suite
+  (`pinpoint-deliver` replacing `pinpoint-commit` and `pinpoint-pr`), and add
+  stage-boundary regression cases verifying that `pinpoint-deliver` stops after
+  Stage 1 (commit) and never crosses into Stage 2 (push/PR) without explicit
+  authorization.
+
 ---
 
 ## Protected strengths and non-goals

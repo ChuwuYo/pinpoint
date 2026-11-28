@@ -44,16 +44,16 @@ Protect working state first: preserve unrelated user changes, staged work, workt
 
 1. Capture the exact environment, input, settings, expected behavior, and observed behavior.
 2. Trace the full runtime path from trigger through local state, transforms, external/native boundaries, persistence, and teardown, inverse, or re-entry paths (check what shared, stacked, or persistent state reused consumers also mutate).
-3. Prove runtime reachability through callers, dispatch, config gates, event/registry channels (live value vs. stale snapshot), and concrete consumers—never from a shared type or helper name alone. Across any suspension, I/O, lock, callback, or concurrency boundary, verify whether shared/environmental state can change before resumption and read fresh authoritative state afterward. Look past symbol search: wire/serialization formats, schemas, cross-language boundaries, dependency source/patches, and multi-hop consumers.
+3. Prove runtime reachability through callers, dispatch, gates, event/registry channels, and implicit boundaries past symbol search (wire formats, schemas, dependencies). Across suspension or concurrency boundaries, verify freshness and read authoritative state after resumption.
 4. Trace any value before reusing it to its producer (`file:line`), and check version history (`git log`/commits) before altering an existing guard, workaround, or regression-prone path.
-5. Inspect the real failing artifact or mechanism (preserve the failing property in any fixture; summarize large logs, traces, or snapshots before drilling down; for cumulative or intermittent defects, capture baseline, repeat the trigger to amplify signal, and return to baseline to confirm cleanup). Adapt tracing to codebase scale: in small/bounded codebases read the full path directly; in large/monorepo codebases map subsystem/package boundaries first and summarize or delegate broad fan-out to read-only subagents so context limits never silently truncate the trace—never equate a local directory search with repo-wide reachability, and mark unsearched siblings or downstream consumers as `Unverified`.
+5. Inspect the real failing artifact or mechanism (summarize large traces before drilling down; amplify and revert cumulative/intermittent defects). Scale tracing to codebase size without equating a local search with repo-wide reachability—mark unsearched scope `Unverified`.
 6. Classify ownership (app, framework, OS, toolkit, data, provider, network, or environment) and locate the first incorrect or unjustified transition.
 
 Before editing, state one invariant and explicit non-goals:
 
 > When X occurs under Y, Z must happen, while A and B remain unchanged.
 
-For transferable principles (consumer-boundary validation, semantic equivalence, cache dependencies, single-producer fields, bounded heuristics) and worked examples, read [references/reasoning-and-gotchas.md](references/reasoning-and-gotchas.md).
+For detailed principles (consumer-boundary validation, symbol-search blind spots, signal amplification, scale-adaptive tracing, Deletion Test, single-producer fields, bounded heuristics) and worked examples, read [references/reasoning-and-gotchas.md](references/reasoning-and-gotchas.md).
 
 ## 3. Fix the Smallest Owned Boundary
 

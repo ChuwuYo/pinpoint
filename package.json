@@ -13,7 +13,8 @@
     "test:eval-tools": "node tests/eval-tools.mjs",
     "test:installer": "node tests/installer-smoke.mjs",
     "test:package": "node tests/package-smoke.mjs",
-    "test": "npm run check && npm run validate:evals && npm run test:eval-tools"
+    "test:scripts": "node tests/skill-scripts.mjs",
+    "test": "npm run check && npm run validate:evals && npm run test:eval-tools && npm run test:scripts"
   },
   "engines": {
     "node": ">=22.20.0"
