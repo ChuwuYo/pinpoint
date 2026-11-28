@@ -4,7 +4,7 @@ description: Run read-only, evidence-based adversarial review of a diff, branch,
 license: MIT
 metadata:
   author: ChuwuYo
-  version: "0.5.1"
+  version: "0.6.0"
   suite: pinpoint
 ---
 

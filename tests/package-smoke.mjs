@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const tar = process.platform === 'win32' ? 'tar.exe' : 'tar';
-const skills = ['pinpoint', 'pinpoint-review', 'pinpoint-commit', 'pinpoint-pr', 'pinpoint-help'];
+const skills = ['pinpoint', 'pinpoint-review', 'pinpoint-deliver', 'pinpoint-help'];
 
 let failures = 0;
 
@@ -114,7 +114,7 @@ try {
       const command = join(fixture, '.opencode', 'commands', `${name}.md`);
       if (!existsSync(command)) fail(`install from tarball did not create command ${name}.md`);
     }
-    ok('install from the published tarball shape installs all five Skills and commands');
+    ok('install from the published tarball shape installs all four Skills and commands');
   }
 } finally {
   rmSync(fixture, { recursive: true, force: true });

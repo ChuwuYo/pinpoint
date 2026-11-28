@@ -4,7 +4,7 @@ description: Trace ambiguous or high-risk software defects and performance probl
 license: MIT
 metadata:
   author: ChuwuYo
-  version: "0.5.1"
+  version: "0.6.0"
   suite: pinpoint
 ---
 
@@ -110,7 +110,7 @@ After the cohesive change is validated, hand it to an independent, read-only rev
 - Otherwise run the same challenge inline (prefer a fresh read-only subagent; prohibit edits explicitly and compare repo state before and after). Check: intent mismatch or scope creep, wrong ownership/root cause, wider blast radius, architecture/platform divergence, reachable regressions, tests imitating implementation, unverified vetoes, and unsupported claims. Close with severity counts (`blocker`, `should-fix`, `nit`) and a verdict (`BLOCK`, `FIX-THEN-COMMIT`, or `CLEAR`). Disclose if only self-review was available.
 - Verify every finding independently. Fix confirmed issues and reject false positives with evidence.
 
-**Deliberate handoff:** stop after implementation, validation, and review unless delivery was explicitly requested. Use `pinpoint-commit` for staging or commits and `pinpoint-pr` for PR preparation or publication. Completion never authorizes commit, push, PR, merge, tag, deployment, or cleanup.
+**Deliberate handoff:** stop after implementation, validation, and review unless delivery was explicitly requested. Use `pinpoint-deliver` for staging, commits, PR preparation, or publication. Completion never authorizes commit, push, PR, merge, tag, deployment, or cleanup.
 
 ## Gotchas
 

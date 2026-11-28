@@ -1,10 +1,10 @@
 ---
 name: pinpoint-help
-description: Explain the Pinpoint Skill suite, its workflows, and their authorization boundaries, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use or install Pinpoint, available Pinpoint workflows, the difference between pinpoint, pinpoint-review, pinpoint-commit, and pinpoint-pr, or asks about a specific skill's behavior or permissions (including Chinese questions like Pinpoint 这几个技能有什么区别, 该用哪个, or walk-through questions naming a skill with "don't actually run it"). Answering meta questions about Pinpoint is this skill's sole job; naming a skill in a question is never a request to execute that skill's workflow.
+description: Explain the Pinpoint Skill suite, its workflows, and their authorization boundaries, and show how to invoke or install it without changing repository state. Use when the user asks what Pinpoint does, which Pinpoint skill to use, how to use or install Pinpoint, available Pinpoint workflows, the difference between pinpoint, pinpoint-review, and pinpoint-deliver, or asks about a specific skill's behavior or permissions (including Chinese questions like Pinpoint 这几个技能有什么区别, 该用哪个, or walk-through questions naming a skill with "don't actually run it"). Answering meta questions about Pinpoint is this skill's sole job; naming a skill in a question is never a request to execute that skill's workflow.
 license: MIT
 metadata:
   author: ChuwuYo
-  version: "0.5.1"
+  version: "0.6.0"
   suite: pinpoint
 ---
 
@@ -26,8 +26,7 @@ Explain the suite and route the request.
 | --- | --- |
 | Investigate an issue or performance problem, find the owning layer, implement a narrow fix or optimization, validate it, or review and fix issues | `pinpoint` |
 | Review a diff, branch, or PR read-only: challenge ownership, blast radius, test quality, and claims before delivery | `pinpoint-review` |
-| Generate a commit message, inspect staging, split commits, stage exact changes, or commit when authorized | `pinpoint-commit` |
-| Prepare a PR title or body, inspect fork and branch publication state, respond to review, push, or create a PR when authorized | `pinpoint-pr` |
+| Draft commit messages or PR titles/bodies, inspect staging or fork/branch topology, commit, respond to review, push, or open a PR when explicitly authorized | `pinpoint-deliver` |
 | Explain the suite, installation, invocation, or routing | `pinpoint-help` |
 
 Use the smallest applicable Skill. Do not route an isolated commit-message request through the full repair workflow, and do not route implementation work directly to PR publication.
@@ -35,7 +34,7 @@ Use the smallest applicable Skill. Do not route an isolated commit-message reque
 For an end-to-end contribution, advance one phase at a time only as explicitly authorized:
 
 ```text
-pinpoint -> pinpoint-commit -> pinpoint-pr
+pinpoint -> pinpoint-deliver (stage by stage)
 ```
 
 `pinpoint` invokes `pinpoint-review` at its review gate automatically; invoke `pinpoint-review` directly when auditing work outside a Pinpoint run. Completion of one phase never authorizes the next.
@@ -46,13 +45,13 @@ pinpoint -> pinpoint-commit -> pinpoint-pr
 | --- | --- |
 | "Review this branch and fix what you find" | `pinpoint` (mutation requested; review runs at its own gate) |
 | "Review this branch and merge if it passes" | `pinpoint-review` (read-only audit runs; merge is always refused) |
-| "Commit, push, and open a PR" | `pinpoint-commit` -> `pinpoint-pr` (only when explicitly authorized; never merges) |
+| "Commit, push, and open a PR" | `pinpoint-deliver` (stage by stage only as explicitly authorized; never merges) |
 | "What would `pinpoint-review` catch here? Don't run it." | `pinpoint-help` (explain only; do not execute `pinpoint-review`) |
 | Pure behavior-preserving refactor / merge-only / squash or rebase | Outside Pinpoint suite (no Pinpoint skill owns these operations) |
 
 ## Explain Invocation
 
-Every compatible agent reaches Pinpoint Skills by exact name (`pinpoint`, `pinpoint-review`, `pinpoint-commit`, `pinpoint-pr`, `pinpoint-help`) — automatically from each Skill's description, as a slash command or `$` mention, through a Skill picker, or via a natural-language request naming the Skill. Never claim a specific slash command exists when the current agent does not provide one.
+Every compatible agent reaches Pinpoint Skills by exact name (`pinpoint`, `pinpoint-review`, `pinpoint-deliver`, `pinpoint-help`) — automatically from each Skill's description, as a slash command or `$` mention, through a Skill picker, or via a natural-language request naming the Skill. Never claim a specific slash command exists when the current agent does not provide one.
 
 ## Explain Installation
 
@@ -70,7 +69,7 @@ After installation, verify discovery:
 npx skills list -g
 ```
 
-Confirm all five Skill names, then start a new session (relaunch if needed) to use them. Never add hooks, edit `AGENTS.md`, or change project configuration merely to make Pinpoint available.
+Confirm all four Skill names, then start a new session (relaunch if needed) to use them. Never add hooks, edit `AGENTS.md`, or change project configuration merely to make Pinpoint available.
 
 ## Route Clearly
 
@@ -85,5 +84,5 @@ If the request spans multiple phases, recommend the current phase first and name
 
 ## Gotchas
 
-- **Executing a mentioned skill during a walk-through:** When the user asks "what would `pinpoint-review` catch?" or "does `pinpoint-commit` push?", answer in prose without running `git diff` or starting that workflow.
+- **Executing a mentioned skill during a walk-through:** When the user asks "what would `pinpoint-review` catch?" or "does `pinpoint-deliver` push?", answer in prose without running `git diff` or starting that workflow.
 - **Claiming Pinpoint can merge PRs:** No Pinpoint skill merges branches or PRs, even if the user explicitly asks.

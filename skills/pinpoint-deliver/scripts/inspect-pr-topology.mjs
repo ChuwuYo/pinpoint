@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Deterministic read-only branch and PR topology inspector for pinpoint-pr.
+ * Deterministic read-only branch and PR topology inspector for pinpoint-deliver.
  * Read-only: never fetches, pushes, or modifies repository state.
  *
  * Usage:
@@ -19,6 +19,10 @@ function runGit(args) {
     stdout: (res.stdout ?? '').trimEnd(),
     stderr: (res.stderr ?? '').trimEnd(),
   };
+}
+
+function usage() {
+  console.log('Usage: inspect-pr-topology.mjs [--base <ref>]');
 }
 
 function parseBaseArg(argv) {
@@ -56,6 +60,12 @@ function findPrTemplates(root) {
 }
 
 try {
+  const argv = process.argv.slice(2);
+  if (argv.includes('--help') || argv.includes('-h')) {
+    usage();
+    process.exit(0);
+  }
+
   const top = runGit(['rev-parse', '--show-toplevel']);
   if (!top.ok) {
     throw new Error(`Not inside a git repository: ${top.stderr || 'git rev-parse failed'}`);

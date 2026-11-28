@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Deterministic pre-staging repository inspector for pinpoint-commit.
+ * Deterministic pre-staging repository inspector for pinpoint-deliver.
  * Read-only: never modifies repository state.
  *
  * Usage:
@@ -9,6 +9,34 @@
  */
 
 import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+const COMMIT_VALIDATORS = [
+  '.commitlintrc',
+  '.commitlintrc.json',
+  '.commitlintrc.yaml',
+  '.commitlintrc.yml',
+  '.commitlintrc.js',
+  '.commitlintrc.cjs',
+  '.commitlintrc.mjs',
+  'commitlint.config.js',
+  'commitlint.config.cjs',
+  'commitlint.config.mjs',
+  'commitlint.config.ts',
+  '.husky/commit-msg',
+  '.git/hooks/commit-msg',
+  'lefthook.yml',
+  '.pre-commit-config.yaml',
+];
+
+function findCommitValidators(root) {
+  return COMMIT_VALIDATORS.filter((rel) => existsSync(join(root, rel)));
+}
+
+function usage() {
+  console.log('Usage: inspect-commit-state.mjs [--log-count 10]');
+}
 
 function runGit(args) {
   const res = spawnSync('git', args, { encoding: 'utf8' });
@@ -37,6 +65,12 @@ function parseLogCount(argv) {
 }
 
 try {
+  const argv = process.argv.slice(2);
+  if (argv.includes('--help') || argv.includes('-h')) {
+    usage();
+    process.exit(0);
+  }
+
   const top = runGit(['rev-parse', '--show-toplevel']);
   if (!top.ok) {
     throw new Error(`Not inside a git repository: ${top.stderr || 'git rev-parse failed'}`);
@@ -86,6 +120,7 @@ try {
     unstagedStat: unstagedStat.stdout || null,
     worktreeCount: worktrees.ok ? worktrees.stdout.split('\n').filter((l) => l.startsWith('worktree ')).length : 1,
     hasSubmodules: Boolean(submodules.ok && submodules.stdout.trim()),
+    commitValidators: findCommitValidators(top.stdout),
     recentCommits: recentCommits.ok && recentCommits.stdout ? recentCommits.stdout.split('\n') : [],
   };
 

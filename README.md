@@ -27,9 +27,9 @@
 
 ---
 
-Pinpoint is a portable Agent Skill suite for fixing and optimizing software with evidence and a deliberately small blast radius. Its core Skill traces the real runtime path, identifies which layer owns the failure, preserves adjacent contracts, and reports only what the available evidence proves.
+Pinpoint is a portable Agent Skill suite for diagnosing, fixing, optimizing, and reviewing software with evidence and a deliberately narrow blast radius. It traces the real execution path, isolates which layer owns the failure, validates the mechanism rather than a proxy, and claims only what observed evidence proves.
 
-It does not prescribe a framework or replace a repository's own rules. It provides a disciplined way to investigate, review, and deliver changes inside them.
+It does not prescribe a framework or replace a repository's own rules—it provides a disciplined engineering workflow inside them.
 
 ## Quick Start
 
@@ -53,20 +53,19 @@ See [`INSTALL.md`](INSTALL.md) for verification, updates, removal, and optional 
 
 ## Why Pinpoint
 
-Coding agents are good at producing plausible patches. The harder problem is deciding whether a patch changes the right layer without silently breaking adjacent behavior or overstating what was tested.
+Coding agents are good at producing plausible patches. The hard part is fixing the owning boundary without silently breaking adjacent contracts or overstating what was tested.
 
 | Without Pinpoint | With Pinpoint |
 | --- | --- |
 | Patch the visible symptom | Trace the first transition from correct to incorrect |
-| Replace architecture when a helper exists | Reuse the project's established boundaries and semantics |
-| Add flags for hypothetical platforms | Prove impact through runtime reachability first |
-| Treat accessibility as a final checklist | Treat interaction structure as a design constraint |
-| Trust a simplified fixture | Validate the real mechanism and consumer artifact |
-| Claim "verified" after local mocks | Separate automated, manual, and unverified evidence |
-| Push the current branch and hope | Verify worktree, remotes, base, and authorization |
+| Invent new helpers or flags | Reuse existing pipelines and prove runtime reachability |
+| Verify only the happy-path entry | Trace teardown, inverse, re-entry, and concurrency windows |
+| Trust simplified mocks or proxies | Validate the real mechanism and downstream consumer |
+| Claim "verified" broadly | Separate automated, manual, and unverified evidence |
+| Push current changes blindly | Check base, worktree, history, and explicit authorization |
 
 > [!NOTE]
-> Pinpoint audits only contracts reachable from the traced runtime path. A single-platform project stays single-platform; unrelated platforms, formats, and toolchains do not become artificial requirements.
+> Pinpoint audits only contracts reachable from the traced runtime path: **interaction & accessibility**, **language & content**, **data & persistence**, **external protocols & security**, **UI & geometry**, and **platform & toolchain**. Unreachable targets never become artificial requirements.
 
 ## Skills
 
@@ -74,71 +73,59 @@ Coding agents are good at producing plausible patches. The harder problem is dec
 | --- | --- | --- |
 | `pinpoint` | Full investigation, implementation, validation, and review workflow for fixes and optimizations | Edits + Review |
 | `pinpoint-review` | Adversarial review of a diff, branch, or PR: parallel concern axes, scored re-rank gate, strict noise budget | Read-only |
-| `pinpoint-commit` | Exact staging, repository-aligned commit messages, and commits when authorized | Delivery |
-| `pinpoint-pr` | Branch and remote checks, evidence-backed PR prose, and PR publication when authorized | Delivery |
+| `pinpoint-deliver` | Two-stage gated git delivery: commit staging/messages and PR prose, branch pushes, PR creation, or review replies when authorized | Delivery |
 | `pinpoint-help` | Explain the suite, check boundaries, and route requests without touching repository state | Read-only help |
 
-`pinpoint` invokes `pinpoint-review` automatically at its review gate, while keeping review, commit, PR, and help as separate Skills so adversarial grading and git delivery rules stay out of unrelated turns. Both delivery Skills reply in the user's language; commit messages and PR prose follow an explicitly requested language first, then repository rules and history, before falling back to the user's language.
+`pinpoint` loads `pinpoint-review` automatically at its review gate whenever installed (scaling between parallel axis subagents and single-reviewer mode based on risk and harness support). Keeping review, delivery, and help as separate Skills prevents adversarial grading and git delivery rules from bloating unrelated turns.
 
-Pinpoint uses the open Agent Skills format: compatible agents load matching Skills automatically from their descriptions or when invoked explicitly by Skill name. Start a new session after installation so your agent refreshes its Skill list.
+### Three-Tier Progressive Disclosure
+
+Each Skill follows the open Agent Skills architecture to keep context lean:
+
+1. **Metadata (`SKILL.md` frontmatter):** always loaded for accurate triggering and routing.
+2. **Core instructions (`SKILL.md` body):** concise, language-agnostic first principles and stop rules loaded only when triggered.
+3. **Bundled resources (`references/` & `scripts/`):** domain checklists, worked examples, and deterministic read-only inspection scripts loaded or executed on demand.
 
 > [!IMPORTANT]
 > Installing or invoking Pinpoint never authorizes commits, pushes, pull requests, merges, deployments, or destructive cleanup. Each delivery action requires explicit user authorization.
 
 ## Core Workflow
 
-The core [`pinpoint`](skills/pinpoint/SKILL.md) Skill guides an agent through seven decisions:
+The core [`pinpoint`](skills/pinpoint/SKILL.md) Skill guides an agent through six stages:
 
-1. **Maintain an evidence ledger**: separate repository contract, external contract, requester direction, observation, and inference.
-2. **Apply transferable reasoning**: validate at the real consumer boundary, match evidence granularity to the claim, preserve upstream authority, and prove impact through runtime reachability.
-3. **Trace the concrete runtime path**: locate the first transition from correct to incorrect and classify which layer owns it.
-4. **Fix the smallest owned boundary**: reuse established settings, pipelines, and abstractions before adding anything new.
-5. **Audit reachable contracts**: check only contracts reachable from the traced path (interaction, language, data, protocol, geometry, or platform) and report what could not be exercised.
-6. **Validate the real mechanism**: test at the lowest reliable oracle, then report automated, manual, unverified, and unrelated-environment evidence separately.
-7. **Run independent adversarial review**: delegate to `pinpoint-review` when subagents are available, verify its findings, or disclose when only self-review was possible. Stop before delivery unless requested.
+1. **Keep an evidence ledger:** classify repository contracts, external contracts, requester direction, observations, and inferences, pushing critical claims down the 5-level proof ladder (`assertion -> file:line/history -> trace -> executed probe -> real-environment repro`).
+2. **Trace ownership before designing:** follow the real path from trigger through boundaries, shared channels, version history of existing guards, symbol-search blind spots, teardown/re-entry, and suspension windows to locate the first incorrect transition.
+3. **Fix the smallest owned boundary:** reuse established settings, pipelines, and single-producer semantics before adding new abstractions; attack the shared premise and revert speculative code from refuted hypotheses if repeated attempts fail.
+4. **Audit only reachable contracts:** load only matching domain sections from `references/domain-checklists.md` and report unexercised reachable domains as gaps.
+5. **Validate the mechanism, not the patch shape:** test at the lowest reliable oracle (with matched before/after baselines for optimizations) and report automated, manual, unverified, and unrelated-environment results separately.
+6. **Run an adversarial review and hand off:** pass a neutral evidence packet to `pinpoint-review` (or run the same challenge read-only), fix confirmed findings, and stop before git delivery unless requested.
 
 Example explicit requests:
 
 ```text
 Use pinpoint to fix the broken sidebar scroll.
 Use pinpoint-review to review this branch before merge.
-Use pinpoint-commit to commit the staged fix in Chinese.
-Use pinpoint-pr to draft the PR title and body.
+Use pinpoint-deliver to commit the staged fix in Chinese.
+Use pinpoint-deliver to draft the PR title and body.
 ```
-
-## What Pinpoint Protects
-
-Every contract reachable from the traced runtime path — whatever the domain:
-
-- **Upstream authority**: intentional browser, OS, protocol, or provider behavior
-- **Interaction structure**: DOM order, focus, keyboard, selection, screen-reader traversal
-- **Language and content**: Unicode, RTL, CJK, vertical text, long translations
-- **Identity and persistence**: stable identifiers, hashes, ordering, sync, fallbacks
-- **Protocol validity**: callbacks, redirects, state, PKCE, signatures, replay checks
-- **Rendered behavior**: geometry, reflow, viewport, caching, clipping, hit targets
-- **Platform reality**: documented workarounds, native toolchains, real execution mechanisms
-- **Producer-consumer contracts**: exit codes, artifact completeness, downstream readability
-- **Repository safety**: existing user work, branch history, fork topology, deployment boundaries
-
-Pinpoint does not promise zero impact. It requires the agent to prove reachable impact and state remaining verification gaps.
 
 ## Evaluation
 
-The scenarios in [`evals/scenarios`](evals/scenarios) test decisions that distinguish a rigorous fix from a plausible-looking patch (ownership vs. external behavior, accessible structure, protocol equivalence, rendered geometry, runtime reachability, artifact usability, baseline-backed optimization, and review noise discipline).
+The scenarios in [`evals/scenarios`](evals/scenarios) test engineering judgment that separates a rigorous fix from a plausible patch (ownership vs. external behavior, accessible structure, protocol equivalence, rendered geometry, runtime reachability, downstream consumer usability, baseline-backed optimization, and review noise discipline).
 
-Each scenario keeps `prompt.md` separate from `rubric.json`. Scenarios are agent-agnostic and scored against [`evals/SCORING.md`](evals/SCORING.md); see [`evals/README.md`](evals/README.md) for layout and validation commands.
+Each scenario separates `prompt.md` from `rubric.json`. Scenarios are agent-agnostic and scored against [`evals/SCORING.md`](evals/SCORING.md); see [`evals/README.md`](evals/README.md) for layout and validation commands.
 
 ## Contributing
 
 Keep changes evidence-driven and narrowly scoped:
 
 1. Add or update a scenario in `evals/scenarios/` that exposes the missing decision.
-2. Make the smallest necessary edit in the responsible `SKILL.md`.
+2. Put universal principles in `SKILL.md`, domain-specific depth or examples in `references/`, and deterministic read-only checks in `scripts/`.
 3. Validate the suite locally with `npm test`.
-4. Run affected scenarios without exposing `rubric.json` to the agent under test, scoring per [`evals/SCORING.md`](evals/SCORING.md).
+4. Run affected scenarios without exposing `rubric.json` to the candidate agent, scoring per [`evals/SCORING.md`](evals/SCORING.md).
 5. Report both improvements and regressions.
 
-Avoid adding scripts, references, compatibility layers, or extra packaging unless they solve a demonstrated reliability or distribution need. When updating the pinned `skills` CLI version in `bin/pinpoint-install.mjs`, keep `tests/installer-smoke.mjs` and the CI matrix in sync.
+Keep `SKILL.md` concise and language-agnostic—do not hardcode project-specific or framework-specific rules into core instructions. When updating the pinned `skills` CLI version in `bin/pinpoint-install.mjs`, keep `tests/installer-smoke.mjs` and the CI matrix in sync.
 
 ## License
 

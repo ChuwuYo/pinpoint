@@ -11,7 +11,7 @@ npx skills add ChuwuYo/pinpoint --skill '*' -g
 ```
 
 - Omit `-g` to install only in the current project.
-- Replace `'*'` with a single Skill name (`pinpoint`, `pinpoint-review`, `pinpoint-commit`, `pinpoint-pr`, or `pinpoint-help`) to install one Skill.
+- Replace `'*'` with a single Skill name (`pinpoint`, `pinpoint-review`, `pinpoint-deliver`, or `pinpoint-help`) to install one Skill.
 
 ### With your agent
 
@@ -29,13 +29,12 @@ List the globally installed Skills (omit `-g` for project scope):
 npx skills list -g
 ```
 
-Confirm that all five names appear:
+Confirm that all four names appear:
 
 ```text
 pinpoint
 pinpoint-review
-pinpoint-commit
-pinpoint-pr
+pinpoint-deliver
 pinpoint-help
 ```
 
@@ -49,10 +48,10 @@ Update globally installed Skills:
 npx skills update -g
 ```
 
-Remove all five Pinpoint Skills globally (omit `-g` for project scope):
+Remove all four Pinpoint Skills globally (omit `-g` for project scope):
 
 ```bash
-npx skills remove pinpoint pinpoint-review pinpoint-commit pinpoint-pr pinpoint-help -g
+npx skills remove pinpoint pinpoint-review pinpoint-deliver pinpoint-help -g
 ```
 
 ## Optional: OpenCode Slash Commands

@@ -7,5 +7,5 @@ Load and follow the `pinpoint-help` Skill for this request:
 
 $ARGUMENTS
 
-If no arguments were supplied, explain the five Pinpoint Skills, when to use each,
+If no arguments were supplied, explain the four Pinpoint Skills, when to use each,
 and which actions require separate authorization.

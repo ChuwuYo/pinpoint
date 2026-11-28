@@ -11,7 +11,7 @@ const packageJson = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
 const repository = 'ChuwuYo/pinpoint';
 const skillsPackage = 'skills@1.5.21';
 const minNodeVersion = [22, 20, 0];
-const commandNames = ['pinpoint', 'pinpoint-commit', 'pinpoint-pr', 'pinpoint-review', 'pinpoint-help'];
+const commandNames = ['pinpoint', 'pinpoint-review', 'pinpoint-deliver', 'pinpoint-help'];
 const knownAgents = new Set(['codex', 'claude-code', 'cursor', 'opencode']);
 const allowedFrontmatterKeys = new Set([
   'name',
@@ -405,7 +405,7 @@ function printInvocation(agent) {
   if (agent === 'codex') {
     console.log('Start a new Codex task, then use $pinpoint or select it through /skills.');
   } else {
-    console.log('Start a new session, then use /pinpoint, /pinpoint-commit, /pinpoint-pr, /pinpoint-review, or /pinpoint-help.');
+    console.log('Start a new session, then use /pinpoint, /pinpoint-review, /pinpoint-deliver, or /pinpoint-help.');
   }
 }
 

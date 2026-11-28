@@ -30,6 +30,7 @@
       "enum": [
         "pinpoint",
         "pinpoint-review",
+        "pinpoint-deliver",
         "pinpoint-commit",
         "pinpoint-pr",
         "pinpoint-help",
@@ -42,6 +43,7 @@
         "enum": [
           "pinpoint",
           "pinpoint-review",
+          "pinpoint-deliver",
           "pinpoint-commit",
           "pinpoint-pr",
           "pinpoint-help"
@@ -54,6 +56,7 @@
         "enum": [
           "pinpoint",
           "pinpoint-review",
+          "pinpoint-deliver",
           "pinpoint-commit",
           "pinpoint-pr",
           "pinpoint-help"

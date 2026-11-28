@@ -18,7 +18,7 @@ const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
 const repository = 'ChuwuYo/pinpoint';
 const skillsPackage = 'skills@1.5.21';
 const agents = ['codex', 'claude-code', 'cursor', 'opencode'];
-const skills = ['pinpoint', 'pinpoint-review', 'pinpoint-commit', 'pinpoint-pr', 'pinpoint-help'];
+const skills = ['pinpoint', 'pinpoint-review', 'pinpoint-deliver', 'pinpoint-help'];
 const marker = '<!-- Managed by ChuwuYo/pinpoint. -->';
 
 let failures = 0;
@@ -148,7 +148,7 @@ function runMatrix() {
           for (const name of skills) {
             if (!output.includes(name)) fail(`${label}: discovery list missing ${name}`);
           }
-          ok(`${label}: discovery list exposes all five skills`);
+          ok(`${label}: discovery list exposes all four skills`);
         }
 
         const uninstall = runInstaller(cwd, ['--agent', agent, scope === 'project' ? '--project' : '', '--uninstall'].filter(Boolean), env);
