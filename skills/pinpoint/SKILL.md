@@ -21,7 +21,7 @@ Repository rules and mandatory external contracts outrank this Skill. Prior fixe
 Classify every key conclusion internally and never present inference as observation:
 
 - **Repository contract:** current code, tests, contribution rules, or architecture.
-- **External contract:** applicable official specification, platform, framework, browser, or provider documentation.
+- **External contract:** applicable official specification, platform, framework, browser, or provider documentation (verify current official docs or installed dependency source rather than relying on stale training memory).
 - **Requester direction:** a requirement stated in the current request, issue, or review.
 - **Observation:** reproduced behavior from the real environment, artifact, payload, trace, or device.
 - **Inference:** an explanation that still needs verification.
@@ -41,7 +41,7 @@ Protect working state first: preserve unrelated user changes, staged work, workt
 2. Follow the concrete runtime path from trigger through local state, shared transforms, external or native boundaries, persistence, and teardown, inverse, or re-entry paths (check what shared, stacked, or persistent state any reused consumer also mutates).
 3. Prove runtime reachability through callers, dispatch, configuration gates, and concrete consumers. Do not infer reachability from a shared type, optional method, or broad interface. Enumerate channels that bypass the call graph (event buses, dispatchers, registries) by event or channel name and check whether each dispatch site passes a live value or a stale snapshot. Across any suspension, I/O, lock, callback, or concurrency boundary, verify whether shared or environmental state can change before resumption and read fresh authoritative state rather than a pre-yield snapshot. Look where symbol search stops: wire or serialization formats, schemas, cross-language boundaries, dependency source/patches, and downstream consumers multiple hops away.
 4. Before reusing, substituting, or extending any value, trace it to its producer (`file:line`) and read the producing computation. Never infer properties from a same-named nearby helper or domain convention. Before altering an existing guard, workaround, or regression-prone path, check version history (`git log`/commits) to separate its original intent from guesswork.
-5. Inspect the real failing artifact or mechanism (DOM, computed style, event sequence, payload, persisted record, generated file, native log, or geometry). A simplified fixture is valid only if it preserves the property that causes the failure.
+5. Inspect the real failing artifact or mechanism (DOM, computed style, event sequence, payload, persisted record, generated file, native log, or geometry). A simplified fixture is valid only if it preserves the property that causes the failure. Summarize large logs, traces, profiles, or snapshots before drilling down so raw dumps do not drown out signal. For cumulative or intermittent defects (leaks, drift, resource exhaustion), capture a baseline, repeat the trigger to amplify signal, and return to baseline to confirm cleanup.
 6. Classify ownership: application, framework, browser, operating system, toolkit, source data, provider, network, or environment.
 7. Locate the first transition from correct to incorrect (or acceptable cost to unjustified cost). Distinguish intentional external behavior from the application consuming it incorrectly.
 
@@ -61,7 +61,7 @@ Prefer changes in this order:
 4. Let proven runtime topology isolate formats, modes, providers, or platforms instead of adding speculative flags.
 5. Add an abstraction only when it creates one source of truth or makes the real mechanism testable.
 
-Reject symptom masking, parallel semantic paths, unrelated cleanup, and architecture replacement justified only by novelty. Minimal means the smallest semantic and risk surface, not the fewest changed lines.
+Reject symptom masking, parallel semantic paths, unrelated cleanup, and architecture replacement justified only by novelty. Minimal means the smallest semantic and risk surface, not the fewest changed lines. Remove imports, variables, or branches that your own change made unused, but leave pre-existing dead code untouched (mention it only); every changed line should trace directly to the stated invariant. Never alter safe code or weaken guards merely to silence a false-positive static alert.
 
 - **Single-producer rule:** keep one user-facing field on one producer with one semantics. Prefer honest absence (an explicit unknown state) over a second fallback producer with conflicting semantics.
 - **High-risk boundaries:** treat changes to native interaction, DOM order, auth validation, persistent identity, shared sync, global styling, cross-cutting state, and platform workarounds as high risk until ownership and reachable impact are proven.
@@ -104,7 +104,7 @@ Report evidence separately under four labels:
 
 ## 6. Run an Adversarial Review and Hand Off
 
-After the cohesive change is validated, hand it to an independent, read-only reviewer. Assemble a neutral review packet: stated intent (unedited), repository rules, authoritative-base diff, validation/reproduction evidence, and intended-behavior claims. Never include the intended verdict or a defense of the change.
+After the cohesive change is validated, inspect your own `git diff` to strip stray debug logs, narration comments, or accidental edits, then hand it to an independent, read-only reviewer. Assemble a neutral review packet: stated intent (unedited), repository rules, authoritative-base diff, validation/reproduction evidence, and intended-behavior claims. Never include the intended verdict or a defense of the change.
 
 - When `pinpoint-review` is available, load and follow it with the review packet.
 - Otherwise run the same challenge inline (prefer a fresh read-only subagent; prohibit edits explicitly and compare repo state before and after). Check: intent mismatch or scope creep, wrong ownership/root cause, wider blast radius, architecture/platform divergence, reachable regressions, tests imitating implementation, unverified vetoes, and unsupported claims. Close with severity counts (`blocker`, `should-fix`, `nit`) and a verdict (`BLOCK`, `FIX-THEN-COMMIT`, or `CLEAR`). Disclose if only self-review was available.
@@ -128,7 +128,7 @@ After the cohesive change is validated, hand it to an independent, read-only rev
 
 ## Final Gate
 
-A completion claim without evidence in this session's ledger is a misreport.
+A completion claim without fresh evidence in this session's ledger is a misreport. Never cite pre-edit or pre-compaction test output or line numbers from memory, and never use speculative completion phrasing ("should work", "probably fixed") without a fresh post-edit verification run.
 
 | Claim | Requires | Not sufficient |
 | --- | --- | --- |

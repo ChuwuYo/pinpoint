@@ -39,6 +39,7 @@ Run the repository's configured formatter check, linter, type checker, and build
 - Record every required command in `Gate status` with its scope, exit status, and exact attribution: `pass`, `diff-caused failure`, `pre-existing/unattributed failure`, `unavailable`, or `not applicable`.
 - A `diff-caused failure` of a required gate blocks the merge on its own. Report it in `Gate status`, not as a duplicate LLM finding.
 - Never blame the diff for a pre-existing failure without evidence, and never claim gates pass when required evidence is unavailable or inconclusive.
+- Never recommend editing safe code, removing intentional fallbacks, or weakening guards merely to force zero findings on a known false-positive static rule.
 
 ## 3. Review by Reachable Concern Axis
 
