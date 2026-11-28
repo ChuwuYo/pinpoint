@@ -4,7 +4,7 @@ description: Trace ambiguous or high-risk software defects and performance probl
 license: MIT
 metadata:
   author: ChuwuYo
-  version: "0.6.0"
+  version: "0.6.1"
   suite: pinpoint
 ---
 

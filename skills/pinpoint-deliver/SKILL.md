@@ -4,7 +4,7 @@ description: Inspect repository, branch, and remote state, draft repository-alig
 license: MIT
 metadata:
   author: ChuwuYo
-  version: "0.6.0"
+  version: "0.6.1"
   suite: pinpoint
 ---
 
