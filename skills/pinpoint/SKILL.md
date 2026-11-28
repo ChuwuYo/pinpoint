@@ -59,11 +59,11 @@ For transferable principles (consumer-boundary validation, semantic equivalence,
 
 Prefer changes in this order:
 
-1. Subtract dead paths, collapse split state, or correct the existing predicate that owns the transition.
+1. Subtract dead paths, collapse split state, or correct the owning predicate—when replacing an internal implementation, migrate all real callers and delete the superseded path (keep compatibility shims only for proven external contracts).
 2. Reuse the established setting, semantic gate, pipeline, adapter, renderer, or platform abstraction.
 3. Normalize data as it enters application ownership rather than rewriting authoritative native or external behavior.
 4. Let proven runtime topology isolate variants instead of adding speculative flags.
-5. Add an abstraction only when it creates one source of truth or makes the real mechanism testable.
+5. Add an abstraction only when it passes the Deletion Test (deleting it would spread complexity rather than remove it) and creates one source of truth or testability.
 
 Minimal means the smallest semantic and risk surface, not the fewest changed lines. Remove imports, variables, or branches your edit made unused while leaving pre-existing dead code untouched (mention it only); never weaken safe code merely to silence a false-positive static alert.
 
@@ -84,7 +84,7 @@ If any apply, read only the matching section(s) of [references/domain-checklists
 
 Choose the lowest reliable oracle that observes the original failure (preserving real input structure, event order, viewport, persistence, or platform behavior). An inconclusive check or wrong-surface pass is not a pass; record it under `Unverified`.
 
-- **Test-first when stable:** add a failing regression test before the fix when a stable oracle exists.
+- **Test-first when stable:** add a failing regression test before the fix when a stable oracle exists. When cheap, encode recurring failure modes as automated tests, types, or lint/CI checks rather than prose.
 - **Optimization baseline:** capture matched before/after measurements at the same oracle and conditions; disclose variance and input/environment limits.
 
 Validate: the corrected behavior or improvement, invariant-named adjacent behavior (with discriminating inputs), boundary/failure fallbacks, persistence/reload/teardown/interleaved transitions when reachable, and repository-prescribed checks for the touched scope. Report evidence separately under **Automated**, **Artifact or manual**, **Unverified**, and **Unrelated environment**.

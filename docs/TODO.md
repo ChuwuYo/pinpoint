@@ -1314,6 +1314,13 @@ candidate Skill improves it without critical regression.
   refactoring checklist.
 - [ ] Center the workflow on preservation inventory, equivalence oracles,
   smallest structural scope, and explicit unverified behavior.
+- [ ] If created for bounded structural cleanup, anchor it on hard anti-drift
+  gates: a frozen task backlog, Deletion Test + net-complexity rollback gate,
+  canonical implementation (migrate all callers then delete old internal paths;
+  keep only proven external shims), per-run batch/review budget in an isolated
+  worktree, hard stop when only style/low-value items remain, and enforceable
+  machine checks (types/lint/contract tests/CI) with `pinpoint-review` as the
+  independent batch gate.
 - [ ] Keep decomposition technique owned by the model and repository.
 - [ ] Add targeted A/B runs for the candidate before merging.
 - [ ] Add the Skill and command to:
