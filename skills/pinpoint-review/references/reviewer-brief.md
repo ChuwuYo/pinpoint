@@ -29,8 +29,8 @@ Rules:
 
 1. **Intent and scope:** Does every requirement in the stated intent have a corresponding verified implementation? Quote the intent source for each gap. Is any behavior added that was never requested? Are any scoped-out items backed only by unverified feasibility claims?
 2. **Ownership and root cause:** Does the fix live at the boundary that first transitions from correct to incorrect, or does it mask a symptom downstream or rewrite upstream authority?
-3. **Blast radius:** Which callers, dispatch paths, config gates, event buses, registries, or concrete consumers can reach this diff that the claims did not account for?
+3. **Blast radius:** What load-bearing fact does this change's safety depend on, and what can break where symbol search stops (callers, dispatch paths, config gates, event buses, registries, wire/serialization formats, schemas, dependency behavior, shared/stacked state, or multi-hop consumers)?
 4. **Architecture and platform:** Does the diff diverge from established repository pipelines, adapters, or platform workarounds without evidence?
-5. **Reachable regressions:** What concrete regressions in accessibility, language/i18n, data/persistence, external protocols/security, UI geometry, or platform behavior can this diff actually trigger?
+5. **Reachable regressions:** What concrete regressions in accessibility, teardown/inverse lifecycle, language/i18n, data/persistence, concurrent/interleaved state transitions, external protocols/security, UI geometry, or platform behavior can this diff actually trigger?
 6. **Test quality:** For each added or modified test, would it actually fail if the production bug were reintroduced, or does it merely imitate the patch shape?
 7. **Claims vs. evidence:** Which claims of completion, preservation, speedup, or platform/format coverage lack direct proof in the validation evidence?

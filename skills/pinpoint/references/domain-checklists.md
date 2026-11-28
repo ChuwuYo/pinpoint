@@ -11,6 +11,7 @@ Check when the traced path touches UI controls, overlays, focus, keyboard naviga
 - **Focus management:** modal/dialog/overlay opens move focus predictably, trap focus only when required, and restore focus to the trigger on close.
 - **Keyboard and native selection:** Escape, Enter, Space, Tab, and arrow keys work without breaking native text selection or OS shortcuts.
 - **Touch and pointer:** hit targets remain reachable without intercepting unrelated gestures.
+- **Exit and state restoration:** closing, canceling, or leaving an in-place transition or overlay restores focus and view state to the true prior context rather than an orphaned intermediate state.
 - **Verification limit:** static ARIA or accessibility-tree inspection does not prove VoiceOver, TalkBack, NVDA, or JAWS traversal; report real AT traversal as unverified when unavailable.
 
 ## Language and Content
@@ -30,6 +31,7 @@ Check when the traced path touches storage, sync, caches, queues, migrations, or
 - **Ordering and transactions:** check partial-write failure modes; a mid-operation error must not leave orphaned rows, half-applied updates, or corrupted state.
 - **Idempotency and retries:** repeated delivery or retry must not duplicate records or side effects.
 - **Migrations, reload, and re-entry:** verify behavior on cold reload, schema upgrade, empty state, and corrupted or truncated input.
+- **Suspension, concurrency, and interleaving:** when an operation yields across I/O, locks, queues, callbacks, or async boundaries, verify whether concurrent work can mutate shared or environmental state before resumption; read fresh authoritative state after resumption and test interleaved transitions.
 - **Sync and stale snapshots:** check whether offline/reconnect or event-bus payloads carry stale snapshots that overwrite newer authoritative state.
 
 ## External Protocols and Security

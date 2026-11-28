@@ -14,6 +14,8 @@ Load this reference when debugging subtle ownership, equivalence, caching, prove
 8. **Relax only the smallest necessary condition.** Accepting another documented OAuth callback form must preserve state and PKCE validation; accepting another file extension must preserve content and size checks. Define the new equivalence precisely and keep unrelated invariants unchanged.
 9. **Keep one user-facing field on one producer with one semantics.** Prefer honest absence (an explicit unknown state) over a second producer with different semantics. A fallback chain that creates a "which value do we show?" fork is a stop signal: re-verify the primary producer's properties instead of delegating ambiguity to the user.
 10. **Bound approximations by their failure cost.** When an exact decision is impossible and refusal is not an option (e.g., a routing gate or language heuristic), choose the cheaper failure direction: degrade to the general path rather than suppressing the capability. Name what the heuristic stands in for, cap it, and document its bounds. When absence is an option, honest absence outranks approximation.
+11. **Find the load-bearing safety fact and look past symbol search.** Most risky changes are safe (or unsafe) because of one or two load-bearing facts. Identify them and push each as far down the proof ladder as is cheap, checking what symbol search misses: serialization/wire formats, schemas, dependency source/patches, and multi-hop downstream consumers.
+12. **Attack the shared premise and revert refuted hypotheses.** When repeated fixes fail the same gate, stop iterating on the same assumption—write the premise down and falsify it directly. Never leave speculative "just-in-case" guards behind from disproven hypotheses.
 
 ## Worked Good vs. Bad Examples
 
@@ -36,3 +38,13 @@ Load this reference when debugging subtle ownership, equivalence, caching, prove
 
 - **Bad:** Declares "no reliable predicate can distinguish route A from route B, so we must drop this requirement" without measuring failure cases.
 - **Good:** Tests candidate predicates against concrete inputs, bounds the failure cost (degrading to the safe general path on ambiguity), or presents concrete counterexamples proving why the contract cannot be satisfied as written.
+
+### Lifecycle Closure Beyond Entry
+
+- **Bad:** Reuses an existing state-transition consumer, verifies the new state activates, and stops—leaving teardown, undo, cancel, or exit stranded on a stale history, focus, or resource entry.
+- **Good:** Traces all shared, stacked, and persistent state mutated by the reused consumer, separates in-place replacement from additive transitions, and verifies the inverse/exit path closes cleanly.
+
+### State Freshness Across Suspension or Concurrency
+
+- **Bad:** Captures mutable state before an I/O, lock, callback, or async suspension boundary, branches on that stale snapshot afterward, and tests only pre-settled state.
+- **Good:** Re-reads authoritative state after resumption (or validates a version/epoch guard) and adds a test that mutates state during the suspension window to catch interleaving races.

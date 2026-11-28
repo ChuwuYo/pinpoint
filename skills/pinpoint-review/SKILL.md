@@ -18,8 +18,8 @@ Challenge a completed change the way a hostile reviewer would, then prove or dis
 
 Before spawning any reviewer, validate the review scope and snapshot repository state at the aggregating agent (fail once here, never inside parallel reviewers):
 
-- Run `node scripts/snapshot-state.mjs --snapshot /tmp/pinpoint-review-before.json [--base <ref>]` (when Node.js is available) to confirm the base ref resolves, the diff is non-empty, and record pre-review worktree/index hashes.
-- If the harness cannot guarantee read-only execution, compare repository state before and after review (via `node scripts/snapshot-state.mjs --verify /tmp/pinpoint-review-before.json` or `git status --porcelain` + file hashes) and report any mutation.
+- From the target repository directory, run `node <skill-dir>/scripts/snapshot-state.mjs --snapshot [--base <ref>]` ([scripts/snapshot-state.mjs](scripts/snapshot-state.mjs), when Node.js is available) to confirm the base ref resolves, the diff is non-empty, and record pre-review worktree/index hashes (defaults to the OS temp directory).
+- If the harness cannot guarantee read-only execution, compare repository state before and after review (via `node <skill-dir>/scripts/snapshot-state.mjs --verify` or `git status --porcelain` + file hashes) and report any mutation.
 
 Assemble one neutral packet shared by every reviewer:
 
@@ -46,13 +46,13 @@ Challenge the change along each axis the diff can actually reach; exclude unreac
 
 1. **Intent and scope:** does the diff satisfy the stated intent? Quote the intent source behind each gap. Flag unrequested behavior as scope creep and challenge scope-outs backed only by unverified feasibility claims. Say explicitly if the stated intent itself looks wrong.
 2. **Ownership and root cause:** wrong ownership or root-cause assumption; fixing at a boundary that does not own the transition.
-3. **Blast radius:** wider runtime blast radius than claimed (callers, dispatch, config gates, event buses, concrete consumers).
+3. **Blast radius:** wider runtime blast radius than claimed (callers, dispatch, config gates, event buses, concrete consumers); look past symbol search (wire/serialization formats, schemas, dependency behavior, multi-hop consumers) and check the load-bearing fact the change's safety depends on.
 4. **Architecture and platform:** unjustified divergence from established architecture or platform handling.
 5. **Reachable regressions:** accessibility, language, platform, data, security, or persistence regressions the change can reach.
 6. **Test quality:** tests imitating the implementation instead of the claimed mechanism (ask: would each new/changed test fail if the code were broken?).
 7. **Claims vs. evidence:** completion, preservation, performance, or coverage claims not proven by the packet's evidence.
 
-**Risk-based depth:** when the harness supports subagents and the diff touches high-risk boundaries (security, auth, persistence, destructive ops, external protocols) or spans multiple modules needing independent deep reading, spawn one fresh-context, read-only reviewer per reachable axis using the brief template in `references/reviewer-brief.md`. For bounded diffs one pass can cover, review locally in single-reviewer mode and disclose it. Never spawn reviewers for unreachable axes.
+**Risk-based depth:** when the harness supports subagents and the diff touches high-risk boundaries (security, auth, persistence, destructive ops, external protocols) or spans multiple modules needing independent deep reading, spawn one fresh-context, read-only reviewer per reachable axis using the brief template in [references/reviewer-brief.md](references/reviewer-brief.md). For bounded diffs one pass can cover, review locally in single-reviewer mode and disclose it. Never spawn reviewers for unreachable axes.
 
 ## 4. Aggregate, Score, and Enforce the Noise Budget
 
@@ -60,10 +60,11 @@ The aggregating agent (never an axis reviewer) merges all reports:
 
 - Deduplicate findings across axes, keeping the strongest formulation.
 - Drop speculative findings (no direct evidence, unreachable from the diff, or already enforced by static tooling).
+- When a suspected reachable defect is ambiguous from static reading alone and can be settled by a side-effect-free read-only command or test run, run it rather than guessing; treat inconclusive checks as unverified, never as passes.
 - Keep open questions as questions: never promote a question to a finding, and never demote a verified reachable defect to a question because its blast radius or intent is unsettled.
 - Never cross-rank axes during discovery: every independently supported blocker from every axis must survive.
 
-Assign severity strictly by consequence (read `references/severity-and-rerank.md` for edge-case calibration and worked examples):
+Assign severity strictly by consequence (read [references/severity-and-rerank.md](references/severity-and-rerank.md) for edge-case calibration and worked examples):
 
 - **blocker:** a reachable defect, data loss, security exposure, persisted-state inconsistency on mid-operation error (partial writes, orphaned/missing rows), or a claim contradicted by evidence (including the same root cause surviving on a sibling supported path).
 - **should-fix:** a real consequence with bounded blast radius outside the claimed contract (wrong failure handling, test gap on the claimed mechanism, unjustified architectural divergence).

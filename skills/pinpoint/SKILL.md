@@ -28,6 +28,7 @@ Classify every key conclusion internally and never present inference as observat
 
 **Precedence order:** real reproduction > traced mechanism > representative oracle > repository contract > official external contract > generic guidance.
 
+- **Proof ladder:** push each safety- or correctness-critical claim as far down this ladder as is cheap, and state where it stopped: (1) assertion alone (worthless) -> (2) exact `file:line` or commit record -> (3) step-by-step reachability/infeasibility trace -> (4) executed test or probe against real code -> (5) reproduction in the real running environment.
 - A veto is a claim too: "no reliable predicate exists" is an inference until its failure costs are bounded with evidence.
 - Resolve conflicts by identifying which authority owns the behavior. Generic best practice never overrides a deliberate repository contract, and repository convention never overrides a mandatory external protocol.
 - External convention and prior art never substitute for tracing the project's own mechanism, and must not expand the option surface.
@@ -37,9 +38,9 @@ Classify every key conclusion internally and never present inference as observat
 Protect working state first: preserve unrelated user changes, staged work, worktrees, and branch history. Never clean, reset, or rewrite anything without explicit authorization. If the task requires a new branch, create one task-focused branch from the authoritative base identified from actual configuration.
 
 1. Capture the exact environment, input, settings, expected behavior, and observed behavior.
-2. Follow the concrete runtime path from trigger through local state, shared transforms, external or native boundaries, and persistence or re-entry.
-3. Prove runtime reachability through callers, dispatch, configuration gates, and concrete consumers. Do not infer reachability from a shared type, optional method, or broad interface. Enumerate channels that bypass the call graph (event buses, dispatchers, registries) by event or channel name and check whether each dispatch site passes a live value or a stale snapshot.
-4. Before reusing, substituting, or extending any value, trace it to its producer (`file:line`) and read the producing computation. Never infer properties from a same-named nearby helper or domain convention.
+2. Follow the concrete runtime path from trigger through local state, shared transforms, external or native boundaries, persistence, and teardown, inverse, or re-entry paths (check what shared, stacked, or persistent state any reused consumer also mutates).
+3. Prove runtime reachability through callers, dispatch, configuration gates, and concrete consumers. Do not infer reachability from a shared type, optional method, or broad interface. Enumerate channels that bypass the call graph (event buses, dispatchers, registries) by event or channel name and check whether each dispatch site passes a live value or a stale snapshot. Across any suspension, I/O, lock, callback, or concurrency boundary, verify whether shared or environmental state can change before resumption and read fresh authoritative state rather than a pre-yield snapshot. Look where symbol search stops: wire or serialization formats, schemas, cross-language boundaries, dependency source/patches, and downstream consumers multiple hops away.
+4. Before reusing, substituting, or extending any value, trace it to its producer (`file:line`) and read the producing computation. Never infer properties from a same-named nearby helper or domain convention. Before altering an existing guard, workaround, or regression-prone path, check version history (`git log`/commits) to separate its original intent from guesswork.
 5. Inspect the real failing artifact or mechanism (DOM, computed style, event sequence, payload, persisted record, generated file, native log, or geometry). A simplified fixture is valid only if it preserves the property that causes the failure.
 6. Classify ownership: application, framework, browser, operating system, toolkit, source data, provider, network, or environment.
 7. Locate the first transition from correct to incorrect (or acceptable cost to unjustified cost). Distinguish intentional external behavior from the application consuming it incorrectly.
@@ -48,7 +49,7 @@ Before editing, state one invariant and explicit non-goals:
 
 > When X occurs under Y, Z must happen, while A and B remain unchanged.
 
-For detailed transferable reasoning principles (consumer-boundary validation, semantic vs. visible equivalence, cache dependencies, single-producer fields, bounded heuristics) and worked Good vs. Bad examples, read `references/reasoning-and-gotchas.md`.
+For detailed transferable reasoning principles (consumer-boundary validation, semantic vs. visible equivalence, cache dependencies, single-producer fields, bounded heuristics) and worked Good vs. Bad examples, read [references/reasoning-and-gotchas.md](references/reasoning-and-gotchas.md).
 
 ## 3. Fix the Smallest Owned Boundary
 
@@ -64,7 +65,7 @@ Reject symptom masking, parallel semantic paths, unrelated cleanup, and architec
 
 - **Single-producer rule:** keep one user-facing field on one producer with one semantics. Prefer honest absence (an explicit unknown state) over a second fallback producer with conflicting semantics.
 - **High-risk boundaries:** treat changes to native interaction, DOM order, auth validation, persistent identity, shared sync, global styling, cross-cutting state, and platform workarounds as high risk until ownership and reachable impact are proven.
-- **3-Strike Escalation:** if three targeted fix attempts fail or each fix breaks another invariant, stop patching. Re-read the runtime path from scratch and question your ownership or architecture assumption before writing more code.
+- **Attack the premise (escalation):** if two or more fixes sharing one premise fail the same gate—or three targeted attempts fail—stop patching. Write down the shared premise, test or falsify it directly, and revert any speculative ("might help") code motivated by refuted hypotheses before editing again.
 
 ## 4. Audit Only Reachable Contracts
 
@@ -77,11 +78,11 @@ Do not load every domain checklist by default. From the traced path, identify wh
 - UI and geometry
 - Platform and toolchain
 
-If any domain above is reachable, read only the matching section(s) of `references/domain-checklists.md`. Exclude unreachable domains instead of inventing hypothetical support. If a reachable domain cannot be exercised in this environment, record the gap as unverified.
+If any domain above is reachable, read only the matching section(s) of [references/domain-checklists.md](references/domain-checklists.md). Exclude unreachable domains instead of inventing hypothetical support. If a reachable domain cannot be exercised in this environment, record the gap as unverified.
 
 ## 5. Validate the Mechanism, Not the Patch Shape
 
-Choose the lowest reliable oracle that observes the original failure (for a pure decision function, a boundary-value unit test; for a CLI export or rendered output, the real downstream consumer). Preserve the real input structure, event order, viewport, persistence state, or platform behavior.
+Choose the lowest reliable oracle that observes the original failure (for a pure decision function, a boundary-value unit test; for a CLI export or rendered output, the real downstream consumer). Preserve the real input structure, event order, viewport, persistence state, or platform behavior. An inconclusive check or wrong-surface pass is not a pass; record it under Unverified.
 
 - **Test-first when stable:** add a failing regression test before the fix whenever a stable, representative oracle exists. Do not force test-first when the real mechanism requires visual judgment, hardware, or an unstable native service.
 - **Optimization baseline:** capture a baseline measurement at the chosen oracle before changing code and compare before/after under identical conditions. A speedup without a matched before/after measurement is an inference, not an observation. Disclose variance, single-input, or single-environment limits.
@@ -91,7 +92,7 @@ Validate:
 - the corrected behavior or measured improvement;
 - adjacent behavior named in the invariant (using inputs capable of exhibiting a regression);
 - meaningful boundaries and failure fallback;
-- persistence, reload, or re-entry when reachable;
+- persistence, reload, teardown/inverse paths, or interleaved state transitions when reachable;
 - the repository-prescribed formatter, linter, type checker, build, and applicable tests for the touched scope.
 
 Report evidence separately under four labels:
@@ -121,6 +122,9 @@ After the cohesive change is validated, hand it to an independent, read-only rev
 | "The primary value is missing, let me add a fallback chain." | Verify the primary producer first; prefer honest unknown over dual semantics. |
 | "Unit tests pass, so it works across all platforms / screen readers." | Report only what the oracle proved and list unexercised targets as unverified. |
 | "This is obviously faster in Big-O, no benchmark needed." | Capture before/after measurements at the same oracle under the same conditions. |
+| "The primary path works now, so the fix is complete." | Trace teardown, inverse, cancel, and re-entry paths too; check what shared or stacked state reused consumers mutate. |
+| "I checked the state before the operation started." | Across I/O, callbacks, locks, or async suspension, re-read fresh authoritative state after resumption and test interleaved transitions. |
+| "Let me keep this extra guard too, just in case." | Speculative ("might help") guards are unverified hypotheses; revert code motivated by refuted hypotheses and ship only what evidence justifies. |
 
 ## Final Gate
 
